@@ -1,27 +1,10 @@
 import { Star, Quote } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "Sarah Johnson",
-    role: "CEO, TechStart Inc",
-    content: "Digital Trust Solutions transformed our vision into a scalable platform that exceeded all expectations. Their expertise and dedication are unmatched.",
-    rating: 5,
-  },
-  {
-    name: "Michael Chen",
-    role: "CTO, DataFlow Systems",
-    content: "Digital Trust Solutions delivered a robust platform on schedule and continues to provide dependable technical support.",
-    rating: 5,
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "Product Manager, CloudVenture",
-    content: "The team's technical prowess and creative problem-solving helped us launch our product ahead of schedule. Highly recommended!",
-    rating: 5,
-  },
-];
+import { useLanguage } from "../i18n/LanguageContext";
 
 export function Testimonials() {
+  const { copy } = useLanguage();
+  const testimonials = copy.testimonials;
+
   return (
     <section id="testimonials" className="py-24 px-6 bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white relative overflow-hidden">
       {/* Background pattern */}
@@ -32,16 +15,16 @@ export function Testimonials() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <div className="inline-block px-4 py-2 bg-slate-500/20 border border-slate-400/30 text-slate-200 rounded-full mb-4">
-            Client Success Stories
+            {testimonials.eyebrow}
           </div>
-          <h2 className="mb-4">What Our Clients Say</h2>
+          <h2 className="mb-4">{testimonials.title}</h2>
           <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-            Don't just take our word for it - hear from the companies we've helped succeed
+            {testimonials.description}
           </p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {testimonials.items.map((testimonial) => (
             <div
               key={testimonial.name}
               className="relative bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 hover:border-slate-500/50 transition-all duration-300 hover:transform hover:scale-105"
@@ -49,7 +32,7 @@ export function Testimonials() {
               <Quote className="w-10 h-10 text-slate-400/30 mb-4" />
               
               <div className="flex gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>

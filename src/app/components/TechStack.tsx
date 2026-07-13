@@ -1,4 +1,5 @@
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const technologies = [
   "React",
@@ -14,6 +15,9 @@ const technologies = [
 ];
 
 export function TechStack() {
+  const { copy } = useLanguage();
+  const techCopy = copy.tech;
+
   return (
     <section className="py-24 px-6 bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto">
@@ -23,7 +27,7 @@ export function TechStack() {
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl">
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaWdpdGFsJTIwaW5ub3ZhdGlvbnxlbnwxfHx8fDE3NjA2NDkxODR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                  alt="Technology and innovation"
+                  alt={techCopy.imageAlt}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -32,10 +36,9 @@ export function TechStack() {
           </div>
           
           <div className="order-1 lg:order-2">
-            <h2 className="text-slate-300 mb-6">Our Technology Stack</h2>
+            <h2 className="text-slate-300 mb-6">{techCopy.title}</h2>
             <p className="text-slate-300 text-lg mb-8">
-              We leverage the latest and most reliable technologies to build robust, 
-              scalable solutions that stand the test of time.
+              {techCopy.description}
             </p>
             
             <div className="flex flex-wrap gap-3">

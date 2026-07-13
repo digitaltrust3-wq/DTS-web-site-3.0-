@@ -1,4 +1,5 @@
 import { useId, type SVGProps } from "react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 type BrandLogoProps = SVGProps<SVGSVGElement> & {
   variant?: "horizontal" | "mark";
@@ -17,6 +18,7 @@ export function BrandLogo({
   const separatorGradientId = useId().replace(/:/g, "");
   const isMark = variant === "mark";
   const silverPaint = `url(#${silverGradientId})`;
+  const { language } = useLanguage();
 
   return (
     <svg
@@ -29,7 +31,9 @@ export function BrandLogo({
     >
       <title id={titleId}>Digital Trust Solutions</title>
       <desc id={descriptionId}>
-        Logo de Digital Trust Solutions con un escudo tecnológico.
+        {language === "es"
+          ? "Logo de Digital Trust Solutions con un escudo tecnológico."
+          : "Digital Trust Solutions logo with a technology shield."}
       </desc>
 
       <defs>

@@ -1,6 +1,7 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { ArrowRight, Check, X } from "lucide-react";
 import { Button } from "./ui/button";
+import { useLanguage } from "../i18n/LanguageContext";
 
 type ContactModalProps = {
   isOpen: boolean;
@@ -14,6 +15,8 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const descriptionId = useId();
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const { copy } = useLanguage();
+  const modal = copy.contactModal;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -56,7 +59,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
       const result = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(result?.message ?? "We couldn't send your request.");
+        throw new Error(result?.message ?? modal.error);
       }
 
       form.reset();
@@ -66,7 +69,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "We couldn't send your request. Please try again.",
+          : modal.error,
       );
     }
   };
@@ -76,7 +79,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
       <button
         type="button"
         className="absolute inset-0 cursor-default"
-        aria-label="Close contact form"
+        aria-label={modal.closeForm}
         onClick={onClose}
       />
 
@@ -91,7 +94,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
           type="button"
           onClick={onClose}
           className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-lg border border-white/10 text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
-          aria-label="Close contact form"
+          aria-label={modal.closeForm}
         >
           <X className="h-5 w-5" />
         </button>
@@ -102,31 +105,31 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
               <Check className="h-6 w-6" />
             </span>
             <h2 id={titleId} className="mb-3 text-3xl font-semibold tracking-tight">
-              Request received
+              {modal.successTitle}
             </h2>
             <p id={descriptionId} className="mx-auto mb-8 max-w-md text-slate-300">
-              Our team will review your project details and contact you shortly.
+              {modal.successDescription}
             </p>
             <Button type="button" onClick={onClose} className="bg-white text-slate-950 hover:bg-slate-100">
-              Close
+              {modal.close}
             </Button>
           </div>
         ) : (
           <>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-              Start a project
+              {modal.eyebrow}
             </p>
             <h2 id={titleId} className="mb-3 pr-12 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Tell us what you are building
+              {modal.title}
             </h2>
             <p id={descriptionId} className="mb-8 max-w-lg text-slate-300">
-              Share the essentials. Digital Trust Solutions will follow up with a practical next step.
+              {modal.description}
             </p>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="contact-name" className="mb-2 block text-sm text-slate-200">
-                  Name
+                  {modal.name}
                 </label>
                 <input
                   id="contact-name"
@@ -137,13 +140,13 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   maxLength={100}
                   autoComplete="name"
                   className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400"
-                  placeholder="Your name"
+                  placeholder={modal.namePlaceholder}
                 />
               </div>
 
               <div>
                 <label htmlFor="contact-email" className="mb-2 block text-sm text-slate-200">
-                  Email
+                  {modal.email}
                 </label>
                 <input
                   id="contact-email"
@@ -153,13 +156,13 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   maxLength={160}
                   autoComplete="email"
                   className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400"
-                  placeholder="you@company.com"
+                  placeholder={modal.emailPlaceholder}
                 />
               </div>
 
               <div>
                 <label htmlFor="contact-message" className="mb-2 block text-sm text-slate-200">
-                  Project details
+                  {modal.details}
                 </label>
                 <textarea
                   id="contact-message"
@@ -169,7 +172,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   maxLength={4000}
                   rows={5}
                   className="w-full resize-y rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400"
-                  placeholder="What do you need to build or improve?"
+                  placeholder={modal.detailsPlaceholder}
                 />
               </div>
 
@@ -184,7 +187,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 disabled={submitState === "submitting"}
                 className="w-full bg-white text-slate-950 hover:bg-slate-100 active:scale-[0.99]"
               >
-                {submitState === "submitting" ? "Sending…" : "Send project request"}
+                {submitState === "submitting" ? modal.sending : modal.send}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </form>

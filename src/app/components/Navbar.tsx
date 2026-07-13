@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Globe2, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { BrandLogo } from "./BrandLogo";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { language, copy, toggleLanguage } = useLanguage();
+  const navCopy = copy.common;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,33 +28,45 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <a href="#" aria-label="Digital Trust Solutions home" className="block shrink-0">
+          <a href="#" aria-label={navCopy.home} className="block shrink-0">
             <BrandLogo className="h-16 w-auto" />
           </a>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             <a href="#services" className="text-slate-300 hover:text-white transition-colors">
-              Services
+              {navCopy.services}
             </a>
             <a href="#about" className="text-slate-300 hover:text-white transition-colors">
-              About
+              {navCopy.about}
             </a>
             <a href="#portfolio" className="text-slate-300 hover:text-white transition-colors">
-              Portfolio
+              {navCopy.portfolio}
             </a>
             <a href="#testimonials" className="text-slate-300 hover:text-white transition-colors">
-              Testimonials
+              {navCopy.testimonials}
             </a>
             <Button asChild className="bg-slate-700 hover:bg-slate-600 border border-slate-600">
-              <a href="#contact">Contact Us</a>
+              <a href="#contact">{navCopy.contact}</a>
             </Button>
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              aria-label={navCopy.switchLanguage}
+              title={navCopy.switchLanguage}
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950/55 px-2.5 text-xs font-semibold tracking-wide text-slate-200 backdrop-blur-md transition-colors hover:border-slate-400 hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+            >
+              <Globe2 className="h-4 w-4" aria-hidden="true" />
+              <span>{language.toUpperCase()}</span>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? navCopy.closeMenu : navCopy.openMenu}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -59,22 +74,34 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 space-y-4">
+          <div className="mt-4 space-y-4 rounded-xl border border-slate-800 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl md:hidden">
             <a href="#services" className="block text-slate-300 hover:text-white transition-colors">
-              Services
+              {navCopy.services}
             </a>
             <a href="#about" className="block text-slate-300 hover:text-white transition-colors">
-              About
+              {navCopy.about}
             </a>
             <a href="#portfolio" className="block text-slate-300 hover:text-white transition-colors">
-              Portfolio
+              {navCopy.portfolio}
             </a>
             <a href="#testimonials" className="block text-slate-300 hover:text-white transition-colors">
-              Testimonials
+              {navCopy.testimonials}
             </a>
-            <Button asChild className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600">
-              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</a>
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button asChild className="flex-1 bg-slate-700 hover:bg-slate-600 border border-slate-600">
+                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>{navCopy.contact}</a>
+              </Button>
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                aria-label={navCopy.switchLanguage}
+                title={navCopy.switchLanguage}
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950/70 px-3 text-xs font-semibold tracking-wide text-slate-200"
+              >
+                <Globe2 className="h-4 w-4" aria-hidden="true" />
+                <span>{language.toUpperCase()}</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

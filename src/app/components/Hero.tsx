@@ -3,6 +3,7 @@ import Hls from "hls.js";
 import { ArrowRight, Rocket } from "lucide-react";
 import { ContactModal } from "./ContactModal";
 import { Button } from "./ui/button";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const HERO_VIDEO_URL =
   "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
@@ -10,6 +11,8 @@ const HERO_VIDEO_URL =
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const { copy } = useLanguage();
+  const hero = copy.hero;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -54,14 +57,12 @@ export function Hero() {
         <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-10">
           <h1 className="mb-6 text-white">
             <span className="mb-4 block bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-5xl text-transparent md:text-7xl">
-              Building Tomorrow&apos;s Technology Today
+              {hero.title}
             </span>
           </h1>
 
           <p className="mb-8 max-w-2xl text-lg text-slate-300">
-            We transform visionary ideas into powerful digital solutions. From
-            AI-driven applications to scalable cloud platforms, we craft
-            technology that drives real business results.
+            {hero.description}
           </p>
 
           <div className="mb-12 flex flex-wrap gap-4">
@@ -71,7 +72,7 @@ export function Hero() {
               onClick={() => setIsContactOpen(true)}
               className="group border border-slate-500/30 bg-gradient-to-r from-slate-700 to-slate-600 px-8 text-white shadow-lg shadow-slate-950/50 hover:from-slate-600 hover:to-slate-500"
             >
-              Start Your Project
+              {hero.startProject}
               <Rocket className="ml-2 h-5 w-5 transition-transform group-hover:-translate-y-1" />
             </Button>
             <Button
@@ -83,7 +84,7 @@ export function Hero() {
               }
               className="border-slate-500 bg-black/10 px-8 text-white backdrop-blur-xl hover:bg-slate-800/50"
             >
-              View Case Studies
+              {hero.viewCases}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
@@ -91,15 +92,15 @@ export function Hero() {
           <div className="grid max-w-2xl grid-cols-3 gap-6">
             <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
               <div className="mb-1 text-slate-300">250+</div>
-              <div className="text-sm text-slate-400">Projects</div>
+              <div className="text-sm text-slate-400">{hero.projects}</div>
             </div>
             <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
               <div className="mb-1 text-slate-300">98%</div>
-              <div className="text-sm text-slate-400">Satisfaction</div>
+              <div className="text-sm text-slate-400">{hero.satisfaction}</div>
             </div>
             <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
               <div className="mb-1 text-slate-300">24/7</div>
-              <div className="text-sm text-slate-400">Support</div>
+              <div className="text-sm text-slate-400">{hero.support}</div>
             </div>
           </div>
         </div>
