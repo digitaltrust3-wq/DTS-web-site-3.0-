@@ -44,6 +44,8 @@ export function Services() {
                   className="service-card__image"
                   src={`${import.meta.env.BASE_URL}${service.image.replace(/^\//, "")}`}
                   alt={serviceCopy.imageAlt}
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="service-card__scrim" aria-hidden="true" />
 
