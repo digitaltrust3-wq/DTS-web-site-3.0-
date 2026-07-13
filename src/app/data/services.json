@@ -5,7 +5,7 @@
     "title": "Custom Software Development",
     "shortDescription": "Software designed around your operations.",
     "longDescription": "We turn complex workflows into maintainable platforms with clear architecture, measurable performance and a delivery path your team can own.",
-    "image": "/assets/digital-trust-solutions-service-hover.png"
+    "image": "/assets/services/custom-software.png"
   },
   {
     "id": "service_02",
@@ -13,7 +13,7 @@
     "title": "Mobile App Development",
     "shortDescription": "Reliable experiences for iOS and Android.",
     "longDescription": "We design and build mobile products that remain fast, accessible and consistent across devices, from discovery through store release.",
-    "image": "/assets/digital-trust-solutions-service-hover.png"
+    "image": "/assets/services/mobile-apps.png"
   },
   {
     "id": "service_03",
@@ -21,7 +21,7 @@
     "title": "Cloud Solutions",
     "shortDescription": "Infrastructure that scales with demand.",
     "longDescription": "We modernize cloud environments, automate delivery and improve observability so your systems can grow without adding operational friction.",
-    "image": "/assets/digital-trust-solutions-service-hover.png"
+    "image": "/assets/services/cloud-solutions.png"
   },
   {
     "id": "service_04",
@@ -29,7 +29,7 @@
     "title": "Data Analytics",
     "shortDescription": "Decisions backed by usable data.",
     "longDescription": "We connect fragmented sources and build trustworthy analytics products that help teams understand performance and act with confidence.",
-    "image": "/assets/digital-trust-solutions-service-hover.png"
+    "image": "/assets/services/data-analytics.png"
   },
   {
     "id": "service_05",
@@ -37,7 +37,7 @@
     "title": "Cybersecurity",
     "shortDescription": "Security embedded in every layer.",
     "longDescription": "We assess risk, strengthen access controls and integrate practical security checks throughout the product and infrastructure lifecycle.",
-    "image": "/assets/digital-trust-solutions-service-hover.png"
+    "image": "/assets/services/cybersecurity.png"
   },
   {
     "id": "service_06",
@@ -45,6 +45,6 @@
     "title": "API Integration",
     "shortDescription": "Connected systems without brittle handoffs.",
     "longDescription": "We design resilient API integrations with documented contracts, monitoring and recovery paths for business-critical data flows.",
-    "image": "/assets/digital-trust-solutions-service-hover.png"
+    "image": "/assets/services/api-integration.png"
   }
 ]

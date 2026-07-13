@@ -343,10 +343,16 @@ body {
 
 .service-card__image {
   object-fit: cover;
+  filter: brightness(0.72) saturate(0.72) contrast(0.92);
 }
 
 .service-card__scrim {
-  background: linear-gradient(180deg, rgba(15, 23, 32, 0.1), rgba(15, 23, 32, 0.94));
+  background: linear-gradient(
+    180deg,
+    rgba(10, 17, 26, 0.2) 0%,
+    rgba(10, 17, 26, 0.46) 48%,
+    rgba(10, 17, 26, 0.97) 100%
+  );
   transition: opacity var(--dts-duration) ease;
 }
 
