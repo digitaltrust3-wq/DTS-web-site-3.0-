@@ -54,9 +54,9 @@ export function Hero() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 pb-32 pt-40">
-        <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-10">
+        <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-16">
           <h1 className="mb-8 text-white">
-            <span className="mb-4 block bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-5xl text-transparent md:text-7xl">
+            <span className="mb-4 block bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text pb-2 text-5xl leading-[1.08] text-transparent md:text-7xl">
               {hero.title}
             </span>
           </h1>
