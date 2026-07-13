@@ -1,5 +1,55 @@
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-300.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-400.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-500.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Barlow";
+  src: url("../assets/fonts/barlow-600.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("../assets/fonts/instrument-serif-italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: "Instrument Serif", Georgia, serif;
+  }
+
+  .font-body {
+    font-family: "Barlow", Arial, sans-serif;
+  }
+}
+
 :root {
   --font-size: 16px;
   --dts-ink: #0f1720;
