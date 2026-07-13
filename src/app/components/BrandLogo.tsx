@@ -7,7 +7,7 @@ type BrandLogoProps = SVGProps<SVGSVGElement> & {
 
 export function BrandLogo({
   variant = "horizontal",
-  showBackground = true,
+  showBackground = false,
   className,
   ...props
 }: BrandLogoProps) {
