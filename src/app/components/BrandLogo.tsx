@@ -2,98 +2,128 @@ import { useId, type SVGProps } from "react";
 
 type BrandLogoProps = SVGProps<SVGSVGElement> & {
   variant?: "horizontal" | "mark";
-  tone?: "light" | "dark";
+  showBackground?: boolean;
 };
 
 export function BrandLogo({
   variant = "horizontal",
-  tone = "light",
+  showBackground = true,
   className,
   ...props
 }: BrandLogoProps) {
   const titleId = useId();
+  const descriptionId = useId();
+  const separatorGradientId = useId().replace(/:/g, "");
   const isMark = variant === "mark";
-  const ink = tone === "light" ? "#F8FAFC" : "#0F1720";
-  const muted = tone === "light" ? "#94A3B8" : "#43576B";
-  const shield = "#131D28";
-  const accent = "#6F8498";
-  const accentHighlight = "#BAC6D2";
 
   return (
     <svg
-      viewBox={isMark ? "0 0 160 176" : "0 0 520 176"}
+      viewBox={isMark ? "55 20 270 275" : "0 0 900 300"}
+      xmlns="http://www.w3.org/2000/svg"
       role="img"
-      aria-labelledby={titleId}
+      aria-labelledby={`${titleId} ${descriptionId}`}
       className={className}
       {...props}
     >
       <title id={titleId}>Digital Trust Solutions</title>
+      <desc id={descriptionId}>
+        Logo de Digital Trust Solutions con un escudo tecnológico.
+      </desc>
 
-      <g id="digital-trust-mark">
+      {showBackground && (
+        <rect width="900" height="300" rx="12" fill="#050608" />
+      )}
+
+      <g id="digital-trust-shield">
         <path
-          d="M80 6 148 34v49c0 43-25 72-68 87C37 155 12 126 12 83V34L80 6Z"
-          fill={shield}
-          stroke={accent}
-          strokeWidth="7"
+          d="M190 38 305 82v88c0 55-50 88-115 112C125 258 75 225 75 170V82l115-44Z"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="12"
           strokeLinejoin="round"
         />
-        <path
-          d="M80 18 137 42v41c0 35-19 59-57 74-38-15-57-39-57-74V42L80 18Z"
-          fill="none"
-          stroke={ink}
-          strokeWidth="3"
-          strokeLinejoin="round"
-        />
 
         <path
-          d="M58 52h27c28 0 45 17 45 44s-17 44-45 44H61v-35h18v18h7c16 0 25-10 25-27s-9-27-25-27H76v25H58V52Z"
+          d="M145 95h45c52 0 77 31 77 70 0 40-26 67-75 67h-47v-58"
           fill="none"
-          stroke={accentHighlight}
-          strokeWidth="9"
+          stroke="#fff"
+          strokeWidth="11"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path d="M58 60H43V48" fill="none" stroke={accentHighlight} strokeWidth="6" strokeLinecap="round" />
-        <path d="M61 116H39" fill="none" stroke={accentHighlight} strokeWidth="6" strokeLinecap="round" />
-        <path d="M72 139v10" fill="none" stroke={accentHighlight} strokeWidth="6" strokeLinecap="round" />
-        <circle cx="43" cy="42" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
-        <circle cx="33" cy="116" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
-        <circle cx="72" cy="151" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
-        <circle cx="88" cy="116" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
+        <path
+          d="M164 119h27c30 0 48 18 48 45 0 26-18 43-48 43h-27v-33"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M164 119v46h41"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        <path
+          d="M111 110v32h24M107 188h23v27h18M181 232v18M253 187h24"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        <circle cx="111" cy="101" r="8" fill="#050608" stroke="#fff" strokeWidth="5" />
+        <circle cx="135" cy="142" r="7" fill="#fff" />
+        <circle cx="98" cy="188" r="8" fill="#050608" stroke="#fff" strokeWidth="5" />
+        <circle cx="148" cy="215" r="7" fill="#fff" />
+        <circle cx="181" cy="258" r="8" fill="#050608" stroke="#fff" strokeWidth="5" />
+        <circle cx="283" cy="187" r="8" fill="#050608" stroke="#fff" strokeWidth="5" />
       </g>
 
       {!isMark && (
-        <g id="digital-trust-wordmark">
+        <g id="digital-trust-wordmark" fill="#fff">
           <text
-            x="182"
-            y="78"
-            fill={ink}
-            fontFamily="Inter, Arial, sans-serif"
-            fontSize="48"
-            fontWeight="800"
-            letterSpacing="2"
+            x="360"
+            y="130"
+            fontFamily="Arial, 'Helvetica Neue', sans-serif"
+            fontSize="63"
+            fontWeight="700"
+            letterSpacing="4"
           >
             DIGITAL
           </text>
           <text
-            x="182"
-            y="126"
-            fill={ink}
-            fontFamily="Inter, Arial, sans-serif"
-            fontSize="48"
-            fontWeight="800"
-            letterSpacing="2"
+            x="360"
+            y="207"
+            fontFamily="Arial, 'Helvetica Neue', sans-serif"
+            fontSize="76"
+            fontWeight="700"
+            letterSpacing="4"
           >
             TRUST
           </text>
-          <path d="M184 140H508" stroke={accent} strokeWidth="3" />
+
+          <defs>
+            <linearGradient id={separatorGradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#fff" stopOpacity="0" />
+              <stop offset="20%" stopColor="#fff" stopOpacity="0.9" />
+              <stop offset="80%" stopColor="#fff" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          <rect x="360" y="225" width="470" height="3" fill={`url(#${separatorGradientId})`} />
           <text
-            x="184"
-            y="163"
-            fill={muted}
-            fontFamily="Inter, Arial, sans-serif"
-            fontSize="16"
-            fontWeight="600"
+            x="465"
+            y="268"
+            fontFamily="Arial, sans-serif"
+            fontSize="25"
+            fontWeight="400"
             letterSpacing="9"
           >
             SOLUTIONS
