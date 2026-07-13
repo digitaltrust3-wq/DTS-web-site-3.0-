@@ -25,9 +25,9 @@ export function BrandLogo({
       className={className}
       {...props}
     >
-      <title id={titleId}>Digital Trust Solutions</title>
+      <title id={titleId}>DT Solutions</title>
       <desc id={descriptionId}>
-        Logo de Digital Trust Solutions con un escudo tecnológico.
+        Logo de DT Solutions con un escudo tecnológico.
       </desc>
 
       {showBackground && (
@@ -89,23 +89,13 @@ export function BrandLogo({
         <g id="digital-trust-wordmark" fill="#fff">
           <text
             x="360"
-            y="130"
+            y="185"
             fontFamily="Arial, 'Helvetica Neue', sans-serif"
-            fontSize="63"
+            fontSize="118"
             fontWeight="700"
-            letterSpacing="4"
+            letterSpacing="8"
           >
-            DIGITAL
-          </text>
-          <text
-            x="360"
-            y="207"
-            fontFamily="Arial, 'Helvetica Neue', sans-serif"
-            fontSize="76"
-            fontWeight="700"
-            letterSpacing="4"
-          >
-            TRUST
+            DT
           </text>
 
           <defs>
@@ -117,14 +107,14 @@ export function BrandLogo({
             </linearGradient>
           </defs>
 
-          <rect x="360" y="225" width="470" height="3" fill={`url(#${separatorGradientId})`} />
+          <rect x="360" y="205" width="470" height="3" fill={`url(#${separatorGradientId})`} />
           <text
-            x="465"
-            y="268"
+            x="420"
+            y="255"
             fontFamily="Arial, sans-serif"
-            fontSize="25"
+            fontSize="31"
             fontWeight="400"
-            letterSpacing="9"
+            letterSpacing="11"
           >
             SOLUTIONS
           </text>
