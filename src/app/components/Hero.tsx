@@ -80,7 +80,7 @@ export function Hero() {
               size="lg"
               variant="outline"
               onClick={() =>
-                document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })
+                document.getElementById("testimonials")?.scrollIntoView({ behavior: "smooth" })
               }
               className="border-slate-500 bg-black/10 px-8 text-white backdrop-blur-xl transition-all duration-300 hover:border-white hover:bg-gradient-to-r hover:from-slate-300 hover:via-white hover:to-slate-400 hover:text-slate-950 hover:shadow-[0_10px_30px_rgba(203,213,225,0.22)]"
             >
