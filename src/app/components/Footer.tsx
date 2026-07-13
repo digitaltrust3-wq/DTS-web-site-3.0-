@@ -1,5 +1,5 @@
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
-import logo from "../../assets/digital-trust-solutions-logo.png";
+import { BrandLogo } from "./BrandLogo";
 
 export function Footer() {
   return (
@@ -7,12 +7,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-white p-2 shadow-lg flex items-center justify-center overflow-hidden">
-                <img src={logo} alt="Digital Trust Solutions Logo" className="h-full w-full object-cover" />
-              </div>
-              <div className="text-white text-xl">Digital Trust Solutions</div>
-            </div>
+            <BrandLogo className="mb-5 h-16 w-auto max-w-full" />
             <p className="text-sm">
               Transforming ideas into digital reality with innovative software solutions.
             </p>

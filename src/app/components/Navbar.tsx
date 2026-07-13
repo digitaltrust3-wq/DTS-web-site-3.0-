@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
-import logo from "../../assets/digital-trust-solutions-logo.png";
+import { BrandLogo } from "./BrandLogo";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,12 +25,9 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-white p-2 shadow-lg flex items-center justify-center overflow-hidden">
-              <img src={logo} alt="Digital Trust Solutions Logo" className="h-full w-full object-cover" />
-            </div>
-            <span className="text-white text-xl">Digital Trust Solutions</span>
-          </div>
+          <a href="#" aria-label="Digital Trust Solutions home" className="block shrink-0">
+            <BrandLogo className="h-12 w-auto" />
+          </a>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
