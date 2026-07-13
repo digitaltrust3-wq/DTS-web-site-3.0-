@@ -21,7 +21,7 @@ export const translations = {
     },
     hero: {
       title: "Building Tomorrow's Technology Today",
-      description: "We transform visionary ideas into powerful digital solutions. From AI-driven applications to scalable cloud platforms, we craft technology that drives real business results.",
+      description: "We transform visionary ideas into powerful digital solutions. Applications and cloud platforms that drive real business results.",
       startProject: "Start Your Project",
       viewCases: "View Case Studies",
       projects: "Projects",
@@ -136,7 +136,7 @@ export const translations = {
     },
     hero: {
       title: "Construimos hoy la tecnología del mañana",
-      description: "Transformamos ideas visionarias en soluciones digitales potentes. Creamos aplicaciones con IA y plataformas en la nube que generan resultados reales.",
+      description: "Transformamos ideas visionarias en soluciones digitales potentes. Aplicaciones y plataformas en la nube que generan resultados reales.",
       startProject: "Inicia tu proyecto",
       viewCases: "Ver casos de éxito",
       projects: "Proyectos",

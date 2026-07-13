@@ -55,7 +55,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 pb-32 pt-40">
         <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-10">
-          <h1 className="mb-6 text-white">
+          <h1 className="mb-8 text-white">
             <span className="mb-4 block bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-5xl text-transparent md:text-7xl">
               {hero.title}
             </span>
