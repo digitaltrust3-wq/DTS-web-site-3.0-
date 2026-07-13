@@ -13,6 +13,14 @@ export function Hero() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const { copy } = useLanguage();
   const hero = copy.hero;
+  const whatsappNumber = String(import.meta.env.VITE_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
+  const whatsappUrl = whatsappNumber
+    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(hero.whatsappMessage)}`
+    : null;
+
+  const scrollToSection = (sectionId: string) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -79,9 +87,7 @@ export function Hero() {
               type="button"
               size="lg"
               variant="outline"
-              onClick={() =>
-                document.getElementById("testimonials")?.scrollIntoView({ behavior: "smooth" })
-              }
+              onClick={() => scrollToSection("testimonials")}
               className="border-slate-500 bg-black/10 px-8 text-white backdrop-blur-xl transition-all duration-300 hover:border-white hover:bg-gradient-to-r hover:from-slate-300 hover:via-white hover:to-slate-400 hover:text-slate-950 hover:shadow-[0_10px_30px_rgba(203,213,225,0.22)]"
             >
               {hero.viewCases}
@@ -90,18 +96,36 @@ export function Hero() {
           </div>
 
           <div className="grid max-w-2xl grid-cols-3 gap-6">
-            <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
+            <button
+              type="button"
+              onClick={() => scrollToSection("portfolio")}
+              className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+            >
               <div className="mb-1 text-slate-300">250+</div>
               <div className="text-sm text-slate-400">{hero.projects}</div>
-            </div>
-            <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection("testimonials")}
+              className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+            >
               <div className="mb-1 text-slate-300">98%</div>
               <div className="text-sm text-slate-400">{hero.satisfaction}</div>
-            </div>
-            <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
+            </button>
+            <a
+              href={whatsappUrl ?? "#contact"}
+              target={whatsappUrl ? "_blank" : undefined}
+              rel={whatsappUrl ? "noreferrer" : undefined}
+              onClick={(event) => {
+                if (whatsappUrl) return;
+                event.preventDefault();
+                setIsContactOpen(true);
+              }}
+              className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+            >
               <div className="mb-1 text-slate-300">24/7</div>
               <div className="text-sm text-slate-400">{hero.support}</div>
-            </div>
+            </a>
           </div>
         </div>
       </div>

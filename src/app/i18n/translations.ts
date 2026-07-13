@@ -27,6 +27,7 @@ export const translations = {
       projects: "Projects",
       satisfaction: "Satisfaction",
       support: "Support",
+      whatsappMessage: "Hello, I would like help with Digital Trust Solutions services.",
     },
     services: {
       eyebrow: "What we do",
@@ -142,6 +143,7 @@ export const translations = {
       projects: "Proyectos",
       satisfaction: "Satisfacción",
       support: "Soporte",
+      whatsappMessage: "Hola, quisiera recibir ayuda con los servicios de Digital Trust Solutions.",
     },
     services: {
       eyebrow: "Lo que hacemos",
