@@ -40,7 +40,7 @@ export function Services() {
               <article className="service-card hover-card" key={service.id} tabIndex={0}>
                 <img
                   className="service-card__image"
-                  src={service.image}
+                  src={`${import.meta.env.BASE_URL}${service.image.replace(/^\//, "")}`}
                   alt="Abstract secure cloud infrastructure"
                 />
                 <div className="service-card__scrim" aria-hidden="true" />

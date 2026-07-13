@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+  base: "/DTS-web-site-3.0-/",
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
