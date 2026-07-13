@@ -15,6 +15,9 @@ export function BrandLogo({
   const isMark = variant === "mark";
   const ink = tone === "light" ? "#F8FAFC" : "#0F1720";
   const muted = tone === "light" ? "#94A3B8" : "#43576B";
+  const shield = "#131D28";
+  const accent = "#6F8498";
+  const accentHighlight = "#BAC6D2";
 
   return (
     <svg
@@ -29,8 +32,8 @@ export function BrandLogo({
       <g id="digital-trust-mark">
         <path
           d="M80 6 148 34v49c0 43-25 72-68 87C37 155 12 126 12 83V34L80 6Z"
-          fill="#0F1720"
-          stroke="#38BDF8"
+          fill={shield}
+          stroke={accent}
           strokeWidth="7"
           strokeLinejoin="round"
         />
@@ -45,18 +48,18 @@ export function BrandLogo({
         <path
           d="M58 52h27c28 0 45 17 45 44s-17 44-45 44H61v-35h18v18h7c16 0 25-10 25-27s-9-27-25-27H76v25H58V52Z"
           fill="none"
-          stroke="#38BDF8"
+          stroke={accentHighlight}
           strokeWidth="9"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path d="M58 60H43V48" fill="none" stroke="#38BDF8" strokeWidth="6" strokeLinecap="round" />
-        <path d="M61 116H39" fill="none" stroke="#38BDF8" strokeWidth="6" strokeLinecap="round" />
-        <path d="M72 139v10" fill="none" stroke="#38BDF8" strokeWidth="6" strokeLinecap="round" />
-        <circle cx="43" cy="42" r="7" fill="#0F1720" stroke="#38BDF8" strokeWidth="5" />
-        <circle cx="33" cy="116" r="7" fill="#0F1720" stroke="#38BDF8" strokeWidth="5" />
-        <circle cx="72" cy="151" r="7" fill="#0F1720" stroke="#38BDF8" strokeWidth="5" />
-        <circle cx="88" cy="116" r="7" fill="#0F1720" stroke="#38BDF8" strokeWidth="5" />
+        <path d="M58 60H43V48" fill="none" stroke={accentHighlight} strokeWidth="6" strokeLinecap="round" />
+        <path d="M61 116H39" fill="none" stroke={accentHighlight} strokeWidth="6" strokeLinecap="round" />
+        <path d="M72 139v10" fill="none" stroke={accentHighlight} strokeWidth="6" strokeLinecap="round" />
+        <circle cx="43" cy="42" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
+        <circle cx="33" cy="116" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
+        <circle cx="72" cy="151" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
+        <circle cx="88" cy="116" r="7" fill={shield} stroke={accentHighlight} strokeWidth="5" />
       </g>
 
       {!isMark && (
@@ -83,7 +86,7 @@ export function BrandLogo({
           >
             TRUST
           </text>
-          <path d="M184 140H508" stroke="#38BDF8" strokeWidth="3" />
+          <path d="M184 140H508" stroke={accent} strokeWidth="3" />
           <text
             x="184"
             y="163"
