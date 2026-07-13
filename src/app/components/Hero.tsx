@@ -13,7 +13,9 @@ export function Hero() {
   const [isContactOpen, setIsContactOpen] = useState(false);
   const { copy } = useLanguage();
   const hero = copy.hero;
-  const whatsappNumber = String(import.meta.env.VITE_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
+  const whatsappNumber = String(
+    import.meta.env.VITE_WHATSAPP_NUMBER ?? "573184289661",
+  ).replace(/\D/g, "");
   const whatsappUrl = whatsappNumber
     ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(hero.whatsappMessage)}`
     : null;
