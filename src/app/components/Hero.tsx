@@ -33,7 +33,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[100dvh] overflow-hidden bg-black">
+    <section className="relative min-h-screen overflow-hidden bg-black">
       <video
         ref={videoRef}
         autoPlay
@@ -50,15 +50,15 @@ export function Hero() {
       <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black via-black/70 to-transparent" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl items-center px-6 pb-24 pt-24">
-        <div className="max-w-3xl">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 pb-32 pt-40">
+        <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-10">
           <h1 className="mb-6 text-white">
-            <span className="font-heading mb-4 block bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text pb-2 text-5xl font-normal italic leading-[0.96] tracking-[-0.035em] text-transparent md:text-7xl lg:text-[5.5rem]">
+            <span className="mb-4 block bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-5xl text-transparent md:text-7xl">
               Building Tomorrow&apos;s Technology Today
             </span>
           </h1>
 
-          <p className="font-body mb-8 max-w-2xl text-lg font-light leading-relaxed text-slate-300">
+          <p className="mb-8 max-w-2xl text-lg text-slate-300">
             We transform visionary ideas into powerful digital solutions. From
             AI-driven applications to scalable cloud platforms, we craft
             technology that drives real business results.
@@ -69,7 +69,7 @@ export function Hero() {
               type="button"
               size="lg"
               onClick={() => setIsContactOpen(true)}
-              className="font-body group border border-slate-500/30 bg-gradient-to-r from-slate-700 to-slate-600 px-8 font-medium text-white shadow-lg shadow-slate-950/50 hover:from-slate-600 hover:to-slate-500"
+              className="group border border-slate-500/30 bg-gradient-to-r from-slate-700 to-slate-600 px-8 text-white shadow-lg shadow-slate-950/50 hover:from-slate-600 hover:to-slate-500"
             >
               Start Your Project
               <Rocket className="ml-2 h-5 w-5 transition-transform group-hover:-translate-y-1" />
@@ -81,14 +81,14 @@ export function Hero() {
               onClick={() =>
                 document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })
               }
-              className="font-body border-slate-500 bg-black/10 px-8 font-medium text-white backdrop-blur-xl hover:bg-slate-800/50"
+              className="border-slate-500 bg-black/10 px-8 text-white backdrop-blur-xl hover:bg-slate-800/50"
             >
               View Case Studies
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
 
-          <div className="font-body grid max-w-2xl grid-cols-3 gap-6">
+          <div className="grid max-w-2xl grid-cols-3 gap-6">
             <div className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 backdrop-blur-xl">
               <div className="mb-1 text-slate-300">250+</div>
               <div className="text-sm text-slate-400">Projects</div>
