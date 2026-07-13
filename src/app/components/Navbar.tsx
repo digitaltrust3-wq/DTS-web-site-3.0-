@@ -26,7 +26,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <a href="#" aria-label="Digital Trust Solutions home" className="block shrink-0">
-            <BrandLogo className="h-12 w-auto" />
+            <BrandLogo className="h-16 w-auto" />
           </a>
 
           {/* Desktop Menu */}

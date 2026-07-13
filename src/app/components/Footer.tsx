@@ -7,7 +7,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
-            <BrandLogo className="mb-5 h-16 w-auto max-w-full" />
+            <BrandLogo className="mb-5 h-24 w-auto max-w-full" />
             <p className="text-sm">
               Transforming ideas into digital reality with innovative software solutions.
             </p>
