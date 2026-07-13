@@ -1,12 +1,12 @@
-import { Navbar } from "./components/Navbar";
-import { Hero } from "./components/Hero";
-import { Services } from "./components/Services";
-import { Portfolio } from "./components/Portfolio";
-import { About } from "./components/About";
-import { TechStack } from "./components/TechStack";
-import { Testimonials } from "./components/Testimonials";
-import { CTA } from "./components/CTA";
-import { Footer } from "./components/Footer";
+import { Navbar } from "./components/layout/Navbar";
+import { Footer } from "./components/layout/Footer";
+import { About } from "./components/sections/About";
+import { CTA } from "./components/sections/CTA";
+import { Hero } from "./components/sections/Hero";
+import { Portfolio } from "./components/sections/Portfolio";
+import { Services } from "./components/sections/Services";
+import { TechStack } from "./components/sections/TechStack";
+import { Testimonials } from "./components/sections/Testimonials";
 import { useLanguage } from "./i18n/LanguageContext";
 
 export default function App() {

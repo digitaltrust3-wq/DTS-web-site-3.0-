@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import Hls from "hls.js";
 import { ArrowRight, Rocket } from "lucide-react";
-import { ContactModal } from "./ContactModal";
-import { Button } from "./ui/button";
-import { useLanguage } from "../i18n/LanguageContext";
+import { ContactModal } from "../shared/ContactModal";
+import { Button } from "../shared/Button";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const HERO_VIDEO_URL =
   "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
@@ -28,7 +27,18 @@ export function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
-    if (Hls.isSupported()) {
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = HERO_VIDEO_URL;
+      return;
+    }
+
+    let isCancelled = false;
+    let destroyPlayer: (() => void) | undefined;
+
+    const loadVideoPlayer = async () => {
+      const { default: Hls } = await import("hls.js");
+      if (isCancelled || !Hls.isSupported()) return;
+
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
@@ -36,13 +46,15 @@ export function Hero() {
 
       hls.loadSource(HERO_VIDEO_URL);
       hls.attachMedia(video);
+      destroyPlayer = () => hls.destroy();
+    };
 
-      return () => hls.destroy();
-    }
+    void loadVideoPlayer();
 
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = HERO_VIDEO_URL;
-    }
+    return () => {
+      isCancelled = true;
+      destroyPlayer?.();
+    };
   }, []);
 
   return (

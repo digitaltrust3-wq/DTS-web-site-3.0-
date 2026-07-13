@@ -1,5 +1,5 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { useLanguage } from "../i18n/LanguageContext";
+import { ImageWithFallback } from "../shared/ImageWithFallback";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const technologies = [
   "React",

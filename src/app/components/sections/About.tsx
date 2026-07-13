@@ -1,6 +1,6 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "../shared/ImageWithFallback";
 import { CheckCircle2 } from "lucide-react";
-import { useLanguage } from "../i18n/LanguageContext";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export function About() {
   const { copy } = useLanguage();

@@ -1,6 +1,6 @@
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "../shared/ImageWithFallback";
 import { ExternalLink, ArrowUpRight } from "lucide-react";
-import { useLanguage } from "../i18n/LanguageContext";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const projects = [
   {

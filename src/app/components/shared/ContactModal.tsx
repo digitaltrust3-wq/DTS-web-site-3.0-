@@ -1,7 +1,7 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { ArrowRight, Check, X } from "lucide-react";
-import { Button } from "./ui/button";
-import { useLanguage } from "../i18n/LanguageContext";
+import { Button } from "./Button";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type ContactModalProps = {
   isOpen: boolean;

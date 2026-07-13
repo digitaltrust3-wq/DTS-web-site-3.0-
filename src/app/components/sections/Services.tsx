@@ -8,8 +8,8 @@ import {
   Workflow,
   type LucideIcon,
 } from "lucide-react";
-import services from "../data/services.json";
-import { useLanguage } from "../i18n/LanguageContext";
+import services from "../../data/services.json";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const serviceIcons: Record<string, LucideIcon> = {
   code: Code2,

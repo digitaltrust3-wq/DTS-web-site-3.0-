@@ -256,11 +256,6 @@ body {
   opacity: 0.9;
 }
 
-.hover-card:hover .hover-card__image img,
-.hover-card:focus-within .hover-card__image img {
-  content: url("/assets/digital-trust-solutions-service-hover.png");
-}
-
 .services-section {
   position: relative;
   overflow: hidden;

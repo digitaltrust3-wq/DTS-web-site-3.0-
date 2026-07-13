@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
+import { Button } from "../shared/Button";
 import { Mail, ArrowRight } from "lucide-react";
-import { useLanguage } from "../i18n/LanguageContext";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export function CTA() {
   const { copy } = useLanguage();

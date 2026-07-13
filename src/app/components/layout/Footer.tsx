@@ -1,6 +1,6 @@
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
-import { BrandLogo } from "./BrandLogo";
-import { useLanguage } from "../i18n/LanguageContext";
+import { BrandLogo } from "../shared/BrandLogo";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export function Footer() {
   const { copy } = useLanguage();

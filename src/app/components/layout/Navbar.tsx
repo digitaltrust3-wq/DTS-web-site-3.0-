@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Globe2, Menu, X } from "lucide-react";
-import { Button } from "./ui/button";
-import { BrandLogo } from "./BrandLogo";
-import { useLanguage } from "../i18n/LanguageContext";
+import { Button } from "../shared/Button";
+import { BrandLogo } from "../shared/BrandLogo";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
