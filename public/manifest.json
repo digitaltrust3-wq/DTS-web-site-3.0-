@@ -1,0 +1,17 @@
+{
+  "name": "Digital Trust Solutions",
+  "short_name": "DTS",
+  "description": "Secure, scalable digital products built around trust.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1720",
+  "theme_color": "#0f1720",
+  "icons": [
+    {
+      "src": "/assets/digital-trust-solutions-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
