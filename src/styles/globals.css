@@ -662,6 +662,8 @@ body {
   padding: 1.75rem 0.15rem 2.25rem;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   scroll-snap-type: inline mandatory;
   scrollbar-width: none;
@@ -669,6 +671,11 @@ body {
 }
 
 .portfolio-track.is-auto-scrolling {
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+
+.portfolio-track.is-touching {
   scroll-behavior: auto;
   scroll-snap-type: none;
 }

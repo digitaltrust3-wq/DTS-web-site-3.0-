@@ -12,6 +12,9 @@ export function Portfolio() {
   const animationFrameRef = useRef<number | null>(null);
   const wheelFrameRef = useRef<number | null>(null);
   const mobileAutoplayRef = useRef(false);
+  const mobileCanAutoplayRef = useRef(false);
+  const mobileInteractionRef = useRef(false);
+  const mobileResumeTimerRef = useRef<number | null>(null);
   const activeIndexRef = useRef(0);
   const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -95,6 +98,23 @@ export function Portfolio() {
     }
   };
 
+  const getCycleLength = () => {
+    const track = trackRef.current;
+    if (!track || sites.length < 2) return 0;
+    const cards = track.querySelectorAll<HTMLElement>(".portfolio-card");
+    return cards[0] && cards[sites.length]
+      ? cards[sites.length].offsetLeft - cards[0].offsetLeft
+      : track.scrollWidth / 3;
+  };
+
+  const normalizeLoopPosition = () => {
+    const track = trackRef.current;
+    const cycleLength = getCycleLength();
+    if (!track || cycleLength <= 0) return;
+    if (track.scrollLeft < cycleLength * 0.35) track.scrollLeft += cycleLength;
+    else if (track.scrollLeft > cycleLength * 1.65) track.scrollLeft -= cycleLength;
+  };
+
   const runDirectionalScroll = () => {
     const track = trackRef.current;
     if (!track || hoverSpeedRef.current === 0) {
@@ -102,18 +122,13 @@ export function Portfolio() {
       return;
     }
 
-    const cards = track.querySelectorAll<HTMLElement>(".portfolio-card");
-    const firstCard = cards[0];
-    const firstDuplicate = cards[sites.length];
-    const cycleLength = firstCard && firstDuplicate
-      ? firstDuplicate.offsetLeft - firstCard.offsetLeft
-      : track.scrollWidth / 2;
+    const cycleLength = getCycleLength();
 
-    if (cycleLength > 0 && hoverSpeedRef.current < 0 && track.scrollLeft <= 0) {
-      track.scrollLeft = cycleLength;
+    if (cycleLength > 0 && hoverSpeedRef.current < 0 && track.scrollLeft <= cycleLength * 0.35) {
+      track.scrollLeft += cycleLength;
     }
     track.scrollLeft += hoverSpeedRef.current;
-    if (cycleLength > 0 && hoverSpeedRef.current > 0 && track.scrollLeft >= cycleLength) {
+    if (cycleLength > 0 && hoverSpeedRef.current > 0 && track.scrollLeft >= cycleLength * 1.65) {
       track.scrollLeft -= cycleLength;
     }
     updateWheelTransforms();
@@ -142,6 +157,33 @@ export function Portfolio() {
     stopDirectionalScroll();
   };
 
+  const pauseMobileAutoplay = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") return;
+    if (mobileResumeTimerRef.current !== null) {
+      window.clearTimeout(mobileResumeTimerRef.current);
+      mobileResumeTimerRef.current = null;
+    }
+    mobileInteractionRef.current = true;
+    mobileAutoplayRef.current = false;
+    trackRef.current?.classList.add("is-touching");
+    stopDirectionalScroll();
+  };
+
+  const scheduleMobileAutoplay = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") return;
+    mobileInteractionRef.current = false;
+    trackRef.current?.classList.remove("is-touching");
+    normalizeLoopPosition();
+    if (mobileResumeTimerRef.current !== null) window.clearTimeout(mobileResumeTimerRef.current);
+    mobileResumeTimerRef.current = window.setTimeout(() => {
+      mobileResumeTimerRef.current = null;
+      if (!mobileCanAutoplayRef.current || mobileInteractionRef.current || document.hidden) return;
+      mobileAutoplayRef.current = true;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      beginScroll(reducedMotion ? 0.45 : 1.35, true);
+    }, 2400);
+  };
+
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -158,11 +200,12 @@ export function Portfolio() {
 
     const syncAutoplay = () => {
       const shouldPlay = isVisible && isMobileDevice() && !document.hidden;
-      mobileAutoplayRef.current = shouldPlay;
-      if (shouldPlay) {
+      mobileCanAutoplayRef.current = shouldPlay;
+      mobileAutoplayRef.current = shouldPlay && !mobileInteractionRef.current;
+      if (mobileAutoplayRef.current) {
         // Keep a perceptible but gentler motion when reduced motion is enabled.
         beginScroll(reducedMotionQuery.matches ? 0.45 : 1.35, true);
-      } else {
+      } else if (!shouldPlay) {
         stopDirectionalScroll();
       }
     };
@@ -188,10 +231,18 @@ export function Portfolio() {
     window.addEventListener("resize", handleDeviceChange);
     coarsePointerQuery.addEventListener("change", handleDeviceChange);
     reducedMotionQuery.addEventListener("change", handleDeviceChange);
-    const initialCheckFrame = requestAnimationFrame(checkCurrentVisibility);
+    const initialCheckFrame = requestAnimationFrame(() => {
+      const cycleLength = getCycleLength();
+      if (cycleLength > 0 && track.scrollLeft < cycleLength * 0.35) {
+        track.scrollLeft = cycleLength;
+      }
+      checkCurrentVisibility();
+    });
 
     return () => {
       mobileAutoplayRef.current = false;
+      mobileCanAutoplayRef.current = false;
+      if (mobileResumeTimerRef.current !== null) window.clearTimeout(mobileResumeTimerRef.current);
       cancelAnimationFrame(initialCheckFrame);
       observer.disconnect();
       document.removeEventListener("visibilitychange", handleVisibility);
@@ -245,7 +296,7 @@ export function Portfolio() {
     else track.scrollBy({ left: direction * distance, behavior: "smooth" });
   };
 
-  const carouselSites = sites.length > 1 ? [...sites, ...sites] : sites;
+  const carouselSites = sites.length > 1 ? [...sites, ...sites, ...sites] : sites;
 
   return (
     <section id="portfolio" className="portfolio-section">
@@ -283,15 +334,18 @@ export function Portfolio() {
             onMouseEnter={() => startDirectionalScroll()}
             onMouseMove={handleMouseMove}
             onMouseLeave={stopPointerScroll}
+            onPointerDown={pauseMobileAutoplay}
+            onPointerUp={scheduleMobileAutoplay}
+            onPointerCancel={scheduleMobileAutoplay}
           >
             {carouselSites.map((site, index) => {
             const siteCopy = site.copy[language];
-            const isDuplicate = index >= sites.length;
+            const isDuplicate = sites.length > 1 && (index < sites.length || index >= sites.length * 2);
             const visibleIndex = index % sites.length;
             return (
               <article
                 className="portfolio-card"
-                key={`${site.id}-${isDuplicate ? "duplicate" : "original"}`}
+                key={`${site.id}-${Math.floor(index / Math.max(sites.length, 1))}`}
                 aria-hidden={isDuplicate || undefined}
               >
                 <button
