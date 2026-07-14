@@ -31,6 +31,25 @@ La compilación estática se genera en `dist/`. GitHub Pages puede publicar esa 
 2. Completa las credenciales de correo, WhatsApp y OpenAI que vayas a utilizar.
 3. Nunca publiques el archivo `.env` ni credenciales reales en Git.
 
+## Panel privado de administración
+
+El panel está disponible en `/DTS-web-site-3.0-/admin` después de iniciar el servidor con `npm start`. Permite:
+
+- Editar todos los textos en español e inglés.
+- Administrar, publicar u ocultar hasta 20 proyectos del carrusel.
+- Cambiar enlaces, imágenes, categorías, descripciones y tecnologías.
+- Publicar los cambios sin recompilar el frontend.
+
+Configura estas variables en `.env` antes de usarlo:
+
+```env
+ADMIN_EMAIL=tu-correo@dominio.com
+ADMIN_PASSWORD=una-contraseña-larga-y-unica
+ADMIN_SESSION_SECRET=una-cadena-aleatoria-de-al-menos-32-caracteres
+```
+
+El contenido se guarda en `server/data/content.json`. En producción, el servicio Node debe usar un disco persistente y HTTPS. GitHub Pages por sí solo no puede ejecutar la autenticación, la API ni guardar cambios; para el panel se necesita desplegar la aplicación completa en un proveedor compatible con Node.js y almacenamiento persistente.
+
 ## Organización
 
 ```text

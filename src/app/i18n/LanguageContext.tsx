@@ -1,14 +1,20 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { translations, type Language } from "./translations";
+import { defaultManagedContent, fetchManagedContent, type ManagedContent } from "../content/managedContent";
+import type { PortfolioSite } from "../data/portfolioSites";
+import type { Language, SiteCopy } from "./translations";
 
 type LanguageContextValue = {
   language: Language;
-  copy: (typeof translations)[Language];
+  copy: SiteCopy;
+  managedContent: ManagedContent;
+  portfolioSites: PortfolioSite[];
+  refreshContent: () => Promise<void>;
   toggleLanguage: () => void;
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 const STORAGE_KEY = "dts-language";
+const CONTENT_CHANNEL = "dts-content-updates";
 
 function getInitialLanguage(): Language {
   if (typeof window === "undefined") return "en";
@@ -19,7 +25,39 @@ function getInitialLanguage(): Language {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>(getInitialLanguage);
-  const copy = translations[language];
+  const [managedContent, setManagedContent] = useState<ManagedContent>(defaultManagedContent);
+  const copy = managedContent.translations[language] as SiteCopy;
+
+  const refreshContent = async () => {
+    try {
+      setManagedContent(await fetchManagedContent());
+    } catch {
+      // The compiled defaults keep the public site available if the API is offline.
+    }
+  };
+
+  useEffect(() => {
+    void refreshContent();
+
+    const events = new EventSource("/api/content/events");
+    events.addEventListener("content-updated", () => void refreshContent());
+
+    const channel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel(CONTENT_CHANNEL) : null;
+    if (channel) channel.onmessage = () => void refreshContent();
+
+    const refreshWhenVisible = () => {
+      if (!document.hidden) void refreshContent();
+    };
+    window.addEventListener("focus", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+
+    return () => {
+      events.close();
+      channel?.close();
+      window.removeEventListener("focus", refreshWhenVisible);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, []);
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, language);
@@ -32,9 +70,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     () => ({
       language,
       copy,
+      managedContent,
+      portfolioSites: managedContent.portfolioSites,
+      refreshContent,
       toggleLanguage: () => setLanguage((current) => (current === "en" ? "es" : "en")),
     }),
-    [copy, language],
+    [copy, language, managedContent],
   );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

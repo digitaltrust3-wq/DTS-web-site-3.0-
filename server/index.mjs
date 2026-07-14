@@ -4,21 +4,25 @@ import nodemailer from "nodemailer";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { receiveWebhook, verifyWebhook } from "./whatsapp/webhook.mjs";
+import { registerAdminRoutes } from "./admin.mjs";
 
 const app = express();
 const port = Number(process.env.PORT || 3001);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
 const distPath = path.join(projectRoot, "dist");
+const publicBasePath = process.env.PUBLIC_BASE_PATH || "/DTS-web-site-3.0-";
 const recentRequests = new Map();
 
 app.disable("x-powered-by");
 app.use(express.json({
-  limit: "32kb",
+  limit: "512kb",
   verify: (request, _response, buffer) => {
     request.rawBody = buffer;
   },
 }));
+
+registerAdminRoutes(app, projectRoot);
 
 app.get("/api/whatsapp/webhook", verifyWebhook);
 app.post("/api/whatsapp/webhook", receiveWebhook);
@@ -92,6 +96,7 @@ app.post("/api/contact", async (request, response) => {
   }
 });
 
+app.use(publicBasePath, express.static(distPath));
 app.use(express.static(distPath));
 app.use((request, response, next) => {
   if (request.method !== "GET" || request.path.startsWith("/api/")) return next();

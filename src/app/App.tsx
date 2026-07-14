@@ -9,6 +9,7 @@ import { TechStack } from "./components/sections/TechStack";
 import { Testimonials } from "./components/sections/Testimonials";
 import { FixedVideoBackground } from "./components/shared/FixedVideoBackground";
 import { useLanguage } from "./i18n/LanguageContext";
+import { AdminPage } from "./admin/AdminPage";
 
 const INTRO_VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260514_135830_bb6491d1-9b66-4aec-9722-13b4dfe3fb46.mp4";
@@ -18,6 +19,9 @@ const LOWER_VIDEO_URL =
 
 export default function App() {
   const { copy } = useLanguage();
+  const isAdminRoute = /\/admin\/?$/.test(window.location.pathname) || window.location.hash === "#/admin";
+
+  if (isAdminRoute) return <AdminPage />;
 
   return (
     <div className="min-h-screen bg-[var(--dts-surface)] text-[var(--dts-text)]">

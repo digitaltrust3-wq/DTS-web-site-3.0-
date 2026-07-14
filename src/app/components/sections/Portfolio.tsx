@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Eye, X } from "lucide-react";
-import { portfolioSites, type PortfolioSite } from "../../data/portfolioSites";
+import type { PortfolioSite } from "../../data/portfolioSites";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { ImageWithFallback } from "../shared/ImageWithFallback";
 
 export function Portfolio() {
-  const { copy, language } = useLanguage();
+  const { copy, language, portfolioSites } = useLanguage();
   const portfolio = copy.portfolio;
   const trackRef = useRef<HTMLDivElement>(null);
   const hoverSpeedRef = useRef(0);
@@ -18,7 +18,7 @@ export function Portfolio() {
   const activeIndexRef = useRef(0);
   const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), []);
+  const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), [portfolioSites]);
   const labels = language === "es"
     ? { preview: "Vista previa", open: "Abrir sitio", previous: "Proyectos anteriores", next: "Proyectos siguientes", close: "Cerrar vista previa", fallback: "Si la página no permite mostrarse aquí, puedes abrirla en una nueva pestaña." }
     : { preview: "Preview", open: "Open website", previous: "Previous projects", next: "Next projects", close: "Close preview", fallback: "If the page cannot be displayed here, you can open it in a new tab." };
