@@ -642,12 +642,16 @@ body {
   height: 1.15rem;
 }
 
+.portfolio-stage {
+  position: relative;
+}
+
 .portfolio-track {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: calc((100% - 3rem) / 3);
   gap: 1.5rem;
-  padding: 0.4rem 0.15rem 1rem;
+  padding: 1.75rem 0.15rem 2.25rem;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   scroll-behavior: smooth;
@@ -661,10 +665,65 @@ body {
   scroll-snap-type: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+.portfolio-motion-zone {
+  display: none;
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
   .portfolio-track {
     cursor: ew-resize;
   }
+
+  .portfolio-motion-zone {
+    position: absolute;
+    z-index: 5;
+    top: 1.75rem;
+    bottom: 2.25rem;
+    display: flex;
+    width: clamp(5rem, 9vw, 8rem);
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    color: #d8e4ef;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .portfolio-motion-zone--left {
+    left: 0;
+    border-right: 1px solid rgba(174, 199, 224, 0.2);
+    background: linear-gradient(90deg, rgba(8, 18, 29, 0.9), transparent);
+    cursor: w-resize;
+  }
+
+  .portfolio-motion-zone--right {
+    right: 0;
+    border-left: 1px solid rgba(174, 199, 224, 0.2);
+    background: linear-gradient(90deg, transparent, rgba(8, 18, 29, 0.9));
+    cursor: e-resize;
+  }
+
+  .portfolio-motion-zone svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    animation: portfolio-zone-pulse 1.2s ease-in-out infinite;
+  }
+
+  .portfolio-motion-zone--left svg {
+    animation-name: portfolio-zone-pulse-left;
+  }
+}
+
+@keyframes portfolio-zone-pulse {
+  0%, 100% { transform: translateX(0); opacity: 0.55; }
+  50% { transform: translateX(0.35rem); opacity: 1; }
+}
+
+@keyframes portfolio-zone-pulse-left {
+  0%, 100% { transform: translateX(0); opacity: 0.55; }
+  50% { transform: translateX(-0.35rem); opacity: 1; }
 }
 
 .portfolio-track::-webkit-scrollbar {
@@ -990,7 +1049,11 @@ body {
   }
 }
 
-@media (max-width: 767px), (pointer: coarse) {
+@media (max-width: 767px), (any-hover: none) {
+  .portfolio-track {
+    padding: 0.5rem 0.15rem 1rem;
+  }
+
   #services,
   #portfolio,
   #about,
