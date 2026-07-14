@@ -14,8 +14,8 @@ export function Portfolio() {
   const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
   const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), []);
   const labels = language === "es"
-    ? { preview: "Vista previa", open: "Abrir sitio", previous: "Proyectos anteriores", next: "Proyectos siguientes", close: "Cerrar vista previa", move: "Mover", fallback: "Si la página no permite mostrarse aquí, puedes abrirla en una nueva pestaña." }
-    : { preview: "Preview", open: "Open website", previous: "Previous projects", next: "Next projects", close: "Close preview", move: "Move", fallback: "If the page cannot be displayed here, you can open it in a new tab." };
+    ? { preview: "Vista previa", open: "Abrir sitio", previous: "Proyectos anteriores", next: "Proyectos siguientes", close: "Cerrar vista previa", fallback: "Si la página no permite mostrarse aquí, puedes abrirla en una nueva pestaña." }
+    : { preview: "Preview", open: "Open website", previous: "Previous projects", next: "Next projects", close: "Close preview", fallback: "If the page cannot be displayed here, you can open it in a new tab." };
 
   useEffect(() => {
     if (!previewSite) return;
@@ -185,10 +185,7 @@ export function Portfolio() {
             onMouseMove={(event) => handleMotionZoneMove(event, -1)}
             onMouseLeave={stopDirectionalScroll}
             aria-hidden="true"
-          >
-            <ChevronLeft />
-            <span>{labels.move}</span>
-          </div>
+          />
           <div
             ref={trackRef}
             className="portfolio-track"
@@ -246,10 +243,7 @@ export function Portfolio() {
             onMouseMove={(event) => handleMotionZoneMove(event, 1)}
             onMouseLeave={stopDirectionalScroll}
             aria-hidden="true"
-          >
-            <span>{labels.move}</span>
-            <ChevronRight />
-          </div>
+          />
         </div>
       </div>
 
