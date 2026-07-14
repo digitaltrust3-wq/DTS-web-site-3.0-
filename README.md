@@ -79,3 +79,8 @@ docs/            Documentación y atribuciones
 - `npm run dev:api`: solo el servidor Node.js.
 - `npm run build`: genera la versión optimizada del sitio.
 - `npm start`: sirve la compilación y habilita la API.
+- `npm run verify:email`: valida la conexión SMTP de Hostinger y, opcionalmente, envía un correo de prueba.
+
+## Hostinger
+
+La configuración completa de buzones, SMTP, aplicación Node.js, dominio y variables de producción está en [docs/HOSTINGER_DEPLOYMENT.md](docs/HOSTINGER_DEPLOYMENT.md). Usa `.env.hostinger.example` como plantilla para hPanel.

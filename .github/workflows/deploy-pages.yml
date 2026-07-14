@@ -32,6 +32,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_BASE_PATH: /DTS-web-site-3.0-/
+          VITE_SITE_URL: https://digitaltrust3-wq.github.io/DTS-web-site-3.0-/
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

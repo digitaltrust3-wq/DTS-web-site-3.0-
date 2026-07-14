@@ -15,7 +15,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const descriptionId = useId();
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const { copy } = useLanguage();
+  const { copy, language } = useLanguage();
   const modal = copy.contactModal;
 
   useEffect(() => {
@@ -47,7 +47,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const payload = {
       name: String(formData.get("name") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim(),
+      phone: String(formData.get("phone") ?? "").trim(),
       message: String(formData.get("message") ?? "").trim(),
+      language,
     };
 
     try {
@@ -157,6 +159,24 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   autoComplete="email"
                   className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400"
                   placeholder={modal.emailPlaceholder}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="contact-phone" className="mb-2 block text-sm text-slate-200">
+                  {modal.phone}
+                </label>
+                <input
+                  id="contact-phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  minLength={7}
+                  maxLength={30}
+                  autoComplete="tel"
+                  inputMode="tel"
+                  className="w-full rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400"
+                  placeholder={modal.phonePlaceholder}
                 />
               </div>
 
