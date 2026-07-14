@@ -8,6 +8,8 @@ export function Portfolio() {
   const { copy, language } = useLanguage();
   const portfolio = copy.portfolio;
   const trackRef = useRef<HTMLDivElement>(null);
+  const hoverSpeedRef = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
   const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
   const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), []);
   const labels = language === "es"
@@ -25,6 +27,54 @@ export function Portfolio() {
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [previewSite]);
+
+  useEffect(() => () => {
+    if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+  }, []);
+
+  const stopDirectionalScroll = () => {
+    hoverSpeedRef.current = 0;
+    if (animationFrameRef.current !== null) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+  };
+
+  const runDirectionalScroll = () => {
+    const track = trackRef.current;
+    if (!track || hoverSpeedRef.current <= 0) {
+      animationFrameRef.current = null;
+      return;
+    }
+
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    track.scrollLeft = Math.min(maxScroll, track.scrollLeft + hoverSpeedRef.current);
+    if (track.scrollLeft >= maxScroll - 1) {
+      stopDirectionalScroll();
+      return;
+    }
+    animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const track = trackRef.current;
+    if (!track) return;
+
+    const bounds = track.getBoundingClientRect();
+    const position = (event.clientX - bounds.left) / bounds.width;
+    const activationPoint = 0.62;
+    if (position <= activationPoint) {
+      stopDirectionalScroll();
+      return;
+    }
+
+    const proximity = Math.min(1, (position - activationPoint) / (1 - activationPoint));
+    hoverSpeedRef.current = 0.7 + proximity * proximity * 5.3;
+    if (animationFrameRef.current === null) {
+      animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
+    }
+  };
 
   const moveCarousel = (direction: -1 | 1) => {
     const track = trackRef.current;
@@ -59,7 +109,15 @@ export function Portfolio() {
           </div>
         </div>
 
-        <div ref={trackRef} className="portfolio-track" tabIndex={0} aria-label={portfolio.title}>
+        <div
+          ref={trackRef}
+          className="portfolio-track"
+          tabIndex={0}
+          aria-label={portfolio.title}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={stopDirectionalScroll}
+          onPointerCancel={stopDirectionalScroll}
+        >
           {sites.map((site, index) => {
             const siteCopy = site.copy[language];
             return (

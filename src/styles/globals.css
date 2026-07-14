@@ -655,6 +655,12 @@ body {
   scrollbar-width: none;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-track {
+    cursor: ew-resize;
+  }
+}
+
 .portfolio-track::-webkit-scrollbar {
   display: none;
 }
