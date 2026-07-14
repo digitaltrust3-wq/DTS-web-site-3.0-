@@ -21,9 +21,8 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-transparent">
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.96)_0%,rgba(4,10,18,0.88)_38%,rgba(9,18,30,0.32)_72%,rgba(10,18,28,0.12)_100%)]" />
+      <div className="hero-contrast-overlay" />
       <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-black via-black/70 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black via-black/70 to-transparent" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 pb-32 pt-40">

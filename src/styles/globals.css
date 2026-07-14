@@ -298,6 +298,32 @@ body {
   z-index: 1;
 }
 
+.hero-contrast-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.96) 0%,
+    rgba(4, 10, 18, 0.88) 38%,
+    rgba(9, 18, 30, 0.32) 72%,
+    rgba(10, 18, 28, 0.12) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 62%,
+    rgba(0, 0, 0, 0.35) 80%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 62%,
+    rgba(0, 0, 0, 0.35) 80%,
+    transparent 100%
+  );
+}
+
 .services-section {
   position: relative;
   overflow: hidden;
