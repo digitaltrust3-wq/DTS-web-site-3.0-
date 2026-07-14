@@ -317,6 +317,7 @@ body {
 
 .page-video-background video {
   object-fit: cover;
+  transform: translateZ(0);
 }
 
 .page-video-background__scrim {
@@ -967,6 +968,47 @@ body {
     padding: 0;
     justify-content: center;
     font-size: 0;
+  }
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  #services,
+  #portfolio,
+  #about,
+  #testimonials,
+  #contact {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 50rem;
+  }
+
+  .portfolio-card,
+  .portfolio-controls button,
+  .portfolio-card__preview,
+  .portfolio-preview,
+  .service-card__icon,
+  #contact {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .portfolio-card,
+  .portfolio-card__image,
+  .hover-card,
+  .hover-card img,
+  .service-card__summary,
+  .service-card__details {
+    transition-duration: 0.01ms;
+  }
+
+  .portfolio-card:hover,
+  .portfolio-card:focus-within,
+  .portfolio-card:hover .portfolio-card__image,
+  .portfolio-card:focus-within .portfolio-card__image,
+  .hover-card:hover,
+  .hover-card:focus-within,
+  .hover-card:hover img,
+  .hover-card:focus-within img {
+    transform: none;
   }
 }
 

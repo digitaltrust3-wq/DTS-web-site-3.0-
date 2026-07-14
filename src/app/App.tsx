@@ -27,7 +27,7 @@ export default function App() {
       <Navbar />
       <main id="main-content">
         <div className="page-video-region page-video-region--intro">
-          <FixedVideoBackground src={INTRO_VIDEO_URL} tone="intro" />
+          <FixedVideoBackground src={INTRO_VIDEO_URL} tone="intro" playbackRate={0.65} eager />
           <div className="page-video-region__content">
             <Hero />
             <Services />
@@ -37,7 +37,7 @@ export default function App() {
         </div>
 
         <div className="page-video-region page-video-region--lower">
-          <FixedVideoBackground src={LOWER_VIDEO_URL} hls tone="lower" />
+          <FixedVideoBackground src={LOWER_VIDEO_URL} hls tone="lower" playbackRate={0.65} />
           <div className="page-video-region__content">
             <TechStack />
             <Testimonials />
