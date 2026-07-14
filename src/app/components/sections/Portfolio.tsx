@@ -341,7 +341,6 @@ export function Portfolio() {
             {carouselSites.map((site, index) => {
             const siteCopy = site.copy[language];
             const isDuplicate = sites.length > 1 && (index < sites.length || index >= sites.length * 2);
-            const visibleIndex = index % sites.length;
             return (
               <article
                 className="portfolio-card"
@@ -359,7 +358,6 @@ export function Portfolio() {
                   aria-label={`${labels.preview}: ${siteCopy.title}`}
                 >
                   <ImageWithFallback src={site.image} alt={siteCopy.title} className="portfolio-card__image" />
-                  <span className="portfolio-card__number">{String(visibleIndex + 1).padStart(2, "0")}</span>
                   <span className="portfolio-card__preview"><Eye aria-hidden="true" /> {labels.preview}</span>
                 </button>
                 <div className="portfolio-card__body">
