@@ -26,15 +26,6 @@ export function Services() {
 
   return (
     <section id="services" className="services-section" aria-labelledby="services-title">
-      <video
-        className="services-background-video"
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260514_135830_bb6491d1-9b66-4aec-9722-13b4dfe3fb46.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      />
       <div className="services-shell">
         <header className="services-heading">
           <p className="services-eyebrow">{serviceCopy.eyebrow}</p>

@@ -7,23 +7,23 @@ export function About() {
   const about = copy.about;
 
   return (
-    <section className="py-24 px-6 bg-white" id="about">
+    <section className="py-24 px-6 bg-transparent text-white" id="about">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-slate-700 mb-6">{about.title}</h2>
-            <p className="text-slate-600 text-lg mb-6">
+            <h2 className="text-white mb-6">{about.title}</h2>
+            <p className="text-slate-200 text-lg mb-6">
               {about.first}
             </p>
-            <p className="text-slate-600 mb-8">
+            <p className="text-slate-300 mb-8">
               {about.second}
             </p>
             
             <div className="space-y-3">
               {about.highlights.map((highlight) => (
                 <div key={highlight} className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-slate-600 flex-shrink-0" />
-                  <span className="text-slate-700">{highlight}</span>
+                  <CheckCircle2 className="w-5 h-5 text-slate-300 flex-shrink-0" />
+                  <span className="text-slate-200">{highlight}</span>
                 </div>
               ))}
             </div>

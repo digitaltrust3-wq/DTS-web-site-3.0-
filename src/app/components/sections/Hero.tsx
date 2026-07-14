@@ -1,14 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, Rocket } from "lucide-react";
 import { ContactModal } from "../shared/ContactModal";
 import { Button } from "../shared/Button";
 import { useLanguage } from "../../i18n/LanguageContext";
 
-const HERO_VIDEO_URL =
-  "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
-
 export function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const { copy } = useLanguage();
   const hero = copy.hero;
@@ -23,53 +19,8 @@ export function Hero() {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = HERO_VIDEO_URL;
-      return;
-    }
-
-    let isCancelled = false;
-    let destroyPlayer: (() => void) | undefined;
-
-    const loadVideoPlayer = async () => {
-      const { default: Hls } = await import("hls.js");
-      if (isCancelled || !Hls.isSupported()) return;
-
-      const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-      });
-
-      hls.loadSource(HERO_VIDEO_URL);
-      hls.attachMedia(video);
-      destroyPlayer = () => hls.destroy();
-    };
-
-    void loadVideoPlayer();
-
-    return () => {
-      isCancelled = true;
-      destroyPlayer?.();
-    };
-  }, []);
-
   return (
-    <section className="relative min-h-screen overflow-hidden bg-black">
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        aria-hidden="true"
-        tabIndex={-1}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-
+    <section className="relative min-h-screen overflow-hidden bg-transparent">
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.96)_0%,rgba(4,10,18,0.88)_38%,rgba(9,18,30,0.32)_72%,rgba(10,18,28,0.12)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-black via-black/70 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black via-black/70 to-transparent" />

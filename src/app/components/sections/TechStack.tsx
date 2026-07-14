@@ -19,7 +19,7 @@ export function TechStack() {
   const techCopy = copy.tech;
 
   return (
-    <section className="py-24 px-6 bg-slate-900 text-white">
+    <section className="py-24 px-6 bg-transparent text-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1">

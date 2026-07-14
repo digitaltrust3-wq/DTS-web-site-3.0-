@@ -7,7 +7,14 @@ import { Portfolio } from "./components/sections/Portfolio";
 import { Services } from "./components/sections/Services";
 import { TechStack } from "./components/sections/TechStack";
 import { Testimonials } from "./components/sections/Testimonials";
+import { FixedVideoBackground } from "./components/shared/FixedVideoBackground";
 import { useLanguage } from "./i18n/LanguageContext";
+
+const INTRO_VIDEO_URL =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260514_135830_bb6491d1-9b66-4aec-9722-13b4dfe3fb46.mp4";
+
+const LOWER_VIDEO_URL =
+  "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
 
 export default function App() {
   const { copy } = useLanguage();
@@ -19,13 +26,24 @@ export default function App() {
       </a>
       <Navbar />
       <main id="main-content">
-        <Hero />
-        <Services />
-        <Portfolio />
-        <About />
-        <TechStack />
-        <Testimonials />
-        <CTA />
+        <div className="page-video-region page-video-region--intro">
+          <FixedVideoBackground src={INTRO_VIDEO_URL} tone="intro" />
+          <div className="page-video-region__content">
+            <Hero />
+            <Services />
+            <Portfolio />
+            <About />
+          </div>
+        </div>
+
+        <div className="page-video-region page-video-region--lower">
+          <FixedVideoBackground src={LOWER_VIDEO_URL} hls tone="lower" />
+          <div className="page-video-region__content">
+            <TechStack />
+            <Testimonials />
+            <CTA />
+          </div>
+        </div>
       </main>
       <Footer />
     </div>

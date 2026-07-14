@@ -6,7 +6,7 @@ export function Testimonials() {
   const testimonials = copy.testimonials;
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white relative overflow-hidden">
+    <section id="testimonials" className="py-24 px-6 bg-transparent text-white relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]"></div>

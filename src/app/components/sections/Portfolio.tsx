@@ -22,14 +22,14 @@ export function Portfolio() {
   const portfolio = copy.portfolio;
 
   return (
-    <section id="portfolio" className="py-24 px-6 bg-slate-50">
+    <section id="portfolio" className="py-24 px-6 bg-transparent text-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 bg-slate-100 text-slate-700 rounded-full mb-4">
+          <div className="inline-block px-4 py-2 bg-slate-950/55 border border-white/15 text-slate-200 rounded-full mb-4 backdrop-blur-md">
             {portfolio.eyebrow}
           </div>
           <h2 className="mb-4">{portfolio.title}</h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-300 text-lg max-w-2xl mx-auto">
             {portfolio.description}
           </p>
         </div>
@@ -40,7 +40,7 @@ export function Portfolio() {
             return (
             <div
               key={projectCopy.title}
-              className="hover-card group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className="hover-card group relative bg-white text-slate-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
             >
               <div className="hover-card__image relative h-64 overflow-hidden">
                 <ImageWithFallback

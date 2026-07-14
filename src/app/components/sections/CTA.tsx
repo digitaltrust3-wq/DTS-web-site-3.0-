@@ -7,7 +7,7 @@ export function CTA() {
   const cta = copy.cta;
 
   return (
-    <section id="contact" className="py-24 px-6 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800">
+    <section id="contact" className="py-24 px-6 bg-slate-950/55 backdrop-blur-sm">
       <div className="max-w-4xl mx-auto text-center text-white">
         <h2 className="mb-6">{cta.title}</h2>
         <p className="text-slate-200 text-lg mb-10">
