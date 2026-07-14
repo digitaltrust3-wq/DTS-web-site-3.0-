@@ -11,7 +11,10 @@ export function Portfolio() {
   const hoverSpeedRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
   const wheelFrameRef = useRef<number | null>(null);
+  const mobileAutoplayRef = useRef(false);
+  const activeIndexRef = useRef(0);
   const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), []);
   const labels = language === "es"
     ? { preview: "Vista previa", open: "Abrir sitio", previous: "Proyectos anteriores", next: "Proyectos siguientes", close: "Cerrar vista previa", fallback: "Si la página no permite mostrarse aquí, puedes abrirla en una nueva pestaña." }
@@ -34,18 +37,31 @@ export function Portfolio() {
     if (!track) return;
     const bounds = track.getBoundingClientRect();
     const center = bounds.left + bounds.width / 2;
+    let nearestIndex = activeIndexRef.current;
+    let nearestDistance = Number.POSITIVE_INFINITY;
 
-    track.querySelectorAll<HTMLElement>(".portfolio-card").forEach((card) => {
+    track.querySelectorAll<HTMLElement>(".portfolio-card").forEach((card, index) => {
       const cardBounds = card.getBoundingClientRect();
       const cardCenter = cardBounds.left + cardBounds.width / 2;
+      const centerDistance = Math.abs(cardCenter - center);
       const distance = Math.max(-1, Math.min(1, (cardCenter - center) / (bounds.width * 0.52)));
       const depth = Math.abs(distance);
+      if (centerDistance < nearestDistance && sites.length > 0) {
+        nearestDistance = centerDistance;
+        nearestIndex = index % sites.length;
+      }
       card.style.setProperty("--wheel-rotate", `${distance * -20}deg`);
       card.style.setProperty("--wheel-y", `${depth * 32}px`);
       card.style.setProperty("--wheel-scale", `${1.06 - depth * 0.22}`);
       card.style.setProperty("--wheel-opacity", `${1 - depth * 0.26}`);
       card.style.zIndex = String(Math.round((1 - depth) * 10));
     });
+
+    const isMobile = window.matchMedia("(max-width: 900px), (any-hover: none)").matches;
+    if (isMobile && nearestIndex !== activeIndexRef.current) {
+      activeIndexRef.current = nearestIndex;
+      setActiveIndex(nearestIndex);
+    }
   };
 
   const scheduleWheelUpdate = () => {
@@ -104,15 +120,58 @@ export function Portfolio() {
     animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
   };
 
-  const startDirectionalScroll = (speed = 2.4) => {
-    const hasHover = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
-    if (!hasHover || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const beginScroll = (speed: number) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     trackRef.current?.classList.add("is-auto-scrolling");
     hoverSpeedRef.current = speed;
     if (animationFrameRef.current === null) {
       animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
     }
   };
+
+  const startDirectionalScroll = (speed = 2.4) => {
+    const hasHover = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
+    if (!hasHover) return;
+    beginScroll(speed);
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    const section = track?.closest("#portfolio");
+    if (!track || !section) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 900px), (any-hover: none)");
+    let isVisible = false;
+
+    const syncAutoplay = () => {
+      const shouldPlay = isVisible && mobileQuery.matches && !document.hidden;
+      mobileAutoplayRef.current = shouldPlay;
+      if (shouldPlay) beginScroll(0.9);
+      else if (hoverSpeedRef.current === 0.9 || mobileQuery.matches) stopDirectionalScroll();
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        syncAutoplay();
+      },
+      { threshold: 0.18 },
+    );
+
+    const handleVisibility = () => syncAutoplay();
+    const handleDeviceChange = () => syncAutoplay();
+    observer.observe(section);
+    document.addEventListener("visibilitychange", handleVisibility);
+    mobileQuery.addEventListener("change", handleDeviceChange);
+
+    return () => {
+      mobileAutoplayRef.current = false;
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+      mobileQuery.removeEventListener("change", handleDeviceChange);
+      stopDirectionalScroll();
+    };
+  }, []);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches) return;
@@ -244,6 +303,18 @@ export function Portfolio() {
             onMouseLeave={stopDirectionalScroll}
             aria-hidden="true"
           />
+        </div>
+        <div
+          className="portfolio-mobile-pagination"
+          aria-label={`${activeIndex + 1} / ${sites.length}`}
+        >
+          {sites.map((site, index) => (
+            <span
+              key={site.id}
+              className={index === activeIndex ? "is-active" : undefined}
+              aria-hidden="true"
+            />
+          ))}
         </div>
       </div>
 

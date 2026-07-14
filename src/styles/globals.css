@@ -677,6 +677,10 @@ body {
   display: none;
 }
 
+.portfolio-mobile-pagination {
+  display: none;
+}
+
 @media (any-hover: hover) and (any-pointer: fine) {
   .portfolio-track {
     cursor: default;
@@ -968,6 +972,33 @@ body {
   .portfolio-track {
     grid-auto-columns: calc((100% - 1.25rem) / 2);
     gap: 1.25rem;
+  }
+}
+
+@media (max-width: 900px), (any-hover: none) {
+  .portfolio-mobile-pagination {
+    display: flex;
+    min-height: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    margin-top: 0.35rem;
+  }
+
+  .portfolio-mobile-pagination span {
+    width: 0.38rem;
+    height: 0.38rem;
+    border: 1px solid rgba(226, 237, 247, 0.38);
+    border-radius: 50%;
+    background: rgba(191, 208, 224, 0.28);
+    transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+
+  .portfolio-mobile-pagination span.is-active {
+    border-color: rgba(255, 255, 255, 0.92);
+    background: #ffffff;
+    box-shadow: 0 0 0.75rem rgba(191, 220, 246, 0.42);
+    transform: scale(1.35);
   }
 }
 
