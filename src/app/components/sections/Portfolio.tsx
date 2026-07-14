@@ -10,6 +10,7 @@ export function Portfolio() {
   const trackRef = useRef<HTMLDivElement>(null);
   const hoverSpeedRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
+  const wheelFrameRef = useRef<number | null>(null);
   const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
   const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), []);
   const labels = language === "es"
@@ -28,12 +29,49 @@ export function Portfolio() {
     };
   }, [previewSite]);
 
-  useEffect(() => () => {
-    if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+  const updateWheelTransforms = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const bounds = track.getBoundingClientRect();
+    const center = bounds.left + bounds.width / 2;
+
+    track.querySelectorAll<HTMLElement>(".portfolio-card").forEach((card) => {
+      const cardBounds = card.getBoundingClientRect();
+      const cardCenter = cardBounds.left + cardBounds.width / 2;
+      const distance = Math.max(-1, Math.min(1, (cardCenter - center) / (bounds.width * 0.52)));
+      const depth = Math.abs(distance);
+      card.style.setProperty("--wheel-rotate", `${distance * -17}deg`);
+      card.style.setProperty("--wheel-y", `${depth * 24}px`);
+      card.style.setProperty("--wheel-scale", `${1 - depth * 0.1}`);
+      card.style.setProperty("--wheel-opacity", `${1 - depth * 0.18}`);
+    });
+  };
+
+  const scheduleWheelUpdate = () => {
+    if (wheelFrameRef.current !== null) return;
+    wheelFrameRef.current = requestAnimationFrame(() => {
+      wheelFrameRef.current = null;
+      updateWheelTransforms();
+    });
+  };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const resizeObserver = new ResizeObserver(scheduleWheelUpdate);
+    resizeObserver.observe(track);
+    scheduleWheelUpdate();
+
+    return () => {
+      resizeObserver.disconnect();
+      if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+      if (wheelFrameRef.current !== null) cancelAnimationFrame(wheelFrameRef.current);
+    };
   }, []);
 
   const stopDirectionalScroll = () => {
     hoverSpeedRef.current = 0;
+    trackRef.current?.classList.remove("is-auto-scrolling");
     if (animationFrameRef.current !== null) {
       cancelAnimationFrame(animationFrameRef.current);
       animationFrameRef.current = null;
@@ -47,13 +85,28 @@ export function Portfolio() {
       return;
     }
 
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    track.scrollLeft = Math.min(maxScroll, track.scrollLeft + hoverSpeedRef.current);
-    if (track.scrollLeft >= maxScroll - 1) {
-      stopDirectionalScroll();
-      return;
+    const cards = track.querySelectorAll<HTMLElement>(".portfolio-card");
+    const firstCard = cards[0];
+    const firstDuplicate = cards[sites.length];
+    const cycleLength = firstCard && firstDuplicate
+      ? firstDuplicate.offsetLeft - firstCard.offsetLeft
+      : track.scrollWidth / 2;
+
+    track.scrollLeft += hoverSpeedRef.current;
+    if (cycleLength > 0 && track.scrollLeft >= cycleLength) {
+      track.scrollLeft -= cycleLength;
     }
+    updateWheelTransforms();
     animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
+  };
+
+  const startDirectionalScroll = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    trackRef.current?.classList.add("is-auto-scrolling");
+    hoverSpeedRef.current = Math.max(hoverSpeedRef.current, 1.35);
+    if (animationFrameRef.current === null) {
+      animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
+    }
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -63,14 +116,9 @@ export function Portfolio() {
 
     const bounds = track.getBoundingClientRect();
     const position = (event.clientX - bounds.left) / bounds.width;
-    const activationPoint = 0.62;
-    if (position <= activationPoint) {
-      stopDirectionalScroll();
-      return;
-    }
-
-    const proximity = Math.min(1, (position - activationPoint) / (1 - activationPoint));
-    hoverSpeedRef.current = 0.7 + proximity * proximity * 5.3;
+    const proximity = Math.max(0, Math.min(1, position));
+    hoverSpeedRef.current = 1.15 + proximity * proximity * 2.85;
+    track.classList.add("is-auto-scrolling");
     if (animationFrameRef.current === null) {
       animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
     }
@@ -89,6 +137,8 @@ export function Portfolio() {
     else if (direction > 0 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
     else track.scrollBy({ left: direction * distance, behavior: "smooth" });
   };
+
+  const carouselSites = sites.length > 1 ? [...sites, ...sites] : sites;
 
   return (
     <section id="portfolio" className="portfolio-section">
@@ -114,17 +164,34 @@ export function Portfolio() {
           className="portfolio-track"
           tabIndex={0}
           aria-label={portfolio.title}
+          onScroll={scheduleWheelUpdate}
+          onPointerEnter={startDirectionalScroll}
           onPointerMove={handlePointerMove}
           onPointerLeave={stopDirectionalScroll}
           onPointerCancel={stopDirectionalScroll}
         >
-          {sites.map((site, index) => {
+          {carouselSites.map((site, index) => {
             const siteCopy = site.copy[language];
+            const isDuplicate = index >= sites.length;
+            const visibleIndex = index % sites.length;
             return (
-              <article className="portfolio-card" key={site.id}>
-                <button className="portfolio-card__media" type="button" onClick={() => setPreviewSite(site)} aria-label={`${labels.preview}: ${siteCopy.title}`}>
+              <article
+                className="portfolio-card"
+                key={`${site.id}-${isDuplicate ? "duplicate" : "original"}`}
+                aria-hidden={isDuplicate || undefined}
+              >
+                <button
+                  className="portfolio-card__media"
+                  type="button"
+                  tabIndex={isDuplicate ? -1 : undefined}
+                  onClick={() => {
+                    stopDirectionalScroll();
+                    setPreviewSite(site);
+                  }}
+                  aria-label={`${labels.preview}: ${siteCopy.title}`}
+                >
                   <ImageWithFallback src={site.image} alt={siteCopy.title} className="portfolio-card__image" />
-                  <span className="portfolio-card__number">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="portfolio-card__number">{String(visibleIndex + 1).padStart(2, "0")}</span>
                   <span className="portfolio-card__preview"><Eye aria-hidden="true" /> {labels.preview}</span>
                 </button>
                 <div className="portfolio-card__body">
@@ -135,7 +202,7 @@ export function Portfolio() {
                     <div className="portfolio-card__tags">
                       {site.tags.map((tag) => <span key={tag}>{tag}</span>)}
                     </div>
-                    <a href={site.url} target="_blank" rel="noreferrer" aria-label={`${labels.open}: ${siteCopy.title}`}>
+                    <a href={site.url} target="_blank" rel="noreferrer" tabIndex={isDuplicate ? -1 : undefined} aria-label={`${labels.open}: ${siteCopy.title}`}>
                       <ArrowUpRight aria-hidden="true" />
                     </a>
                   </div>

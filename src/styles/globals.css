@@ -653,6 +653,12 @@ body {
   scroll-behavior: smooth;
   scroll-snap-type: inline mandatory;
   scrollbar-width: none;
+  perspective: 1200px;
+}
+
+.portfolio-track.is-auto-scrolling {
+  scroll-behavior: auto;
+  scroll-snap-type: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -666,6 +672,10 @@ body {
 }
 
 .portfolio-card {
+  --wheel-opacity: 1;
+  --wheel-rotate: 0deg;
+  --wheel-scale: 1;
+  --wheel-y: 0px;
   min-width: 0;
   overflow: hidden;
   scroll-snap-align: start;
@@ -674,13 +684,16 @@ body {
   background: rgba(10, 19, 29, 0.82);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(16px);
-  transition: border-color 220ms ease, transform 220ms ease;
+  opacity: var(--wheel-opacity);
+  transform: perspective(1200px) translateY(var(--wheel-y)) rotateY(var(--wheel-rotate)) scale(var(--wheel-scale));
+  transform-origin: center center;
+  transition: border-color 220ms ease, opacity 140ms linear, transform 140ms linear;
+  will-change: transform, opacity;
 }
 
 .portfolio-card:hover,
 .portfolio-card:focus-within {
   border-color: rgba(174, 199, 224, 0.46);
-  transform: translateY(-0.35rem);
 }
 
 .portfolio-card__media {
