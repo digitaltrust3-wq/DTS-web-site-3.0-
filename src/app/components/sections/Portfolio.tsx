@@ -1,92 +1,115 @@
-import { ImageWithFallback } from "../shared/ImageWithFallback";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, Eye, X } from "lucide-react";
+import { portfolioSites, type PortfolioSite } from "../../data/portfolioSites";
 import { useLanguage } from "../../i18n/LanguageContext";
-
-const projects = [
-  {
-    image: "https://images.unsplash.com/photo-1630283017802-785b7aff9aac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjB3b3Jrc3BhY2UlMjBkZXNrfGVufDF8fHx8MTc2MDcyMjE5NXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    tags: ["React Native", "AI/ML", "Cloud"],
-  },
-  {
-    image: "https://images.unsplash.com/photo-1688413709025-5f085266935a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRlY2hub2xvZ3klMjBwYXR0ZXJufGVufDF8fHx8MTc2MDY4NjMwMXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    tags: ["React", "D3.js", "Node.js"],
-  },
-  {
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHByb2Zlc3Npb25hbHxlbnwxfHx8fDE3NjA2NDI0MDV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    tags: ["Next.js", "PostgreSQL", "AWS"],
-  },
-];
+import { ImageWithFallback } from "../shared/ImageWithFallback";
 
 export function Portfolio() {
-  const { copy } = useLanguage();
+  const { copy, language } = useLanguage();
   const portfolio = copy.portfolio;
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [previewSite, setPreviewSite] = useState<PortfolioSite | null>(null);
+  const sites = useMemo(() => portfolioSites.filter((site) => site.enabled).slice(0, 20), []);
+  const labels = language === "es"
+    ? { preview: "Vista previa", open: "Abrir sitio", previous: "Proyectos anteriores", next: "Proyectos siguientes", close: "Cerrar vista previa", fallback: "Si la página no permite mostrarse aquí, puedes abrirla en una nueva pestaña." }
+    : { preview: "Preview", open: "Open website", previous: "Previous projects", next: "Next projects", close: "Close preview", fallback: "If the page cannot be displayed here, you can open it in a new tab." };
+
+  useEffect(() => {
+    if (!previewSite) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => event.key === "Escape" && setPreviewSite(null);
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [previewSite]);
+
+  const moveCarousel = (direction: -1 | 1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector<HTMLElement>(".portfolio-card");
+    const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 24;
+    const distance = (card?.offsetWidth || track.clientWidth * 0.85) + gap;
+    const atStart = track.scrollLeft <= 4;
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+
+    if (direction < 0 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    else if (direction > 0 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
+    else track.scrollBy({ left: direction * distance, behavior: "smooth" });
+  };
 
   return (
-    <section id="portfolio" className="py-24 px-6 bg-transparent text-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 bg-slate-950/55 border border-white/15 text-slate-200 rounded-full mb-4 backdrop-blur-md">
-            {portfolio.eyebrow}
+    <section id="portfolio" className="portfolio-section">
+      <div className="portfolio-shell">
+        <div className="portfolio-heading">
+          <div>
+            <span className="portfolio-eyebrow">{portfolio.eyebrow}</span>
+            <h2>{portfolio.title}</h2>
+            <p>{portfolio.description}</p>
           </div>
-          <h2 className="mb-4">{portfolio.title}</h2>
-          <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-            {portfolio.description}
-          </p>
+          <div className="portfolio-controls" aria-label={portfolio.title}>
+            <button type="button" onClick={() => moveCarousel(-1)} aria-label={labels.previous}>
+              <ChevronLeft aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => moveCarousel(1)} aria-label={labels.next}>
+              <ChevronRight aria-hidden="true" />
+            </button>
+          </div>
         </div>
-        
-        <div className="grid lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => {
-            const projectCopy = portfolio.projects[index];
+
+        <div ref={trackRef} className="portfolio-track" tabIndex={0} aria-label={portfolio.title}>
+          {sites.map((site, index) => {
+            const siteCopy = site.copy[language];
             return (
-            <div
-              key={projectCopy.title}
-              className="hover-card group relative bg-white text-slate-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
-            >
-              <div className="hover-card__image relative h-64 overflow-hidden">
-                <ImageWithFallback
-                  src={project.image}
-                  alt={projectCopy.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                
-                {/* Category badge */}
-                <div className="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm">
-                  {projectCopy.category}
-                </div>
-                
-                {/* View project button */}
-                <button
-                  type="button"
-                  aria-label={`${portfolio.viewProject}: ${projectCopy.title}`}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity focus-visible:opacity-100"
-                >
-                  <ExternalLink className="w-5 h-5 text-slate-900" aria-hidden="true" />
+              <article className="portfolio-card" key={site.id}>
+                <button className="portfolio-card__media" type="button" onClick={() => setPreviewSite(site)} aria-label={`${labels.preview}: ${siteCopy.title}`}>
+                  <ImageWithFallback src={site.image} alt={siteCopy.title} className="portfolio-card__image" />
+                  <span className="portfolio-card__number">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="portfolio-card__preview"><Eye aria-hidden="true" /> {labels.preview}</span>
                 </button>
-              </div>
-              
-              <div className="p-6">
-                <h3 className="mb-2 flex items-center justify-between">
-                  {projectCopy.title}
-                  <ArrowUpRight className="w-5 h-5 text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </h3>
-                <p className="text-slate-600 mb-4">{projectCopy.description}</p>
-                
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-slate-100 text-slate-600 text-sm rounded-lg"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                <div className="portfolio-card__body">
+                  <span className="portfolio-card__category">{siteCopy.category}</span>
+                  <h3>{siteCopy.title}</h3>
+                  <p>{siteCopy.description}</p>
+                  <div className="portfolio-card__footer">
+                    <div className="portfolio-card__tags">
+                      {site.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                    </div>
+                    <a href={site.url} target="_blank" rel="noreferrer" aria-label={`${labels.open}: ${siteCopy.title}`}>
+                      <ArrowUpRight aria-hidden="true" />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </div>
-          );})}
+              </article>
+            );
+          })}
         </div>
       </div>
+
+      {previewSite && (
+        <div className="portfolio-preview" role="dialog" aria-modal="true" aria-labelledby="portfolio-preview-title" onMouseDown={(event) => event.target === event.currentTarget && setPreviewSite(null)}>
+          <div className="portfolio-preview__panel">
+            <header>
+              <div>
+                <span>{previewSite.copy[language].category}</span>
+                <h3 id="portfolio-preview-title">{previewSite.copy[language].title}</h3>
+              </div>
+              <div className="portfolio-preview__actions">
+                <a href={previewSite.url} target="_blank" rel="noreferrer">
+                  {labels.open}<ExternalLink aria-hidden="true" />
+                </a>
+                <button type="button" onClick={() => setPreviewSite(null)} aria-label={labels.close} autoFocus>
+                  <X aria-hidden="true" />
+                </button>
+              </div>
+            </header>
+            <iframe src={previewSite.url} title={`${labels.preview}: ${previewSite.copy[language].title}`} loading="lazy" />
+            <p className="portfolio-preview__fallback">{labels.fallback}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
