@@ -21,19 +21,15 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-transparent">
-      <div className="hero-contrast-overlay" />
-      <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-b from-black via-black/70 to-transparent" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:72px_72px]" />
-
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 pb-32 pt-40">
         <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-16">
           <h1 className="mb-8 text-white">
-            <span className="mb-4 block bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text pb-2 text-5xl leading-[1.08] text-transparent md:text-7xl">
+            <span className="mb-4 block bg-gradient-to-r from-white via-white to-slate-200 bg-clip-text pb-2 text-5xl leading-[1.08] text-transparent drop-shadow-[0_2px_18px_rgba(0,0,0,0.55)] md:text-7xl">
               {hero.title}
             </span>
           </h1>
 
-          <p className="mb-8 max-w-2xl text-lg text-slate-300">
+          <p className="mb-8 max-w-2xl text-lg text-slate-100 drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]">
             {hero.description}
           </p>
 
@@ -65,16 +61,16 @@ export function Hero() {
               onClick={() => scrollToSection("portfolio")}
               className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
             >
-              <div className="mb-1 text-slate-300">250+</div>
-              <div className="text-sm text-slate-400">{hero.projects}</div>
+              <div className="mb-1 text-white">250+</div>
+              <div className="text-sm text-slate-200">{hero.projects}</div>
             </button>
             <button
               type="button"
               onClick={() => scrollToSection("testimonials")}
               className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
             >
-              <div className="mb-1 text-slate-300">98%</div>
-              <div className="text-sm text-slate-400">{hero.satisfaction}</div>
+              <div className="mb-1 text-white">98%</div>
+              <div className="text-sm text-slate-200">{hero.satisfaction}</div>
             </button>
             <a
               href={whatsappUrl ?? "#contact"}
@@ -87,8 +83,8 @@ export function Hero() {
               }}
               className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
             >
-              <div className="mb-1 text-slate-300">24/7</div>
-              <div className="text-sm text-slate-400">{hero.support}</div>
+              <div className="mb-1 text-white">24/7</div>
+              <div className="text-sm text-slate-200">{hero.support}</div>
             </a>
           </div>
         </div>
