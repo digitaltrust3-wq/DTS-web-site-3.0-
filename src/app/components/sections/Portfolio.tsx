@@ -120,8 +120,8 @@ export function Portfolio() {
     animationFrameRef.current = requestAnimationFrame(runDirectionalScroll);
   };
 
-  const beginScroll = (speed: number) => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const beginScroll = (speed: number, allowReducedMotion = false) => {
+    if (!allowReducedMotion && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     trackRef.current?.classList.add("is-auto-scrolling");
     hoverSpeedRef.current = speed;
     if (animationFrameRef.current === null) {
@@ -135,19 +135,42 @@ export function Portfolio() {
     beginScroll(speed);
   };
 
+  const stopPointerScroll = () => {
+    // Mobile browsers can emit synthetic mouseleave events after a touch/scroll.
+    // Those events must not cancel the mobile autoplay loop.
+    if (mobileAutoplayRef.current) return;
+    stopDirectionalScroll();
+  };
+
   useEffect(() => {
     const track = trackRef.current;
-    const section = track?.closest("#portfolio");
-    if (!track || !section) return;
+    if (!track) return;
 
-    const mobileQuery = window.matchMedia("(max-width: 900px), (any-hover: none)");
+    const coarsePointerQuery = window.matchMedia("(any-pointer: coarse), (any-hover: none)");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     let isVisible = false;
 
+    const isMobileDevice = () => (
+      window.innerWidth <= 1024
+      || navigator.maxTouchPoints > 0
+      || coarsePointerQuery.matches
+    );
+
     const syncAutoplay = () => {
-      const shouldPlay = isVisible && mobileQuery.matches && !document.hidden;
+      const shouldPlay = isVisible && isMobileDevice() && !document.hidden;
       mobileAutoplayRef.current = shouldPlay;
-      if (shouldPlay) beginScroll(0.9);
-      else if (hoverSpeedRef.current === 0.9 || mobileQuery.matches) stopDirectionalScroll();
+      if (shouldPlay) {
+        // Keep a perceptible but gentler motion when reduced motion is enabled.
+        beginScroll(reducedMotionQuery.matches ? 0.45 : 1.35, true);
+      } else {
+        stopDirectionalScroll();
+      }
+    };
+
+    const checkCurrentVisibility = () => {
+      const bounds = track.getBoundingClientRect();
+      isVisible = bounds.top < window.innerHeight + 120 && bounds.bottom > -120;
+      syncAutoplay();
     };
 
     const observer = new IntersectionObserver(
@@ -155,20 +178,26 @@ export function Portfolio() {
         isVisible = entry.isIntersecting;
         syncAutoplay();
       },
-      { threshold: 0.18 },
+      { threshold: 0.01, rootMargin: "120px 0px" },
     );
 
     const handleVisibility = () => syncAutoplay();
-    const handleDeviceChange = () => syncAutoplay();
-    observer.observe(section);
+    const handleDeviceChange = () => checkCurrentVisibility();
+    observer.observe(track);
     document.addEventListener("visibilitychange", handleVisibility);
-    mobileQuery.addEventListener("change", handleDeviceChange);
+    window.addEventListener("resize", handleDeviceChange);
+    coarsePointerQuery.addEventListener("change", handleDeviceChange);
+    reducedMotionQuery.addEventListener("change", handleDeviceChange);
+    const initialCheckFrame = requestAnimationFrame(checkCurrentVisibility);
 
     return () => {
       mobileAutoplayRef.current = false;
+      cancelAnimationFrame(initialCheckFrame);
       observer.disconnect();
       document.removeEventListener("visibilitychange", handleVisibility);
-      mobileQuery.removeEventListener("change", handleDeviceChange);
+      window.removeEventListener("resize", handleDeviceChange);
+      coarsePointerQuery.removeEventListener("change", handleDeviceChange);
+      reducedMotionQuery.removeEventListener("change", handleDeviceChange);
       stopDirectionalScroll();
     };
   }, []);
@@ -242,7 +271,7 @@ export function Portfolio() {
             className="portfolio-motion-zone portfolio-motion-zone--left"
             onMouseEnter={() => startDirectionalScroll(-5.5)}
             onMouseMove={(event) => handleMotionZoneMove(event, -1)}
-            onMouseLeave={stopDirectionalScroll}
+            onMouseLeave={stopPointerScroll}
             aria-hidden="true"
           />
           <div
@@ -253,7 +282,7 @@ export function Portfolio() {
             onScroll={scheduleWheelUpdate}
             onMouseEnter={() => startDirectionalScroll()}
             onMouseMove={handleMouseMove}
-            onMouseLeave={stopDirectionalScroll}
+            onMouseLeave={stopPointerScroll}
           >
             {carouselSites.map((site, index) => {
             const siteCopy = site.copy[language];
@@ -300,7 +329,7 @@ export function Portfolio() {
             className="portfolio-motion-zone portfolio-motion-zone--right"
             onMouseEnter={() => startDirectionalScroll(5.5)}
             onMouseMove={(event) => handleMotionZoneMove(event, 1)}
-            onMouseLeave={stopDirectionalScroll}
+            onMouseLeave={stopPointerScroll}
             aria-hidden="true"
           />
         </div>
