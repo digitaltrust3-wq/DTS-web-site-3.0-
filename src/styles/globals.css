@@ -305,6 +305,10 @@ body {
   height: 100vh;
   height: 100dvh;
   pointer-events: none;
+  background:
+    radial-gradient(circle at 78% 32%, rgba(96, 109, 171, 0.34), transparent 38%),
+    radial-gradient(circle at 25% 72%, rgba(64, 81, 103, 0.28), transparent 42%),
+    #07101a;
 }
 
 .page-video-background video,

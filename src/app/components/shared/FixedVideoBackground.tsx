@@ -25,7 +25,20 @@ export function FixedVideoBackground({
 
     const region = container.closest(".page-video-region") ?? container;
     const mobileQuery = window.matchMedia("(max-width: 767px), (pointer: coarse)");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const isMobile = mobileQuery.matches;
+    const connection = (navigator as Navigator & {
+      connection?: { effectiveType?: string; saveData?: boolean };
+    }).connection;
+    const hasSlowConnection = connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
+    const useStaticBackground = isMobile || reducedMotionQuery.matches || connection?.saveData || hasSlowConnection;
+
+    if (useStaticBackground) {
+      video.removeAttribute("src");
+      video.load();
+      return;
+    }
+
     let isCancelled = false;
     let isNearViewport = eager;
     let sourceIsLoaded = false;
@@ -122,7 +135,7 @@ export function FixedVideoBackground({
         muted
         loop
         playsInline
-        preload={eager ? "auto" : "metadata"}
+        preload="metadata"
         tabIndex={-1}
       />
       <div className="page-video-background__scrim" />
