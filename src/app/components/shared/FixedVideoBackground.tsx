@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 
 type FixedVideoBackgroundProps = {
   src: string;
+  mobileSrc?: string;
+  poster?: string;
   hls?: boolean;
   tone?: "intro" | "lower";
   playbackRate?: number;
@@ -10,6 +12,8 @@ type FixedVideoBackgroundProps = {
 
 export function FixedVideoBackground({
   src,
+  mobileSrc,
+  poster,
   hls = false,
   tone = "intro",
   playbackRate = 0.65,
@@ -31,7 +35,7 @@ export function FixedVideoBackground({
       connection?: { effectiveType?: string; saveData?: boolean };
     }).connection;
     const hasSlowConnection = connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
-    const useStaticBackground = isMobile || reducedMotionQuery.matches || connection?.saveData || hasSlowConnection;
+    const useStaticBackground = reducedMotionQuery.matches || connection?.saveData || hasSlowConnection;
 
     if (useStaticBackground) {
       video.removeAttribute("src");
@@ -43,6 +47,7 @@ export function FixedVideoBackground({
     let isNearViewport = eager;
     let sourceIsLoaded = false;
     let destroyPlayer: (() => void) | undefined;
+    const selectedSource = isMobile && mobileSrc ? mobileSrc : src;
 
     const play = () => {
       video.defaultPlaybackRate = playbackRate;
@@ -55,14 +60,14 @@ export function FixedVideoBackground({
       sourceIsLoaded = true;
 
       if (!hls) {
-        video.src = src;
+        video.src = selectedSource;
         video.load();
         play();
         return;
       }
 
       if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        video.src = src;
+        video.src = selectedSource;
         video.load();
         play();
         return;
@@ -93,7 +98,7 @@ export function FixedVideoBackground({
         }
         if (isNearViewport) play();
       });
-      player.loadSource(src);
+      player.loadSource(selectedSource);
       player.attachMedia(video);
       destroyPlayer = () => player.destroy();
     };
@@ -125,7 +130,7 @@ export function FixedVideoBackground({
       video.pause();
       destroyPlayer?.();
     };
-  }, [eager, hls, playbackRate, src]);
+  }, [eager, hls, mobileSrc, playbackRate, src]);
 
   return (
     <div ref={containerRef} className={`page-video-background page-video-background--${tone}`} aria-hidden="true">
@@ -135,6 +140,7 @@ export function FixedVideoBackground({
         muted
         loop
         playsInline
+        poster={poster}
         preload="metadata"
         tabIndex={-1}
       />
