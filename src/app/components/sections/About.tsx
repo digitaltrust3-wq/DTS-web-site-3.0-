@@ -7,10 +7,10 @@ export function About() {
   const about = copy.about;
 
   return (
-    <section className="py-24 px-6 bg-transparent text-white" id="about">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
+    <section className="content-section" id="about">
+      <div className="wide-shell">
+        <div className="content-split content-split--about">
+          <div className="content-copy">
             <h2 className="text-white mb-6">{about.title}</h2>
             <p className="text-slate-200 text-lg mb-6">
               {about.first}
@@ -29,7 +29,7 @@ export function About() {
             </div>
           </div>
           
-          <div className="relative">
+          <div className="content-media relative">
             <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2Z0d2FyZSUyMGRldmVsb3BtZW50JTIwdGVhbXxlbnwxfHx8fDE3NjA2MTIzNzh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"

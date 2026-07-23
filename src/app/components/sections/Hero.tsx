@@ -20,9 +20,10 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-transparent">
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 pb-32 pt-40">
-        <div className="max-w-3xl -translate-y-4 sm:-translate-y-6 lg:-translate-y-16">
+    <section className="hero-section">
+      <div className="hero-shell">
+        <div className="hero-layout">
+          <div className="hero-copy">
           <h1 className="mb-8 text-white">
             <span className="mb-4 block bg-gradient-to-r from-white via-white to-slate-200 bg-clip-text pb-2 text-5xl leading-[1.08] text-transparent drop-shadow-[0_2px_18px_rgba(0,0,0,0.55)] md:text-7xl">
               {hero.title}
@@ -55,7 +56,9 @@ export function Hero() {
             </Button>
           </div>
 
-          <div className="grid max-w-2xl grid-cols-3 gap-6">
+          </div>
+
+          <aside className="hero-metrics" aria-label={hero.projects}>
             <button
               type="button"
               onClick={() => scrollToSection("portfolio")}
@@ -86,7 +89,7 @@ export function Hero() {
               <div className="mb-1 text-white">24/7</div>
               <div className="text-sm text-slate-200">{hero.support}</div>
             </a>
-          </div>
+          </aside>
         </div>
       </div>
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />

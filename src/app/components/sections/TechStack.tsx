@@ -19,10 +19,10 @@ export function TechStack() {
   const techCopy = copy.tech;
 
   return (
-    <section className="py-24 px-6 bg-transparent text-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="order-2 lg:order-1">
+    <section className="content-section content-section--tech">
+      <div className="wide-shell">
+        <div className="content-split content-split--tech">
+          <div className="content-media order-2 lg:order-1">
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl">
                 <ImageWithFallback
@@ -35,7 +35,7 @@ export function TechStack() {
             </div>
           </div>
           
-          <div className="order-1 lg:order-2">
+          <div className="content-copy order-1 lg:order-2">
             <h2 className="text-slate-300 mb-6">{techCopy.title}</h2>
             <p className="text-slate-300 text-lg mb-8">
               {techCopy.description}

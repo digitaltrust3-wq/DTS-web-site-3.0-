@@ -7,9 +7,9 @@ export function Footer() {
   const footer = copy.footer;
 
   return (
-    <footer className="py-12 px-6 bg-slate-950 text-slate-400">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+    <footer className="footer-section">
+      <div className="wide-shell">
+        <div className="footer-grid">
           <div>
             <BrandLogo className="mb-5 h-24 w-auto max-w-full" />
             <p className="text-sm">

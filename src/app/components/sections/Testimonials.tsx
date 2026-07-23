@@ -6,13 +6,13 @@ export function Testimonials() {
   const testimonials = copy.testimonials;
 
   return (
-    <section id="testimonials" className="py-24 px-6 bg-transparent text-white relative overflow-hidden">
+    <section id="testimonials" className="testimonials-section">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
       </div>
       
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="wide-shell relative z-10">
         <div className="text-center mb-16">
           <div className="inline-block px-4 py-2 bg-slate-500/20 border border-slate-400/30 text-slate-200 rounded-full mb-4">
             {testimonials.eyebrow}
@@ -23,11 +23,11 @@ export function Testimonials() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="testimonials-grid">
           {testimonials.items.map((testimonial) => (
             <div
               key={testimonial.name}
-              className="relative bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 hover:border-slate-500/50 transition-all duration-300 hover:transform hover:scale-105"
+              className="testimonial-card relative bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 hover:border-slate-500/50 transition-all duration-300 hover:-translate-y-1"
             >
               <Quote className="w-10 h-10 text-slate-400/30 mb-4" />
               
