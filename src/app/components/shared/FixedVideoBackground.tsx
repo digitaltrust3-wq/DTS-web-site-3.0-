@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 type FixedVideoBackgroundProps = {
   src: string;
   mobileSrc?: string;
+  mobileHighSrc?: string;
   poster?: string;
   hls?: boolean;
   tone?: "intro" | "lower";
@@ -13,6 +14,7 @@ type FixedVideoBackgroundProps = {
 export function FixedVideoBackground({
   src,
   mobileSrc,
+  mobileHighSrc,
   poster,
   hls = false,
   tone = "intro",
@@ -35,6 +37,7 @@ export function FixedVideoBackground({
       connection?: { effectiveType?: string; saveData?: boolean };
     }).connection;
     const hasSlowConnection = connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
+    const isMediumConnection = connection?.effectiveType === "3g";
     const useStaticBackground = reducedMotionQuery.matches || connection?.saveData || hasSlowConnection;
 
     if (useStaticBackground) {
@@ -47,7 +50,9 @@ export function FixedVideoBackground({
     let isNearViewport = eager;
     let sourceIsLoaded = false;
     let destroyPlayer: (() => void) | undefined;
-    const selectedSource = isMobile && mobileSrc ? mobileSrc : src;
+    const selectedSource = isMobile
+      ? (!isMediumConnection && mobileHighSrc ? mobileHighSrc : mobileSrc ?? src)
+      : src;
 
     const play = () => {
       video.defaultPlaybackRate = playbackRate;
@@ -90,8 +95,9 @@ export function FixedVideoBackground({
 
       player.on(Hls.Events.MANIFEST_PARSED, () => {
         if (isMobile && player.levels.length > 0) {
+          const mobileMaxHeight = isMediumConnection ? 720 : 1080;
           const mobileCap = player.levels.reduce(
-            (best, level, index) => level.height <= 720 ? index : best,
+            (best, level, index) => level.height <= mobileMaxHeight ? index : best,
             0,
           );
           player.autoLevelCapping = mobileCap;
@@ -130,7 +136,7 @@ export function FixedVideoBackground({
       video.pause();
       destroyPlayer?.();
     };
-  }, [eager, hls, mobileSrc, playbackRate, src]);
+  }, [eager, hls, mobileHighSrc, mobileSrc, playbackRate, src]);
 
   return (
     <div ref={containerRef} className={`page-video-background page-video-background--${tone}`} aria-hidden="true">

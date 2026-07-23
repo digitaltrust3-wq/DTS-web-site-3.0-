@@ -15,6 +15,7 @@ const INTRO_VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260514_135830_bb6491d1-9b66-4aec-9722-13b4dfe3fb46.mp4";
 
 const INTRO_MOBILE_VIDEO_URL = `${import.meta.env.BASE_URL}assets/video/intro-mobile.mp4`;
+const INTRO_MOBILE_1080_VIDEO_URL = `${import.meta.env.BASE_URL}assets/video/intro-mobile-1080.mp4`;
 const INTRO_POSTER_URL = `${import.meta.env.BASE_URL}assets/video/intro-poster.jpg`;
 const LOWER_POSTER_URL = `${import.meta.env.BASE_URL}assets/video/lower-poster.jpg`;
 
@@ -38,6 +39,7 @@ export default function App() {
           <FixedVideoBackground
             src={INTRO_VIDEO_URL}
             mobileSrc={INTRO_MOBILE_VIDEO_URL}
+            mobileHighSrc={INTRO_MOBILE_1080_VIDEO_URL}
             poster={INTRO_POSTER_URL}
             tone="intro"
             playbackRate={0.65}
