@@ -3,7 +3,6 @@ import {
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type MouseEventHandler,
   type PointerEvent,
 } from "react";
@@ -24,7 +23,6 @@ type HeroMetricCardProps = {
   suffix: string;
   label: string;
   icon: LucideIcon;
-  index: number;
   href?: string;
   target?: string;
   rel?: string;
@@ -34,40 +32,51 @@ type HeroMetricCardProps = {
 function useMetricCounter(target: number) {
   const elementRef = useRef<HTMLElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(target);
   const [isVisible, setIsVisible] = useState(false);
 
   const setElement = useCallback((node: HTMLElement | null) => {
     elementRef.current = node;
   }, []);
 
+  const startCounter = useCallback(() => {
+    if (animationFrameRef.current !== null) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplayValue(target);
+      return;
+    }
+
+    setDisplayValue(0);
+    const startedAt = performance.now();
+    const duration = 1250;
+    const updateCounter = (now: number) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const easedProgress = 1 - Math.pow(1 - progress, 4);
+      setDisplayValue(Math.round(target * easedProgress));
+
+      if (progress < 1) {
+        animationFrameRef.current = requestAnimationFrame(updateCounter);
+      } else {
+        animationFrameRef.current = null;
+      }
+    };
+
+    animationFrameRef.current = requestAnimationFrame(updateCounter);
+  }, [target]);
+
   useEffect(() => {
     const element = elementRef.current;
     if (!element) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
-      setDisplayValue(target);
-      setIsVisible(true);
-      return;
-    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
         setIsVisible(true);
-
-        const startedAt = performance.now();
-        const duration = 1250;
-        const updateCounter = (now: number) => {
-          const progress = Math.min(1, (now - startedAt) / duration);
-          const easedProgress = 1 - Math.pow(1 - progress, 4);
-          setDisplayValue(Math.round(target * easedProgress));
-          if (progress < 1) animationFrameRef.current = requestAnimationFrame(updateCounter);
-        };
-
-        animationFrameRef.current = requestAnimationFrame(updateCounter);
       },
       { threshold: 0.45 },
     );
@@ -77,9 +86,9 @@ function useMetricCounter(target: number) {
       observer.disconnect();
       if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [target]);
+  }, []);
 
-  return { displayValue, isVisible, setElement };
+  return { displayValue, isVisible, setElement, startCounter };
 }
 
 function HeroMetricCard({
@@ -87,13 +96,12 @@ function HeroMetricCard({
   suffix,
   label,
   icon: Icon,
-  index,
   href,
   target,
   rel,
   onClick,
 }: HeroMetricCardProps) {
-  const { displayValue, isVisible, setElement } = useMetricCounter(value);
+  const { displayValue, isVisible, setElement, startCounter } = useMetricCounter(value);
   const boundsRef = useRef<DOMRect | null>(null);
   const pointerFrameRef = useRef<number | null>(null);
 
@@ -103,6 +111,7 @@ function HeroMetricCard({
 
   const handlePointerEnter = (event: PointerEvent<HTMLElement>) => {
     if (event.pointerType !== "mouse") return;
+    startCounter();
     boundsRef.current = event.currentTarget.getBoundingClientRect();
   };
 
@@ -135,7 +144,6 @@ function HeroMetricCard({
   };
 
   const className = `hero-metric-card${isVisible ? " is-visible" : ""}`;
-  const style = { "--metric-delay": `${index * 90}ms` } as CSSProperties;
   const content = (
     <>
       <span className="hero-metric-card__ambient" aria-hidden="true" />
@@ -159,11 +167,11 @@ function HeroMetricCard({
   );
   const interactionProps = {
     className,
-    style,
     "aria-label": `${value}${suffix} ${label}`,
     onPointerEnter: handlePointerEnter,
     onPointerMove: handlePointerMove,
     onPointerLeave: handlePointerLeave,
+    onFocus: startCounter,
   };
 
   if (href) {
@@ -248,7 +256,6 @@ export function Hero() {
               suffix="+"
               label={hero.projects}
               icon={Code2}
-              index={0}
               onClick={() => scrollToSection("portfolio")}
             />
             <HeroMetricCard
@@ -256,7 +263,6 @@ export function Hero() {
               suffix="%"
               label={hero.satisfaction}
               icon={BadgeCheck}
-              index={1}
               onClick={() => scrollToSection("testimonials")}
             />
             <HeroMetricCard
@@ -264,7 +270,6 @@ export function Hero() {
               suffix="/7"
               label={hero.support}
               icon={Headphones}
-              index={2}
               href={whatsappUrl ?? "#contact"}
               target={whatsappUrl ? "_blank" : undefined}
               rel={whatsappUrl ? "noreferrer" : undefined}
