@@ -1,8 +1,192 @@
-import { useState } from "react";
-import { ArrowRight, Rocket } from "lucide-react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEventHandler,
+  type PointerEvent,
+} from "react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  Code2,
+  Headphones,
+  Rocket,
+  type LucideIcon,
+} from "lucide-react";
 import { ContactModal } from "../shared/ContactModal";
 import { Button } from "../shared/Button";
 import { useLanguage } from "../../i18n/LanguageContext";
+
+type HeroMetricCardProps = {
+  value: number;
+  suffix: string;
+  label: string;
+  icon: LucideIcon;
+  index: number;
+  href?: string;
+  target?: string;
+  rel?: string;
+  onClick?: MouseEventHandler<HTMLElement>;
+};
+
+function useMetricCounter(target: number) {
+  const elementRef = useRef<HTMLElement | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const [displayValue, setDisplayValue] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const setElement = useCallback((node: HTMLElement | null) => {
+    elementRef.current = node;
+  }, []);
+
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setDisplayValue(target);
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        setIsVisible(true);
+
+        const startedAt = performance.now();
+        const duration = 1250;
+        const updateCounter = (now: number) => {
+          const progress = Math.min(1, (now - startedAt) / duration);
+          const easedProgress = 1 - Math.pow(1 - progress, 4);
+          setDisplayValue(Math.round(target * easedProgress));
+          if (progress < 1) animationFrameRef.current = requestAnimationFrame(updateCounter);
+        };
+
+        animationFrameRef.current = requestAnimationFrame(updateCounter);
+      },
+      { threshold: 0.45 },
+    );
+
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, [target]);
+
+  return { displayValue, isVisible, setElement };
+}
+
+function HeroMetricCard({
+  value,
+  suffix,
+  label,
+  icon: Icon,
+  index,
+  href,
+  target,
+  rel,
+  onClick,
+}: HeroMetricCardProps) {
+  const { displayValue, isVisible, setElement } = useMetricCounter(value);
+  const boundsRef = useRef<DOMRect | null>(null);
+  const pointerFrameRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
+  }, []);
+
+  const handlePointerEnter = (event: PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== "mouse") return;
+    boundsRef.current = event.currentTarget.getBoundingClientRect();
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== "mouse" || !boundsRef.current) return;
+    const element = event.currentTarget;
+    const bounds = boundsRef.current;
+    const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+    const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
+
+    if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
+    pointerFrameRef.current = requestAnimationFrame(() => {
+      element.style.setProperty("--metric-glow-x", `${x * 100}%`);
+      element.style.setProperty("--metric-glow-y", `${y * 100}%`);
+      element.style.setProperty("--metric-rotate-x", `${(0.5 - y) * 4}deg`);
+      element.style.setProperty("--metric-rotate-y", `${(x - 0.5) * 5}deg`);
+    });
+  };
+
+  const handlePointerLeave = (event: PointerEvent<HTMLElement>) => {
+    const element = event.currentTarget;
+    boundsRef.current = null;
+    if (pointerFrameRef.current !== null) cancelAnimationFrame(pointerFrameRef.current);
+    pointerFrameRef.current = requestAnimationFrame(() => {
+      element.style.setProperty("--metric-glow-x", "50%");
+      element.style.setProperty("--metric-glow-y", "50%");
+      element.style.setProperty("--metric-rotate-x", "0deg");
+      element.style.setProperty("--metric-rotate-y", "0deg");
+    });
+  };
+
+  const className = `hero-metric-card${isVisible ? " is-visible" : ""}`;
+  const style = { "--metric-delay": `${index * 90}ms` } as CSSProperties;
+  const content = (
+    <>
+      <span className="hero-metric-card__ambient" aria-hidden="true" />
+      <span className="hero-metric-card__icon" aria-hidden="true">
+        <Icon />
+      </span>
+      <span className="hero-metric-card__content" aria-hidden="true">
+        <strong>
+          {displayValue}
+          <span>{suffix}</span>
+        </strong>
+        <span>{label}</span>
+      </span>
+      <span className="hero-metric-card__signal" aria-hidden="true" />
+      <span className="hero-metric-card__particles" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </span>
+    </>
+  );
+  const interactionProps = {
+    className,
+    style,
+    "aria-label": `${value}${suffix} ${label}`,
+    onPointerEnter: handlePointerEnter,
+    onPointerMove: handlePointerMove,
+    onPointerLeave: handlePointerLeave,
+  };
+
+  if (href) {
+    return (
+      <a
+        {...interactionProps}
+        ref={setElement}
+        href={href}
+        target={target}
+        rel={rel}
+        onClick={onClick}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button {...interactionProps} ref={setElement} type="button" onClick={onClick}>
+      {content}
+    </button>
+  );
+}
 
 export function Hero() {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -59,36 +243,36 @@ export function Hero() {
           </div>
 
           <aside className="hero-metrics" aria-label={hero.projects}>
-            <button
-              type="button"
+            <HeroMetricCard
+              value={250}
+              suffix="+"
+              label={hero.projects}
+              icon={Code2}
+              index={0}
               onClick={() => scrollToSection("portfolio")}
-              className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
-            >
-              <div className="mb-1 text-white">250+</div>
-              <div className="text-sm text-slate-200">{hero.projects}</div>
-            </button>
-            <button
-              type="button"
+            />
+            <HeroMetricCard
+              value={98}
+              suffix="%"
+              label={hero.satisfaction}
+              icon={BadgeCheck}
+              index={1}
               onClick={() => scrollToSection("testimonials")}
-              className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
-            >
-              <div className="mb-1 text-white">98%</div>
-              <div className="text-sm text-slate-200">{hero.satisfaction}</div>
-            </button>
-            <a
+            />
+            <HeroMetricCard
+              value={24}
+              suffix="/7"
+              label={hero.support}
+              icon={Headphones}
+              index={2}
               href={whatsappUrl ?? "#contact"}
               target={whatsappUrl ? "_blank" : undefined}
               rel={whatsappUrl ? "noreferrer" : undefined}
-              onClick={(event) => {
-                if (whatsappUrl) return;
+              onClick={whatsappUrl ? undefined : (event) => {
                 event.preventDefault();
                 setIsContactOpen(true);
               }}
-              className="rounded-xl border border-slate-700 bg-slate-950/40 p-4 text-left backdrop-blur-xl transition-colors hover:border-slate-400 hover:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
-            >
-              <div className="mb-1 text-white">24/7</div>
-              <div className="text-sm text-slate-200">{hero.support}</div>
-            </a>
+            />
           </aside>
         </div>
       </div>
