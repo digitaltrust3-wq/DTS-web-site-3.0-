@@ -56,11 +56,11 @@ export const translations = {
       ],
     },
     about: {
-      title: "About Digital Trust Solutions",
-      first: "Founded with a vision to bridge the gap between technology and business success, Digital Trust Solutions has been at the forefront of digital innovation for over a decade.",
-      second: "Our developers, designers and strategists work together to deliver solutions that exceed expectations. We build long-term partnerships that support our clients in an evolving digital landscape.",
-      imageAlt: "Digital Trust Solutions team collaborating",
-      highlights: ["15+ years of industry expertise", "Award-winning development team", "Agile methodology and rapid delivery", "24/7 support and maintenance"],
+      title: "Why choose Digital Trust Solutions?",
+      first: "At Digital Trust Solutions, we transform business ideas and needs into functional, modern digital solutions designed to fit. We develop websites, platforms and software that help companies improve their processes, strengthen their digital presence and deliver better experiences to their customers.",
+      second: "We do not work with generic solutions. We analyze the objectives of each business and build tools adapted to its real needs, with an architecture prepared to grow and evolve alongside the company.",
+      statement: "Your business is unique. The technology that powers it should be too.",
+      highlights: ["Solutions adapted to the real needs of your business", "Professional, intuitive design that adapts to mobile devices", "Scalable technology prepared for future functionality", "Support throughout development, launch and maintenance"],
     },
     tech: {
       title: "Our Technology Stack",
@@ -174,11 +174,11 @@ export const translations = {
       ],
     },
     about: {
-      title: "Acerca de Digital Trust Solutions",
-      first: "Digital Trust Solutions nació para conectar la tecnología con el éxito empresarial. Durante más de una década hemos estado a la vanguardia de la innovación digital.",
-      second: "Nuestros desarrolladores, diseñadores y estrategas trabajan en conjunto para superar expectativas. Construimos alianzas a largo plazo que respaldan a nuestros clientes en un entorno digital en constante evolución.",
-      imageAlt: "Equipo de Digital Trust Solutions colaborando",
-      highlights: ["Más de 15 años de experiencia", "Equipo de desarrollo galardonado", "Metodología ágil y entrega rápida", "Soporte y mantenimiento 24/7"],
+      title: "¿Por qué elegir Digital Trust Solutions?",
+      first: "En Digital Trust Solutions transformamos ideas y necesidades empresariales en soluciones digitales funcionales, modernas y diseñadas a la medida. Desarrollamos páginas web, plataformas y software que ayudan a las empresas a mejorar sus procesos, fortalecer su presencia digital y ofrecer mejores experiencias a sus clientes.",
+      second: "No trabajamos con soluciones genéricas. Analizamos los objetivos de cada negocio y construimos herramientas adaptadas a sus necesidades reales, con una arquitectura preparada para crecer y evolucionar con la empresa.",
+      statement: "Tu negocio es único. La tecnología que lo impulsa también debería serlo.",
+      highlights: ["Soluciones adaptadas a las necesidades reales de tu negocio", "Diseño profesional, intuitivo y adaptable a dispositivos móviles", "Tecnología escalable preparada para futuras funcionalidades", "Acompañamiento durante el desarrollo, lanzamiento y mantenimiento"],
     },
     tech: {
       title: "Nuestras tecnologías",
