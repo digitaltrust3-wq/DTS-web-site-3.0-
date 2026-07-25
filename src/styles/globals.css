@@ -285,6 +285,7 @@ body {
 
 .hero-copy h1 span {
   font-size: clamp(3.25rem, 5.1vw, 5.75rem);
+  font-weight: 700;
   text-wrap: balance;
 }
 
@@ -699,7 +700,7 @@ body {
   margin: 0 0 1.35rem;
   color: #f5f8fb;
   font-size: clamp(2.6rem, 4.5vw, 5rem);
-  font-weight: 580;
+  font-weight: 700;
   letter-spacing: -0.055em;
   line-height: 0.98;
   text-wrap: balance;
@@ -961,7 +962,7 @@ body {
 .content-copy h2,
 .cta-copy h2 {
   font-size: clamp(2.5rem, 4vw, 4.75rem);
-  font-weight: 550;
+  font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1.02;
   text-wrap: balance;
@@ -1383,7 +1384,7 @@ body {
   margin: 0;
   color: white;
   font-size: clamp(2.25rem, 5vw, 4.5rem);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.055em;
   line-height: 0.98;
   text-wrap: balance;
@@ -1878,7 +1879,7 @@ body {
   margin: 0;
   color: #ffffff;
   font-size: clamp(2.4rem, 5vw, 4.8rem);
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: -0.055em;
   line-height: 0.98;
 }
