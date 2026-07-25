@@ -63,9 +63,9 @@ export const translations = {
       highlights: ["Solutions adapted to the real needs of your business", "Professional, intuitive design that adapts to mobile devices", "Scalable technology prepared for future functionality", "Support throughout development, launch and maintenance"],
     },
     tech: {
-      title: "Our Technology Stack",
-      description: "We use reliable modern technologies to build robust, scalable solutions that stand the test of time.",
-      imageAlt: "Technology and innovation",
+      title: "Modern technology and AI",
+      description: "We build with AI, cloud-native architectures and modern software platforms to deliver intelligent, secure and scalable products.",
+      imageAlt: "Modern software, cloud and artificial intelligence architecture",
     },
     testimonials: {
       eyebrow: "Client Success Stories",
@@ -181,9 +181,9 @@ export const translations = {
       highlights: ["Soluciones adaptadas a las necesidades reales de tu negocio", "Diseño profesional, intuitivo y adaptable a dispositivos móviles", "Tecnología escalable preparada para futuras funcionalidades", "Acompañamiento durante el desarrollo, lanzamiento y mantenimiento"],
     },
     tech: {
-      title: "Nuestras tecnologías",
-      description: "Utilizamos tecnologías modernas y confiables para crear soluciones sólidas, escalables y preparadas para el futuro.",
-      imageAlt: "Tecnología e innovación",
+      title: "Tecnología moderna e IA",
+      description: "Construimos con IA, arquitecturas nativas de la nube y plataformas de software modernas para crear productos inteligentes, seguros y escalables.",
+      imageAlt: "Arquitectura moderna de software, nube e inteligencia artificial",
     },
     testimonials: {
       eyebrow: "Historias de éxito",
