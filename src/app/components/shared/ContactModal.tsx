@@ -1,4 +1,5 @@
 import { useEffect, useId, useState, type FormEvent } from "react";
+import { createPortal } from "react-dom";
 import { ArrowRight, Check, X } from "lucide-react";
 import { Button } from "./Button";
 import { useLanguage } from "../../i18n/LanguageContext";
@@ -76,7 +77,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[70] grid place-items-center overflow-y-auto bg-slate-950/80 px-4 py-10 backdrop-blur-md">
       <button
         type="button"
@@ -214,6 +215,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
           </>
         )}
       </section>
-    </div>
+    </div>,
+    document.body,
   );
 }

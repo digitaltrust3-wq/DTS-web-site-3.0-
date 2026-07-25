@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo, useState, type FormEvent } from "react";
+import { createPortal } from "react-dom";
 import { ArrowRight, CalendarDays, Check, Clock3, ExternalLink, Video, X } from "lucide-react";
 import { Button } from "./Button";
 import { useLanguage } from "../../i18n/LanguageContext";
@@ -106,7 +107,7 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[75] grid place-items-center overflow-y-auto bg-slate-950/85 px-3 py-6 backdrop-blur-md sm:px-4 sm:py-10">
       <button type="button" className="absolute inset-0 cursor-default" aria-label={modal.closeForm} onClick={onClose} />
       <section role="dialog" aria-modal="true" aria-labelledby={titleId} className="relative z-10 w-full max-w-4xl rounded-2xl border border-white/15 bg-slate-950 p-5 text-white shadow-[0_2rem_8rem_rgba(0,0,0,0.6)] sm:p-8">
@@ -145,6 +146,7 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
                 <label className="mb-5 grid gap-2 text-sm text-slate-200"><span className="flex items-center gap-2"><CalendarDays className="h-4 w-4" />{modal.date}</span><input type="date" value={date} min={minDate} max={maxDate} onChange={(event) => setDate(event.target.value)} required className="rounded-lg border border-white/15 bg-slate-900 px-4 py-3 text-white [color-scheme:dark] focus:border-slate-400" /></label>
                 <div className="mb-3 flex items-center justify-between gap-3"><span className="flex items-center gap-2 text-sm text-slate-200"><Clock3 className="h-4 w-4" />{modal.time}</span><span className="text-xs text-slate-500">{timeZone}</span></div>
                 <div className="grid max-h-52 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
+                  {loadState === "idle" && <p className="col-span-full py-6 text-center text-sm leading-relaxed text-slate-400">{modal.selectDatePrompt}</p>}
                   {loadState === "loading" && <p className="col-span-full py-6 text-center text-sm text-slate-400">{modal.loading}</p>}
                   {loadState === "ready" && slots.length === 0 && <p className="col-span-full py-6 text-center text-sm text-slate-400">{modal.noTimes}</p>}
                   {slots.map((slot) => <button key={slot.startAt} type="button" onClick={() => setSelectedSlot(slot.startAt)} className={`rounded-lg border px-3 py-2.5 text-sm font-semibold transition-colors ${selectedSlot === slot.startAt ? "border-white bg-white text-slate-950" : "border-white/15 bg-white/5 text-slate-200 hover:border-white/35 hover:bg-white/10"}`}>{formatTime(slot.startAt)}</button>)}
@@ -158,6 +160,7 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
           </>
         )}
       </section>
-    </div>
+    </div>,
+    document.body,
   );
 }

@@ -9,8 +9,8 @@ function schedulingConfig() {
   return {
     timeZone: process.env.GOOGLE_TIME_ZONE || "America/Bogota",
     utcOffset: process.env.SCHEDULING_UTC_OFFSET || "-05:00",
-    startHour: Number(process.env.SCHEDULING_START_HOUR || 9),
-    endHour: Number(process.env.SCHEDULING_END_HOUR || 17),
+    startHour: Number(process.env.SCHEDULING_START_HOUR || 8),
+    endHour: Number(process.env.SCHEDULING_END_HOUR || 21),
     slotMinutes: Number(process.env.SCHEDULING_SLOT_MINUTES || 30),
     daysAhead: Number(process.env.SCHEDULING_DAYS_AHEAD || 30),
     minimumNoticeHours: Number(process.env.SCHEDULING_MIN_NOTICE_HOURS || 4),
@@ -34,7 +34,7 @@ function createCandidateSlots(date) {
   if (weekday === 0 || weekday === 6) return [];
 
   const slots = [];
-  for (let minutes = config.startHour * 60; minutes + config.slotMinutes <= config.endHour * 60; minutes += config.slotMinutes) {
+  for (let minutes = config.startHour * 60; minutes <= config.endHour * 60; minutes += config.slotMinutes) {
     const hour = String(Math.floor(minutes / 60)).padStart(2, "0");
     const minute = String(minutes % 60).padStart(2, "0");
     const startAt = `${date}T${hour}:${minute}:00${config.utcOffset}`;

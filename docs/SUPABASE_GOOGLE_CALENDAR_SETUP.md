@@ -37,7 +37,7 @@ Defaults are configured for Colombia:
 - Time zone: `America/Bogota`
 - UTC offset: `-05:00`
 - Monday through Friday
-- 09:00 to 17:00
+- Selectable start times from 08:00 through 21:00
 - 30-minute consultations
 - Four hours minimum notice
 - Thirty days available in advance
