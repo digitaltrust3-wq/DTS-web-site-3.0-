@@ -6,6 +6,8 @@ import { fileURLToPath } from "node:url";
 import { receiveWebhook, verifyWebhook } from "./whatsapp/webhook.mjs";
 import { registerAdminRoutes } from "./admin.mjs";
 import { clientWelcomeEmail, ownerLeadEmail } from "./email/templates.mjs";
+import { registerSchedulingRoutes } from "./scheduling.mjs";
+import { isSupabaseConfigured, saveLead } from "./integrations/supabase.mjs";
 
 const app = express();
 const port = Number(process.env.PORT || 3001);
@@ -25,6 +27,7 @@ app.use(express.json({
 }));
 
 registerAdminRoutes(app, projectRoot);
+registerSchedulingRoutes(app);
 
 app.get("/api/health", (_request, response) => {
   response.json({ status: "ok", service: "digital-trust-solutions" });
@@ -64,8 +67,24 @@ app.post("/api/contact", async (request, response) => {
     return response.status(429).json({ message: "Please wait before sending another request." });
   }
 
-  const requiredConfiguration = [
-    "SMTP_USER",
+  let storedLead = null;
+  if (isSupabaseConfigured()) {
+    try {
+      storedLead = await saveLead({
+        name,
+        email,
+        phone,
+        interest: message,
+        source: "website_contact",
+        language,
+        metadata: { ip: request.ip },
+      });
+    } catch (databaseError) {
+      console.error("Contact persistence failed", databaseError);
+    }
+  }
+
+  const requiredConfiguration = [    "SMTP_USER",
     "SMTP_PASS",
     "CONTACT_TO",
     "CONTACT_FROM",
@@ -73,7 +92,11 @@ app.post("/api/contact", async (request, response) => {
   const missingConfiguration = requiredConfiguration.filter((key) => !process.env[key]);
 
   if (missingConfiguration.length > 0) {
-    console.error(`Contact service is missing: ${missingConfiguration.join(", ")}`);
+    console.error(`Contact email service is missing: ${missingConfiguration.join(", ")}`);
+    if (storedLead) {
+      recentRequests.set(clientKey, Date.now());
+      return response.status(202).json({ message: "Project request received.", stored: true, confirmationSent: false });
+    }
     return response.status(503).json({
       message: "The contact service is not configured yet. Please contact us directly.",
     });
@@ -113,7 +136,7 @@ app.post("/api/contact", async (request, response) => {
     }
 
     recentRequests.set(clientKey, Date.now());
-    return response.status(202).json({ message: "Project request received.", confirmationSent });
+    return response.status(202).json({ message: "Project request received.", stored: Boolean(storedLead), confirmationSent });
   } catch (error) {
     console.error("Contact email failed", error);
     return response.status(502).json({
