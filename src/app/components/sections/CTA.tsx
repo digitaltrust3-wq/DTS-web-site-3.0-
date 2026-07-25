@@ -1,5 +1,5 @@
 import { Button } from "../shared/Button";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight, CalendarDays } from "lucide-react";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 export function CTA() {
@@ -22,8 +22,10 @@ export function CTA() {
             {cta.contact}
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
-          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 px-8">
+          <Button size="lg" className="bg-white text-slate-800 hover:bg-slate-100 px-8 group shadow-lg">
+            <CalendarDays className="mr-2 w-5 h-5" />
             {cta.schedule}
+            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
       </div>

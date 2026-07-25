@@ -81,7 +81,7 @@ export const translations = {
       title: "Ready to Start Your Project?",
       description: "Let's discuss how innovative technology can transform your business. Our team is ready to bring your vision to life.",
       contact: "Contact Us",
-      schedule: "Schedule a Call",
+      schedule: "Schedule a consultation",
     },
     footer: {
       description: "Transforming ideas into digital reality with innovative software solutions.",
@@ -199,7 +199,7 @@ export const translations = {
       title: "¿Listo para iniciar tu proyecto?",
       description: "Conversemos sobre cómo la tecnología puede transformar tu empresa. Nuestro equipo está listo para hacer realidad tu visión.",
       contact: "Contáctanos",
-      schedule: "Agenda una llamada",
+      schedule: "Agendar una consulta",
     },
     footer: {
       description: "Transformamos ideas en productos digitales mediante soluciones de software innovadoras.",
