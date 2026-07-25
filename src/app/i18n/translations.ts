@@ -182,7 +182,7 @@ export const translations = {
     },
     tech: {
       title: "Tecnología moderna e IA",
-      description: "Construimos con IA, arquitecturas nativas de la nube y plataformas de software modernas para crear productos inteligentes, seguros y escalables.",
+      description: "Construimos arquitecturas nativas de la nube y plataformas de software modernas para crear productos inteligentes, seguros y escalables.",
       imageAlt: "Arquitectura moderna de software, nube e inteligencia artificial",
     },
     testimonials: {
