@@ -6,7 +6,6 @@ import { Hero } from "./components/sections/Hero";
 import { Portfolio } from "./components/sections/Portfolio";
 import { Services } from "./components/sections/Services";
 import { TechStack } from "./components/sections/TechStack";
-import { Testimonials } from "./components/sections/Testimonials";
 import { FixedVideoBackground } from "./components/shared/FixedVideoBackground";
 import { useLanguage } from "./i18n/LanguageContext";
 import { AdminPage } from "./admin/AdminPage";
@@ -47,7 +46,6 @@ export default function App() {
             <Portfolio />
             <About />
             <TechStack />
-            <Testimonials />
             <CTA />
           </div>
         </div>

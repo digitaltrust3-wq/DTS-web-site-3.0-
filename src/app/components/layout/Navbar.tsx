@@ -51,9 +51,6 @@ export function Navbar() {
             <a href="#about" className="text-slate-300 hover:text-white transition-colors">
               {navCopy.about}
             </a>
-            <a href="#testimonials" className="text-slate-300 hover:text-white transition-colors">
-              {navCopy.testimonials}
-            </a>
             <Button type="button" onClick={openContactForm} className="bg-slate-700 hover:bg-slate-600 border border-slate-600">
               {navCopy.contact}
             </Button>
@@ -91,9 +88,6 @@ export function Navbar() {
             </a>
             <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="block text-slate-300 hover:text-white transition-colors">
               {navCopy.about}
-            </a>
-            <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block text-slate-300 hover:text-white transition-colors">
-              {navCopy.testimonials}
             </a>
             <div className="flex items-center gap-3">
               <Button type="button" onClick={openContactForm} className="flex-1 bg-slate-700 hover:bg-slate-600 border border-slate-600">
