@@ -29,7 +29,9 @@ npm run google:calendar:connect
 npm run dev
 ```
 
-Open the Vite URL, normally `http://127.0.0.1:5173/DTS-web-site-3.0-/`. Do not use the static preview on port 5192 for API testing.
+Open `http://127.0.0.1:5192/DTS-web-site-3.0-/`. In development, Vite proxies `/api` to the Node.js API on `http://127.0.0.1:3001`.
+
+Port `3012` is only a temporary OAuth callback used by `npm run google:calendar:connect`. It is not the website or scheduling API port and does not need to stay running.
 
 Important: an external OAuth application left in **Testing** receives Calendar refresh tokens that expire after seven days. For continuous production use, move the OAuth application to **In production** and complete any verification Google requests.
 ## 1. Create the Supabase tables
@@ -66,7 +68,7 @@ Defaults are configured for Colombia:
 
 - Time zone: `America/Bogota`
 - UTC offset: `-05:00`
-- Monday through Friday
+- Every day of the week
 - Selectable start times from 08:00 through 21:00
 - 30-minute consultations
 - Four hours minimum notice
@@ -86,7 +88,12 @@ Use the Vite URL printed by the command. Vite proxies `/api` to the Express back
 
 ## 5. Production checks
 
+- Run `npm run check:deployment`.
+- Use `npm run build` as the hosting build command.
+- Use `npm start` as the hosting start command.
 - Confirm the hosting process runs `npm start`, not only the static `dist` folder.
+- Confirm `/api/health` reports `calendarConfigured: true`.
+- Confirm `/api/ready` returns HTTP 200 with `status: "ready"`.
 - Confirm HTTPS is enabled.
 - Book a test appointment with a non-owner email.
 - Verify the event appears on the owner calendar.

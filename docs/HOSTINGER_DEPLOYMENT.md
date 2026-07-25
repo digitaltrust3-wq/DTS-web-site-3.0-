@@ -66,6 +66,24 @@ CONTACT_TO=cotizaciones@tu-dominio.com
 
 Añade también las variables `ADMIN_EMAIL`, `ADMIN_PASSWORD` y `ADMIN_SESSION_SECRET` del panel privado. Nunca copies `.env` al repositorio.
 
+Para activar reservas y Google Meet, agrega también estas variables privadas:
+
+```env
+GOOGLE_CLIENT_ID=tu-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=tu-client-secret
+GOOGLE_REFRESH_TOKEN=tu-refresh-token
+GOOGLE_CALENDAR_ID=primary
+GOOGLE_TIME_ZONE=America/Bogota
+SCHEDULING_UTC_OFFSET=-05:00
+SCHEDULING_START_HOUR=8
+SCHEDULING_END_HOUR=21
+SCHEDULING_SLOT_MINUTES=30
+SCHEDULING_DAYS_AHEAD=30
+SCHEDULING_MIN_NOTICE_HOURS=4
+```
+
+No agregues estas credenciales con prefijo `VITE_`. El puerto `3012` se usa únicamente en tu equipo para generar el refresh token; el servidor publicado debe usar el valor `PORT` asignado por Hostinger.
+
 ## 4. Dominio y HTTPS
 
 Conecta el dominio a la aplicación desde el panel de Hostinger y espera a que el certificado SSL quede activo. `PUBLIC_SITE_URL` y `VITE_SITE_URL` deben comenzar con `https://` y terminar con `/`.
@@ -81,6 +99,14 @@ https://tu-dominio.com/api/health
 ```
 
 Debe responder con `{"status":"ok"}`.
+
+También verifica:
+
+```text
+https://tu-dominio.com/api/ready
+```
+
+Debe responder con estado HTTP 200 y `{"status":"ready"}`. Antes de publicar, ejecuta `npm run check:deployment` para detectar variables faltantes o puertos mal configurados.
 
 Para verificar las credenciales SMTP desde un entorno que tenga las variables configuradas:
 

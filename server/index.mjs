@@ -1,12 +1,14 @@
 import "dotenv/config";
 import express from "express";
 import nodemailer from "nodemailer";
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { receiveWebhook, verifyWebhook } from "./whatsapp/webhook.mjs";
 import { registerAdminRoutes } from "./admin.mjs";
 import { clientWelcomeEmail, ownerLeadEmail } from "./email/templates.mjs";
 import { registerSchedulingRoutes } from "./scheduling.mjs";
+import { isGoogleCalendarConfigured } from "./integrations/google-calendar.mjs";
 import { isSupabaseConfigured, saveLead } from "./integrations/supabase.mjs";
 
 const app = express();
@@ -30,7 +32,26 @@ registerAdminRoutes(app, projectRoot);
 registerSchedulingRoutes(app);
 
 app.get("/api/health", (_request, response) => {
-  response.json({ status: "ok", service: "digital-trust-solutions" });
+  response.json({
+    status: "ok",
+    service: "digital-trust-solutions",
+    environment: process.env.NODE_ENV || "development",
+    checks: {
+      calendarConfigured: isGoogleCalendarConfigured(),
+      supabaseConfigured: isSupabaseConfigured(),
+      emailConfigured: Boolean(process.env.SMTP_USER && process.env.SMTP_PASS && process.env.CONTACT_TO),
+      frontendBuilt: fs.existsSync(path.join(distPath, "index.html")),
+    },
+  });
+});
+
+app.get("/api/ready", (_request, response) => {
+  const checks = {
+    calendarConfigured: isGoogleCalendarConfigured(),
+    frontendBuilt: fs.existsSync(path.join(distPath, "index.html")),
+  };
+  const ready = Object.values(checks).every(Boolean);
+  response.status(ready ? 200 : 503).json({ status: ready ? "ready" : "not_ready", checks });
 });
 
 app.get("/api/whatsapp/webhook", verifyWebhook);
@@ -152,6 +173,15 @@ app.use((request, response, next) => {
   response.sendFile(path.join(distPath, "index.html"));
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Digital Trust Solutions server listening on http://127.0.0.1:${port}`);
+});
+
+server.on("error", (error) => {
+  if (error?.code === "EADDRINUSE") {
+    console.error(`Port ${port} is already in use. Stop the previous API process and run the command again.`);
+  } else {
+    console.error("The Digital Trust Solutions server could not start.", error);
+  }
+  process.exit(1);
 });
