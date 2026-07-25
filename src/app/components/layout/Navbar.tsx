@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Globe2, Menu, X } from "lucide-react";
 import { Button } from "../shared/Button";
 import { BrandLogo } from "../shared/BrandLogo";
+import { ContactModal } from "../shared/ContactModal";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const { language, copy, toggleLanguage } = useLanguage();
   const navCopy = copy.common;
 
@@ -18,16 +20,22 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const openContactForm = () => {
+    setIsMobileMenuOpen(false);
+    setIsContactOpen(true);
+  };
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-slate-950/95 backdrop-blur-lg shadow-lg"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-slate-950/95 backdrop-blur-lg shadow-lg"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
           <a href="#" aria-label={navCopy.home} className="block shrink-0">
             <BrandLogo className="h-16 w-auto" />
           </a>
@@ -37,17 +45,17 @@ export function Navbar() {
             <a href="#services" className="text-slate-300 hover:text-white transition-colors">
               {navCopy.services}
             </a>
-            <a href="#about" className="text-slate-300 hover:text-white transition-colors">
-              {navCopy.about}
-            </a>
             <a href="#portfolio" className="text-slate-300 hover:text-white transition-colors">
               {navCopy.portfolio}
+            </a>
+            <a href="#about" className="text-slate-300 hover:text-white transition-colors">
+              {navCopy.about}
             </a>
             <a href="#testimonials" className="text-slate-300 hover:text-white transition-colors">
               {navCopy.testimonials}
             </a>
-            <Button asChild className="bg-slate-700 hover:bg-slate-600 border border-slate-600">
-              <a href="#contact">{navCopy.contact}</a>
+            <Button type="button" onClick={openContactForm} className="bg-slate-700 hover:bg-slate-600 border border-slate-600">
+              {navCopy.contact}
             </Button>
             <button
               type="button"
@@ -70,26 +78,26 @@ export function Navbar() {
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-        </div>
+          </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="mt-4 space-y-4 rounded-xl border border-slate-800 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl md:hidden">
-            <a href="#services" className="block text-slate-300 hover:text-white transition-colors">
+            <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="block text-slate-300 hover:text-white transition-colors">
               {navCopy.services}
             </a>
-            <a href="#about" className="block text-slate-300 hover:text-white transition-colors">
-              {navCopy.about}
-            </a>
-            <a href="#portfolio" className="block text-slate-300 hover:text-white transition-colors">
+            <a href="#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="block text-slate-300 hover:text-white transition-colors">
               {navCopy.portfolio}
             </a>
-            <a href="#testimonials" className="block text-slate-300 hover:text-white transition-colors">
+            <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="block text-slate-300 hover:text-white transition-colors">
+              {navCopy.about}
+            </a>
+            <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block text-slate-300 hover:text-white transition-colors">
               {navCopy.testimonials}
             </a>
             <div className="flex items-center gap-3">
-              <Button asChild className="flex-1 bg-slate-700 hover:bg-slate-600 border border-slate-600">
-                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>{navCopy.contact}</a>
+              <Button type="button" onClick={openContactForm} className="flex-1 bg-slate-700 hover:bg-slate-600 border border-slate-600">
+                {navCopy.contact}
               </Button>
               <button
                 type="button"
@@ -104,7 +112,9 @@ export function Navbar() {
             </div>
           </div>
         )}
-      </div>
-    </nav>
+        </div>
+      </nav>
+      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+    </>
   );
 }
