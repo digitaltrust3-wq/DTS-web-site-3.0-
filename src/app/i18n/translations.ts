@@ -63,8 +63,8 @@ export const translations = {
       highlights: ["Solutions adapted to the real needs of your business", "Professional, intuitive design that adapts to mobile devices", "Scalable technology prepared for future functionality", "Support throughout development, launch and maintenance"],
     },
     tech: {
-      title: "Modern technology and AI",
-      description: "We build with AI, cloud-native architectures and modern software platforms to deliver intelligent, secure and scalable products.",
+      title: "Modern technology and AI implementations",
+      description: "We build cloud-native architectures and modern software platforms to deliver intelligent, secure and scalable products.",
       imageAlt: "Modern software, cloud and artificial intelligence architecture",
     },
     testimonials: {
@@ -181,7 +181,7 @@ export const translations = {
       highlights: ["Soluciones adaptadas a las necesidades reales de tu negocio", "Diseño profesional, intuitivo y adaptable a dispositivos móviles", "Tecnología escalable preparada para futuras funcionalidades", "Acompañamiento durante el desarrollo, lanzamiento y mantenimiento"],
     },
     tech: {
-      title: "Tecnología moderna e IA",
+      title: "Tecnología moderna e implementaciones con IA",
       description: "Construimos arquitecturas nativas de la nube y plataformas de software modernas para crear productos inteligentes, seguros y escalables.",
       imageAlt: "Arquitectura moderna de software, nube e inteligencia artificial",
     },
