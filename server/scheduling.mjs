@@ -30,9 +30,6 @@ function isValidDate(date) {
 
 function createCandidateSlots(date) {
   const config = schedulingConfig();
-  const weekday = new Date(`${date}T12:00:00Z`).getUTCDay();
-  if (weekday === 0 || weekday === 6) return [];
-
   const slots = [];
   for (let minutes = config.startHour * 60; minutes <= config.endHour * 60; minutes += config.slotMinutes) {
     const hour = String(Math.floor(minutes / 60)).padStart(2, "0");
