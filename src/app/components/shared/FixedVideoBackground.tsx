@@ -5,7 +5,6 @@ type FixedVideoBackgroundProps = {
   mobileSrc?: string;
   mobileHighSrc?: string;
   poster?: string;
-  hls?: boolean;
   tone?: "intro" | "lower";
   playbackRate?: number;
   eager?: boolean;
@@ -16,7 +15,6 @@ export function FixedVideoBackground({
   mobileSrc,
   mobileHighSrc,
   poster,
-  hls = false,
   tone = "intro",
   playbackRate = 0.65,
   eager = false,
@@ -49,7 +47,6 @@ export function FixedVideoBackground({
     let isCancelled = false;
     let isNearViewport = eager;
     let sourceIsLoaded = false;
-    let destroyPlayer: (() => void) | undefined;
     const selectedSource = isMobile
       ? (!isMediumConnection && mobileHighSrc ? mobileHighSrc : mobileSrc ?? src)
       : src;
@@ -63,50 +60,9 @@ export function FixedVideoBackground({
     const loadSource = async () => {
       if (sourceIsLoaded || isCancelled) return;
       sourceIsLoaded = true;
-
-      if (!hls) {
-        video.src = selectedSource;
-        video.load();
-        play();
-        return;
-      }
-
-      if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        video.src = selectedSource;
-        video.load();
-        play();
-        return;
-      }
-
-      const { default: Hls } = await import("hls.js");
-      if (isCancelled || !Hls.isSupported()) return;
-
-      const player = new Hls({
-        enableWorker: true,
-        lowLatencyMode: false,
-        capLevelToPlayerSize: true,
-        startLevel: isMobile ? 0 : -1,
-        maxBufferLength: isMobile ? 8 : 20,
-        maxMaxBufferLength: isMobile ? 16 : 40,
-        backBufferLength: isMobile ? 0 : 15,
-        abrBandWidthFactor: isMobile ? 0.7 : 0.95,
-        abrBandWidthUpFactor: isMobile ? 0.5 : 0.7,
-      });
-
-      player.on(Hls.Events.MANIFEST_PARSED, () => {
-        if (isMobile && player.levels.length > 0) {
-          const mobileMaxHeight = isMediumConnection ? 720 : 1080;
-          const mobileCap = player.levels.reduce(
-            (best, level, index) => level.height <= mobileMaxHeight ? index : best,
-            0,
-          );
-          player.autoLevelCapping = mobileCap;
-        }
-        if (isNearViewport) play();
-      });
-      player.loadSource(selectedSource);
-      player.attachMedia(video);
-      destroyPlayer = () => player.destroy();
+      video.src = selectedSource;
+      video.load();
+      play();
     };
 
     const observer = new IntersectionObserver(
@@ -134,9 +90,8 @@ export function FixedVideoBackground({
       video.removeEventListener("loadedmetadata", play);
       document.removeEventListener("visibilitychange", handleVisibility);
       video.pause();
-      destroyPlayer?.();
     };
-  }, [eager, hls, mobileHighSrc, mobileSrc, playbackRate, src]);
+  }, [eager, mobileHighSrc, mobileSrc, playbackRate, src]);
 
   return (
     <div ref={containerRef} className={`page-video-background page-video-background--${tone}`} aria-hidden="true">

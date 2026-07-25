@@ -17,10 +17,6 @@ const INTRO_VIDEO_URL =
 const INTRO_MOBILE_VIDEO_URL = `${import.meta.env.BASE_URL}assets/video/intro-mobile.mp4`;
 const INTRO_MOBILE_1080_VIDEO_URL = `${import.meta.env.BASE_URL}assets/video/intro-mobile-1080.mp4`;
 const INTRO_POSTER_URL = `${import.meta.env.BASE_URL}assets/video/intro-poster.jpg`;
-const LOWER_POSTER_URL = `${import.meta.env.BASE_URL}assets/video/lower-poster.jpg`;
-
-const LOWER_VIDEO_URL =
-  "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
 
 export default function App() {
   const { copy } = useLanguage();
@@ -50,18 +46,6 @@ export default function App() {
             <Services />
             <Portfolio />
             <About />
-          </div>
-        </div>
-
-        <div className="page-video-region page-video-region--lower">
-          <FixedVideoBackground
-            src={LOWER_VIDEO_URL}
-            poster={LOWER_POSTER_URL}
-            hls
-            tone="lower"
-            playbackRate={0.65}
-          />
-          <div className="page-video-region__content">
             <TechStack />
             <Testimonials />
             <CTA />
