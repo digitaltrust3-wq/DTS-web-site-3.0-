@@ -2,6 +2,36 @@
 
 This implementation keeps every private credential on the Node.js backend. The browser only calls `/api/contact`, `/api/scheduling/availability`, and `/api/scheduling/book`.
 
+## Quick activation today
+
+1. Open [Google Cloud Console](https://console.cloud.google.com/) and create or select a project.
+2. Enable **Google Calendar API**.
+3. Configure **Google Auth Platform / OAuth consent screen** and add your own Google account as a test user.
+4. Create an OAuth 2.0 client of type **Web application**.
+5. Add this exact Authorized redirect URI: `http://127.0.0.1:3012/oauth2/callback`.
+6. Add the client values to the local `.env` file:
+
+```env
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+```
+
+7. Run:
+
+```bash
+npm run google:calendar:connect
+```
+
+8. Open the URL printed in the terminal, approve access with the calendar owner account and wait for the success page. The command saves the refresh token privately in `.env` without printing it.
+9. Start the complete application:
+
+```bash
+npm run dev
+```
+
+Open the Vite URL, normally `http://127.0.0.1:5173/DTS-web-site-3.0-/`. Do not use the static preview on port 5192 for API testing.
+
+Important: an external OAuth application left in **Testing** receives Calendar refresh tokens that expire after seven days. For continuous production use, move the OAuth application to **In production** and complete any verification Google requests.
 ## 1. Create the Supabase tables
 
 1. Create or open the Supabase project.

@@ -1,48 +1,49 @@
 {
-  "name": "digital-trust-solutions-web",
-  "private": true,
-  "version": "0.0.1",
-  "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "dev": "concurrently --kill-others-on-fail \"npm:dev:web\" \"npm:dev:api\"",
-    "dev:web": "vite",
-    "dev:api": "node --watch server/index.mjs",
-    "start": "node server/index.mjs",
-    "verify:email": "node server/scripts/verify-email.mjs"
-  },
-  "engines": {
-    "node": ">=20 <23"
-  },
-  "dependencies": {
-    "@radix-ui/react-slot": "1.1.2",
-    "@react-three/drei": "^9.122.0",
-    "@react-three/fiber": "^8.18.0",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "gsap": "^3.15.0",
-    "hls.js": "^1.6.16",
-    "lucide-react": "0.487.0",
-    "motion": "^12.42.2",
-    "nodemailer": "^9.0.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "tailwind-merge": "3.2.0",
-    "three": "^0.185.1"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "4.1.12",
-    "@vitejs/plugin-react": "4.7.0",
-    "concurrently": "^9.2.4",
-    "tailwindcss": "4.1.12",
-    "vite": "6.4.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "6.4.3"
-    }
-  },
-  "description": "Official website for Digital Trust Solutions"
+    "name":  "digital-trust-solutions-web",
+    "private":  true,
+    "version":  "0.0.1",
+    "type":  "module",
+    "scripts":  {
+                    "build":  "vite build",
+                    "dev":  "concurrently --kill-others-on-fail \"npm:dev:web\" \"npm:dev:api\"",
+                    "dev:web":  "vite",
+                    "dev:api":  "node --watch server/index.mjs",
+                    "start":  "node server/index.mjs",
+                    "verify:email":  "node server/scripts/verify-email.mjs",
+                    "google:calendar:connect":  "node server/scripts/connect-google-calendar.mjs"
+                },
+    "engines":  {
+                    "node":  "\u003e=20 \u003c23"
+                },
+    "dependencies":  {
+                         "@radix-ui/react-slot":  "1.1.2",
+                         "@react-three/drei":  "^9.122.0",
+                         "@react-three/fiber":  "^8.18.0",
+                         "class-variance-authority":  "0.7.1",
+                         "clsx":  "2.1.1",
+                         "dotenv":  "^17.4.2",
+                         "express":  "^5.2.1",
+                         "gsap":  "^3.15.0",
+                         "hls.js":  "^1.6.16",
+                         "lucide-react":  "0.487.0",
+                         "motion":  "^12.42.2",
+                         "nodemailer":  "^9.0.3",
+                         "react":  "18.3.1",
+                         "react-dom":  "18.3.1",
+                         "tailwind-merge":  "3.2.0",
+                         "three":  "^0.185.1"
+                     },
+    "devDependencies":  {
+                            "@tailwindcss/vite":  "4.1.12",
+                            "@vitejs/plugin-react":  "4.7.0",
+                            "concurrently":  "^9.2.4",
+                            "tailwindcss":  "4.1.12",
+                            "vite":  "6.4.3"
+                        },
+    "pnpm":  {
+                 "overrides":  {
+                                   "vite":  "6.4.3"
+                               }
+             },
+    "description":  "Official website for Digital Trust Solutions"
 }

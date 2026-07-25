@@ -51,6 +51,8 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
 
     fetch(`/api/scheduling/availability?date=${encodeURIComponent(date)}`, { signal: controller.signal })
       .then(async (response) => {
+        const isJson = response.headers.get("content-type")?.includes("application/json");
+        if (!isJson) throw new Error(modal.backendUnavailable);
         const result = await response.json().catch(() => null);
         if (!response.ok) throw new Error(result?.message || modal.availabilityError);
         setSlots(result.slots || []);
