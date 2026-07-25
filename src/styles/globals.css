@@ -675,17 +675,22 @@ body {
   grid-template-columns: 1.35rem minmax(0, 1fr);
   align-items: start;
   gap: 0.9rem;
-  color: #d9e0e8;
+  color: #f5f8fb;
   font-size: clamp(1rem, 1.1vw, 1.075rem);
+  font-weight: 520;
   line-height: 1.55;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.78),
+    0 0 18px rgba(2, 8, 15, 0.34);
 }
 
 .about-benefits__list svg {
   width: 1.35rem;
   height: 1.35rem;
   margin-top: 0.12rem;
-  color: #bac6d2;
-  stroke-width: 1.8;
+  color: #eef5fa;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.72));
+  stroke-width: 2.1;
 }
 
 .about-statement {
@@ -695,9 +700,12 @@ body {
   border-top: 1px solid rgba(186, 198, 210, 0.24);
   color: #f8fafc;
   font-size: clamp(1.2rem, 1.65vw, 1.5rem);
-  font-weight: 550;
+  font-weight: 650;
   letter-spacing: -0.015em;
   line-height: 1.45;
+  text-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.82),
+    0 0 22px rgba(2, 8, 15, 0.38);
 }
 
 .testimonials-section {
