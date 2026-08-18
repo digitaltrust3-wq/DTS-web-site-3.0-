@@ -1,50 +1,50 @@
 [
   {
     "id": "service_01",
-    "icon": "code",
-    "title": "Custom Software Development",
-    "shortDescription": "Software designed around your operations.",
-    "longDescription": "We turn complex workflows into maintainable platforms with clear architecture, measurable performance and a delivery path your team can own.",
+    "icon": "agents",
+    "title": "Enterprise AI Agents",
+    "shortDescription": "Intelligent agents for sales, customer service and operations.",
+    "longDescription": "We build specialized digital workers that assist customers, qualify leads, update systems, execute actions and transfer complex cases to your team.",
     "image": "/assets/services/custom-software.jpg"
   },
   {
     "id": "service_02",
-    "icon": "mobile",
-    "title": "Mobile App Development",
-    "shortDescription": "Reliable experiences for iOS and Android.",
-    "longDescription": "We design and build mobile products that remain fast, accessible and consistent across devices, from discovery through store release.",
+    "icon": "automation",
+    "title": "Intelligent Process Automation",
+    "shortDescription": "We turn manual processes into intelligent, automated workflows.",
+    "longDescription": "We analyze, redesign and automate repetitive work across email, forms, CRM, documents, approvals, notifications and business reporting.",
     "image": "/assets/services/mobile-apps.jpg"
   },
   {
     "id": "service_03",
-    "icon": "cloud",
-    "title": "Cloud Solutions",
-    "shortDescription": "Infrastructure that scales with demand.",
-    "longDescription": "We modernize cloud environments, automate delivery and improve observability so your systems can grow without adding operational friction.",
+    "icon": "knowledge",
+    "title": "Enterprise Knowledge Assistants",
+    "shortDescription": "AI that understands your organization's knowledge and processes.",
+    "longDescription": "We connect AI to manuals, contracts, policies, catalogs and internal data so customers and teams receive reliable, context-aware answers.",
     "image": "/assets/services/cloud-solutions.jpg"
   },
   {
     "id": "service_04",
-    "icon": "data",
-    "title": "Data Analytics",
-    "shortDescription": "Decisions backed by usable data.",
-    "longDescription": "We connect fragmented sources and build trustworthy analytics products that help teams understand performance and act with confidence.",
+    "icon": "intelligence",
+    "title": "Process Intelligence and Optimization",
+    "shortDescription": "We uncover opportunities to reduce time, cost and unnecessary work.",
+    "longDescription": "We analyze response times, operational load, funnels and customer behavior to identify bottlenecks and prioritize measurable improvements.",
     "image": "/assets/services/data-analytics.jpg"
   },
   {
     "id": "service_05",
-    "icon": "security",
-    "title": "Cybersecurity",
-    "shortDescription": "Security embedded in every layer.",
-    "longDescription": "We assess risk, strengthen access controls and integrate practical security checks throughout the product and infrastructure lifecycle.",
+    "icon": "integration",
+    "title": "AI Integration with Business Systems",
+    "shortDescription": "We connect AI with the tools your company already uses.",
+    "longDescription": "We integrate agents, data and automations with WhatsApp, CRM, email, ERP, calendars, APIs, databases and internal systems.",
     "image": "/assets/services/cybersecurity.jpg"
   },
   {
     "id": "service_06",
-    "icon": "integration",
-    "title": "API Integration",
-    "shortDescription": "Connected systems without brittle handoffs.",
-    "longDescription": "We design resilient API integrations with documented contracts, monitoring and recovery paths for business-critical data flows.",
+    "icon": "software",
+    "title": "Custom Intelligent Software",
+    "shortDescription": "Software, automation and AI working as one business system.",
+    "longDescription": "We create secure platforms, portals and internal tools with AI, integrations, cloud infrastructure and data architecture built in from the start.",
     "image": "/assets/services/api-integration.jpg"
   }
 ]

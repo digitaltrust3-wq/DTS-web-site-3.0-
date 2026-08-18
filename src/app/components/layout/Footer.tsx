@@ -110,6 +110,7 @@ export function Footer() {
 
           <div className="border-t border-slate-800 pt-8 text-center text-sm">
             <p>{footer.rights}</p>
+            <a href={`${import.meta.env.BASE_URL}privacy.html`} className="mt-3 inline-block transition-colors hover:text-slate-300">{footer.privacy}</a>
           </div>
         </div>
       </footer>

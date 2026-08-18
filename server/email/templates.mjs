@@ -74,3 +74,51 @@ export function clientWelcomeEmail({ name, language }) {
       <p style="margin:0;color:#c3d0dc;font-size:15px;line-height:1.75">We will contact you soon by email or phone.</p>`),
   };
 }
+
+function appointmentDetails({ startAt, timeZone, meetUrl }) {
+  const date = new Intl.DateTimeFormat("es-CO", {
+    dateStyle: "full",
+    timeStyle: "short",
+    timeZone,
+  }).format(new Date(startAt));
+  return { date: escapeHtml(date), meetUrl: escapeHtml(meetUrl || "") };
+}
+
+export function appointmentOwnerEmail(data) {
+  const safe = {
+    name: escapeHtml(data.name),
+    email: escapeHtml(data.email),
+    phone: escapeHtml(data.phone),
+    interest: escapeHtml(data.interest).replaceAll("\n", "<br>"),
+    ...appointmentDetails(data),
+  };
+  return {
+    subject: `[Consulta] Reserva confirmada de ${data.name}`,
+    text: `Reserva confirmada\n\nCliente: ${data.name}\nCorreo: ${data.email}\nTeléfono: ${data.phone}\nFecha: ${safe.date}\nMeet: ${data.meetUrl || "Pendiente"}\n\nInterés:\n${data.interest}`,
+    html: emailShell(`
+      <p style="margin:0 0 8px;color:#8fa4b8;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">Nueva consulta</p>
+      <h1 style="margin:0 0 22px;color:#fff;font-size:28px">Reserva confirmada</h1>
+      <p style="color:#d6e0e9;line-height:1.7"><strong>${safe.name}</strong><br>${safe.email}<br>${safe.phone}<br>${safe.date}</p>
+      <div style="margin-top:20px;padding:18px;border-radius:10px;background:#09131e;color:#d6e0e9;line-height:1.7">${safe.interest}</div>
+      ${safe.meetUrl ? `<p style="margin-top:22px"><a href="${safe.meetUrl}" style="color:#eaf1f7">Abrir Google Meet</a></p>` : ""}`),
+  };
+}
+
+export function appointmentClientEmail(data) {
+  const spanish = data.language === "es";
+  const safeName = escapeHtml(data.name);
+  const details = appointmentDetails(data);
+  const heading = spanish ? `Tu consulta está confirmada, ${safeName}` : `Your consultation is confirmed, ${safeName}`;
+  const body = spanish
+    ? `Te esperamos el ${details.date}. También recibirás la invitación de Google Calendar.`
+    : `We will see you on ${details.date}. You will also receive the Google Calendar invitation.`;
+  return {
+    subject: spanish ? "Consulta confirmada | Digital Trust Solutions" : "Consultation confirmed | Digital Trust Solutions",
+    text: `${heading}\n\n${body}\n${data.meetUrl || ""}`,
+    html: emailShell(`
+      <p style="margin:0 0 8px;color:#8fa4b8;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">${spanish ? "Consulta confirmada" : "Consultation confirmed"}</p>
+      <h1 style="margin:0 0 20px;color:#fff;font-size:30px;line-height:1.2">${heading}</h1>
+      <p style="margin:0;color:#c3d0dc;font-size:15px;line-height:1.75">${body}</p>
+      ${details.meetUrl ? `<p style="margin-top:24px"><a href="${details.meetUrl}" style="display:inline-block;padding:12px 18px;border-radius:8px;background:#f1f5f9;color:#0f172a;text-decoration:none;font-weight:700">Google Meet</a></p>` : ""}`),
+  };
+}

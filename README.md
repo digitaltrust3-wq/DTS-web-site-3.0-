@@ -1,6 +1,6 @@
 # Digital Trust Solutions
 
-Sitio web bilingüe de Digital Trust Solutions, construido con React, Vite y Tailwind CSS. Incluye un formulario de contacto, enlaces a WhatsApp y una base para automatizar respuestas mediante la API oficial de WhatsApp Cloud.
+Sitio web bilingüe de Digital Trust Solutions, construido con React, Vite, Tailwind CSS y una API Express desplegable en Vercel. Incluye contacto, reservas con Google Meet, persistencia en Supabase y una base para WhatsApp Cloud.
 
 ## Requisitos
 
@@ -23,7 +23,7 @@ npm run build
 npm start
 ```
 
-La compilación estática se genera en `dist/`. GitHub Pages puede publicar esa carpeta, pero las funciones del servidor —correo y automatización de WhatsApp— necesitan un servicio compatible con Node.js.
+La compilación estática se genera en `dist/`. Vercel es el entorno de producción recomendado para publicar el frontend y la API como una sola aplicación. GitHub Pages queda limitado a una versión estática sin formularios, reservas ni administración.
 
 ## Variables de entorno
 
@@ -48,7 +48,7 @@ ADMIN_PASSWORD=una-contraseña-larga-y-unica
 ADMIN_SESSION_SECRET=una-cadena-aleatoria-de-al-menos-32-caracteres
 ```
 
-El contenido se guarda en `server/data/content.json`. En producción, el servicio Node debe usar un disco persistente y HTTPS. GitHub Pages por sí solo no puede ejecutar la autenticación, la API ni guardar cambios; para el panel se necesita desplegar la aplicación completa en un proveedor compatible con Node.js y almacenamiento persistente.
+En desarrollo, el contenido puede guardarse en `server/data/content.json`. En producción se almacena en Supabase porque el sistema de archivos de las funciones serverless no es persistente.
 
 ## Organización
 
@@ -84,3 +84,7 @@ docs/            Documentación y atribuciones
 ## Hostinger
 
 La configuración completa de buzones, SMTP, aplicación Node.js, dominio y variables de producción está en [docs/HOSTINGER_DEPLOYMENT.md](docs/HOSTINGER_DEPLOYMENT.md). Usa `.env.hostinger.example` como plantilla para hPanel.
+
+## Vercel
+
+La arquitectura, variables, migraciones y pruebas de producción están documentadas en [docs/VERCEL_DEPLOYMENT.md](docs/VERCEL_DEPLOYMENT.md). Usa `.env.vercel.example` únicamente como referencia de nombres; los secretos se configuran directamente en Vercel.

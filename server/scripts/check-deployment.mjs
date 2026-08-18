@@ -16,6 +16,8 @@ function configured(key) {
   return Boolean(current) && !/(replace|your-|example\.com|tu-dominio)/i.test(current);
 }
 
+const production = value("NODE_ENV") === "production" || Boolean(value("VERCEL"));
+
 const nodeMajor = Number(process.versions.node.split(".")[0]);
 if (nodeMajor < 20 || nodeMajor >= 25) {
   issues.push(`Node.js ${process.versions.node} is unsupported. Use a Node.js version from 20 through 24.`);
@@ -42,11 +44,19 @@ if (missingCalendar.length) {
 }
 
 if (!configured("SUPABASE_URL") || !configured("SUPABASE_SERVICE_ROLE_KEY")) {
-  warnings.push("Supabase is not fully configured; bookings will create Calendar events but will not be persisted in Supabase.");
+  (production ? issues : warnings).push("Supabase is not fully configured; production bookings and managed content require persistent storage.");
 }
 
 if (!configured("SMTP_USER") || !configured("SMTP_PASS") || !configured("CONTACT_TO")) {
-  warnings.push("SMTP is not fully configured; contact-form email delivery will be unavailable.");
+  (production ? issues : warnings).push("SMTP is not fully configured; contact and booking confirmations will be unavailable.");
+}
+
+if (!configured("ADMIN_EMAIL") || value("ADMIN_PASSWORD").length < 16 || value("ADMIN_SESSION_SECRET").length < 32) {
+  (production ? issues : warnings).push("Administrator credentials are missing or too weak.");
+}
+
+for (const key of ["PUBLIC_SITE_URL", "VITE_SITE_URL"]) {
+  if (production && (!configured(key) || !value(key).startsWith("https://"))) issues.push(`${key} must be a production HTTPS URL.`);
 }
 
 if (!fs.existsSync(path.join(projectRoot, "dist", "index.html"))) {

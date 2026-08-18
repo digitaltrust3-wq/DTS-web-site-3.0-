@@ -54,7 +54,7 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
         const isJson = response.headers.get("content-type")?.includes("application/json");
         if (!isJson) throw new Error(modal.backendUnavailable);
         const result = await response.json().catch(() => null);
-        if (!response.ok) throw new Error(result?.message || modal.availabilityError);
+        if (!response.ok) throw new Error(result?.error?.message || result?.message || modal.availabilityError);
         setSlots(result.slots || []);
         setTimeZone(result.timeZone || "America/Bogota");
         setLoadState("ready");
@@ -89,18 +89,19 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
     try {
       const response = await fetch("/api/scheduling/book", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Idempotency-Key": crypto.randomUUID() },
         body: JSON.stringify({
           name: String(formData.get("name") || "").trim(),
           email: String(formData.get("email") || "").trim(),
           phone: String(formData.get("phone") || "").trim(),
           interest: String(formData.get("interest") || "").trim(),
           startAt: selectedSlot,
+          privacyConsent: formData.get("privacyConsent") === "on",
           language,
         }),
       });
       const result = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(result?.message || modal.error);
+      if (!response.ok) throw new Error(result?.error?.message || result?.message || modal.error);
       setMeeting(result);
       setSubmitState("success");
     } catch (error) {
@@ -142,6 +143,10 @@ export function SchedulingModal({ isOpen, onClose }: SchedulingModalProps) {
                   <label className="grid gap-2 text-sm text-slate-200">{modal.phone}<input name="phone" type="tel" required minLength={7} maxLength={30} autoComplete="tel" className="rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400" placeholder={modal.phonePlaceholder} /></label>
                 </div>
                 <label className="grid gap-2 text-sm text-slate-200">{modal.interest}<textarea name="interest" required minLength={10} maxLength={2000} rows={5} className="resize-y rounded-lg border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-slate-400" placeholder={modal.interestPlaceholder} /></label>
+                <label className="flex items-start gap-3 text-sm leading-relaxed text-slate-300">
+                  <input type="checkbox" name="privacyConsent" required className="mt-1 h-4 w-4 accent-slate-200" />
+                  <span>{modal.privacyConsent}{" "}<a href={`${import.meta.env.BASE_URL}privacy.html`} target="_blank" rel="noreferrer" className="text-white underline underline-offset-4">{modal.privacyLink}</a>.</span>
+                </label>
               </div>
 
               <div className="rounded-xl border border-white/10 bg-white/[0.035] p-4 sm:p-5">

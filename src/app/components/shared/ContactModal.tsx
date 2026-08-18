@@ -1,4 +1,4 @@
-import { useEffect, useId, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import { ArrowRight, Check, X } from "lucide-react";
 import { Button } from "./Button";
@@ -16,11 +16,13 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const descriptionId = useId();
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const openedAtRef = useRef(Date.now());
   const { copy, language } = useLanguage();
   const modal = copy.contactModal;
 
   useEffect(() => {
     if (!isOpen) return;
+    openedAtRef.current = Date.now();
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -50,6 +52,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
       email: String(formData.get("email") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
       message: String(formData.get("message") ?? "").trim(),
+      website: String(formData.get("website") ?? "").trim(),
+      submittedAt: openedAtRef.current,
+      privacyConsent: formData.get("privacyConsent") === "on",
       language,
     };
 
@@ -62,7 +67,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
       const result = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(result?.message ?? modal.error);
+        throw new Error(result?.error?.message ?? result?.message ?? modal.error);
       }
 
       form.reset();
@@ -130,6 +135,10 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
             </p>
 
             <form className="space-y-5" onSubmit={handleSubmit}>
+              <label className="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
+                Website
+                <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+              </label>
               <div>
                 <label htmlFor="contact-name" className="mb-2 block text-sm text-slate-200">
                   {modal.name}
@@ -196,6 +205,16 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   placeholder={modal.detailsPlaceholder}
                 />
               </div>
+
+              <label className="flex items-start gap-3 text-sm leading-relaxed text-slate-300">
+                <input type="checkbox" name="privacyConsent" required className="mt-1 h-4 w-4 accent-slate-200" />
+                <span>
+                  {modal.privacyConsent}{" "}
+                  <a href={`${import.meta.env.BASE_URL}privacy.html`} target="_blank" rel="noreferrer" className="text-white underline underline-offset-4">
+                    {modal.privacyLink}
+                  </a>.
+                </span>
+              </label>
 
               {submitState === "error" && (
                 <p className="rounded-lg border border-red-400/25 bg-red-950/35 px-4 py-3 text-sm text-red-100" role="alert">

@@ -39,9 +39,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     void refreshContent();
 
-    const events = new EventSource("/api/content/events");
-    events.addEventListener("content-updated", () => void refreshContent());
-
     const channel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel(CONTENT_CHANNEL) : null;
     if (channel) channel.onmessage = () => void refreshContent();
 
@@ -52,7 +49,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.addEventListener("visibilitychange", refreshWhenVisible);
 
     return () => {
-      events.close();
       channel?.close();
       window.removeEventListener("focus", refreshWhenVisible);
       document.removeEventListener("visibilitychange", refreshWhenVisible);

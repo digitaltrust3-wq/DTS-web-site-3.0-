@@ -25,6 +25,7 @@ async function getAccessToken() {
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
       grant_type: "refresh_token",
     }),
+    signal: AbortSignal.timeout(10_000),
   });
 
   if (!response.ok) throw new Error(`Google OAuth failed (${response.status}).`);
@@ -43,13 +44,19 @@ async function calendarRequest(url, options = {}) {
       "Content-Type": "application/json",
       ...(options.headers || {}),
     },
+    signal: options.signal || AbortSignal.timeout(15_000),
   });
 
   if (!response.ok) {
-    const detail = await response.text();
-    throw new Error(`Google Calendar request failed (${response.status}): ${detail}`);
+    throw new Error(`Google Calendar request failed (${response.status}).`);
   }
   return response.json();
+}
+
+export async function checkGoogleCalendarConnection() {
+  if (!isGoogleCalendarConfigured()) return false;
+  await getAccessToken();
+  return true;
 }
 
 export async function getBusyPeriods({ timeMin, timeMax, timeZone }) {

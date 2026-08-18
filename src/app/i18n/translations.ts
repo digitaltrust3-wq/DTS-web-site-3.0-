@@ -3,8 +3,8 @@ export type Language = "en" | "es";
 export const translations = {
   en: {
     meta: {
-      title: "Digital Trust Solutions | Secure digital products and cloud systems",
-      description: "Digital Trust Solutions designs secure software, cloud platforms, data products and digital experiences for modern organizations.",
+      title: "Digital Trust Solutions | AI agents and intelligent automation",
+      description: "Enterprise AI agents, intelligent process automation and custom software that connect with your business systems.",
     },
     common: {
       skip: "Skip to main content",
@@ -31,17 +31,17 @@ export const translations = {
     },
     services: {
       eyebrow: "What we do",
-      title: "Technology services built around trust",
-      description: "Explore each capability for a concise view of the business outcome, delivery approach and value it adds.",
-      imageAlt: "Abstract secure cloud infrastructure",
+      title: "AI, automation and intelligent software for business",
+      description: "We transform business processes through specialized AI agents, intelligent automation and custom software.",
+      imageAlt: "Abstract technology infrastructure representing AI and business automation",
       discuss: "Discuss this service",
       items: {
-        service_01: { title: "Custom Software Development", short: "Software designed around your operations.", long: "We turn complex workflows into maintainable platforms with clear architecture, measurable performance and a delivery path your team can own." },
-        service_02: { title: "Mobile App Development", short: "Reliable experiences for iOS and Android.", long: "We design and build mobile products that remain fast, accessible and consistent across devices, from discovery through store release." },
-        service_03: { title: "Cloud Solutions", short: "Infrastructure that scales with demand.", long: "We modernize cloud environments, automate delivery and improve observability so your systems can grow without adding operational friction." },
-        service_04: { title: "Data Analytics", short: "Decisions backed by usable data.", long: "We connect fragmented sources and build trustworthy analytics products that help teams understand performance and act with confidence." },
-        service_05: { title: "Cybersecurity", short: "Security embedded in every layer.", long: "We assess risk, strengthen access controls and integrate practical security checks throughout the product and infrastructure lifecycle." },
-        service_06: { title: "API Integration", short: "Connected systems without brittle handoffs.", long: "We design resilient API integrations with documented contracts, monitoring and recovery paths for business-critical data flows." },
+        service_01: { title: "Enterprise AI Agents", short: "Intelligent agents for sales, customer service and operations.", long: "We build specialized digital workers that assist customers, qualify leads, update systems, execute actions and transfer complex cases to your team." },
+        service_02: { title: "Intelligent Process Automation", short: "We turn manual processes into intelligent, automated workflows.", long: "We analyze, redesign and automate repetitive work across email, forms, CRM, documents, approvals, notifications and business reporting." },
+        service_03: { title: "Enterprise Knowledge Assistants", short: "AI that understands your organization's knowledge and processes.", long: "We connect AI to manuals, contracts, policies, catalogs and internal data so customers and teams receive reliable, context-aware answers." },
+        service_04: { title: "Process Intelligence and Optimization", short: "We uncover opportunities to reduce time, cost and unnecessary work.", long: "We analyze response times, operational load, funnels and customer behavior to identify bottlenecks and prioritize measurable improvements." },
+        service_05: { title: "AI Integration with Business Systems", short: "We connect AI with the tools your company already uses.", long: "We integrate agents, data and automations with WhatsApp, CRM, email, ERP, calendars, APIs, databases and internal systems." },
+        service_06: { title: "Custom Intelligent Software", short: "Software, automation and AI working as one business system.", long: "We create secure platforms, portals and internal tools with AI, integrations, cloud infrastructure and data architecture built in from the start." },
       },
     },
     portfolio: {
@@ -97,6 +97,7 @@ export const translations = {
       contact: "Contact",
       connect: "Connect",
       rights: "© 2026 Digital Trust Solutions. All rights reserved.",
+      privacy: "Privacy policy",
     },
     scheduleModal: {
       closeForm: "Close scheduling form",
@@ -127,6 +128,8 @@ export const translations = {
       successDescription: "Your Calendar invitation and Google Meet link have been created.",
       joinMeet: "Open Google Meet",
       close: "Close",
+      privacyConsent: "I agree to the processing of my information according to the",
+      privacyLink: "privacy policy",
     },    contactModal: {
       closeForm: "Close contact form",
       successTitle: "Request received",
@@ -146,12 +149,14 @@ export const translations = {
       send: "Send project request",
       sending: "Sending…",
       error: "We couldn't send your request. Please try again.",
+      privacyConsent: "I agree to the processing of my information according to the",
+      privacyLink: "privacy policy",
     },
   },
   es: {
     meta: {
-      title: "Digital Trust Solutions | Productos digitales seguros y sistemas en la nube",
-      description: "Digital Trust Solutions diseña software seguro, plataformas en la nube, productos de datos y experiencias digitales para organizaciones modernas.",
+      title: "Digital Trust Solutions | Agentes de IA y automatización inteligente",
+      description: "Agentes de IA empresariales, automatización inteligente y software a medida conectado con los sistemas de tu organización.",
     },
     common: {
       skip: "Saltar al contenido principal",
@@ -178,17 +183,17 @@ export const translations = {
     },
     services: {
       eyebrow: "Lo que hacemos",
-      title: "Servicios tecnológicos basados en la confianza",
-      description: "Explora cada capacidad y conoce su impacto empresarial, nuestro enfoque de entrega y el valor que aporta.",
-      imageAlt: "Infraestructura abstracta y segura en la nube",
+      title: "IA, automatización y software inteligente para empresas",
+      description: "Transformamos procesos empresariales mediante agentes de IA especializados, automatización inteligente y software a medida.",
+      imageAlt: "Infraestructura tecnológica abstracta que representa IA y automatización empresarial",
       discuss: "Consultar este servicio",
       items: {
-        service_01: { title: "Desarrollo de software a medida", short: "Software diseñado para tus operaciones.", long: "Convertimos flujos de trabajo complejos en plataformas sostenibles, con arquitectura clara, rendimiento medible y una ruta de entrega que tu equipo puede gestionar." },
-        service_02: { title: "Desarrollo de aplicaciones móviles", short: "Experiencias confiables para iOS y Android.", long: "Diseñamos y desarrollamos productos móviles rápidos, accesibles y consistentes en todos los dispositivos, desde el descubrimiento hasta su publicación." },
-        service_03: { title: "Soluciones en la nube", short: "Infraestructura que crece con la demanda.", long: "Modernizamos entornos en la nube, automatizamos entregas y mejoramos la observabilidad para que tus sistemas crezcan sin fricción operativa." },
-        service_04: { title: "Analítica de datos", short: "Decisiones respaldadas por datos útiles.", long: "Conectamos fuentes fragmentadas y construimos productos analíticos confiables que ayudan a comprender el rendimiento y actuar con seguridad." },
-        service_05: { title: "Ciberseguridad", short: "Seguridad integrada en cada capa.", long: "Evaluamos riesgos, fortalecemos los controles de acceso e incorporamos verificaciones prácticas de seguridad durante todo el ciclo de vida del producto." },
-        service_06: { title: "Integración de API", short: "Sistemas conectados mediante integraciones sólidas.", long: "Diseñamos integraciones de API resistentes, con contratos documentados, monitoreo y rutas de recuperación para flujos de datos críticos." },
+        service_01: { title: "Agentes de IA empresariales", short: "Agentes inteligentes para ventas, servicio al cliente y operaciones.", long: "Creamos trabajadores digitales especializados que atienden clientes, califican prospectos, actualizan sistemas, ejecutan acciones y escalan casos complejos a tu equipo." },
+        service_02: { title: "Automatización inteligente de procesos", short: "Convertimos procesos manuales en flujos inteligentes y automatizados.", long: "Analizamos, rediseñamos y automatizamos tareas repetitivas en correos, formularios, CRM, documentos, aprobaciones, notificaciones y reportes empresariales." },
+        service_03: { title: "Asistentes con conocimiento empresarial", short: "IA que entiende la información y los procesos de tu organización.", long: "Conectamos la IA con manuales, contratos, políticas, catálogos y datos internos para entregar respuestas confiables y contextualizadas a clientes y equipos." },
+        service_04: { title: "Inteligencia y optimización de procesos", short: "Detectamos oportunidades para reducir tiempos, costos y tareas innecesarias.", long: "Analizamos tiempos de respuesta, carga operativa, embudos y comportamiento de clientes para encontrar cuellos de botella y priorizar mejoras medibles." },
+        service_05: { title: "Integración de IA con sistemas empresariales", short: "Conectamos la IA con las herramientas que tu empresa ya utiliza.", long: "Integramos agentes, datos y automatizaciones con WhatsApp, CRM, email, ERP, calendarios, APIs, bases de datos y sistemas internos." },
+        service_06: { title: "Software inteligente a medida", short: "Software, automatización e IA trabajando como un solo sistema empresarial.", long: "Creamos plataformas seguras, portales y herramientas internas con IA, integraciones, infraestructura cloud y arquitectura de datos desde el inicio." },
       },
     },
     portfolio: {
@@ -244,6 +249,7 @@ export const translations = {
       contact: "Contacto",
       connect: "Conecta",
       rights: "© 2026 Digital Trust Solutions. Todos los derechos reservados.",
+      privacy: "Política de privacidad",
     },
     scheduleModal: {
       closeForm: "Cerrar formulario de agendamiento",
@@ -274,6 +280,8 @@ export const translations = {
       successDescription: "Creamos tu invitación de Calendar y el enlace de Google Meet.",
       joinMeet: "Abrir Google Meet",
       close: "Cerrar",
+      privacyConsent: "Acepto el tratamiento de mi información de acuerdo con la",
+      privacyLink: "política de privacidad",
     },    contactModal: {
       closeForm: "Cerrar formulario de contacto",
       successTitle: "Solicitud recibida",
@@ -293,6 +301,8 @@ export const translations = {
       send: "Enviar solicitud",
       sending: "Enviando…",
       error: "No pudimos enviar tu solicitud. Inténtalo de nuevo.",
+      privacyConsent: "Acepto el tratamiento de mi información de acuerdo con la",
+      privacyLink: "política de privacidad",
     },
   },
 } as const;

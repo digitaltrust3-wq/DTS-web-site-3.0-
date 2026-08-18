@@ -4,5 +4,7 @@ dist/
 .env.*
 !.env.example
 !.env.hostinger.example
+!.env.vercel.example
 *.log
 server/data/content.json
+supabase/.temp/

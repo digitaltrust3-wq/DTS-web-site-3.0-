@@ -1,7 +1,11 @@
 import { isGoogleCalendarConfigured, getBusyPeriods, createGoogleMeetEvent } from "./integrations/google-calendar.mjs";
-import { isSupabaseConfigured, saveAppointment, saveLead } from "./integrations/supabase.mjs";
+import { isSupabaseConfigured, reserveAppointment, saveLead, updateAppointment } from "./integrations/supabase.mjs";
+import { isEmailConfigured, sendAppointmentEmails } from "./integrations/email.mjs";
+import { apiError, createRateLimiter, logError } from "./lib/security.mjs";
 
 const bookingRequests = new Map();
+const limitAvailability = createRateLimiter({ windowMs: 60_000, limit: 30 });
+const limitBooking = createRateLimiter({ windowMs: 10 * 60_000, limit: 6 });
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -31,7 +35,7 @@ function isValidDate(date) {
 function createCandidateSlots(date) {
   const config = schedulingConfig();
   const slots = [];
-  for (let minutes = config.startHour * 60; minutes <= config.endHour * 60; minutes += config.slotMinutes) {
+  for (let minutes = config.startHour * 60; minutes + config.slotMinutes <= config.endHour * 60; minutes += config.slotMinutes) {
     const hour = String(Math.floor(minutes / 60)).padStart(2, "0");
     const minute = String(minutes % 60).padStart(2, "0");
     const startAt = `${date}T${hour}:${minute}:00${config.utcOffset}`;
@@ -67,18 +71,20 @@ function validateBooking(body) {
   const interest = String(body?.interest || "").trim();
   const startAt = String(body?.startAt || "").trim();
   const language = body?.language === "es" ? "es" : "en";
+  const privacyConsent = body?.privacyConsent === true;
   const phoneDigits = phone.replace(/\D/g, "");
 
   if (name.length < 2 || name.length > 100) return { error: "Enter a valid name." };
   if (!EMAIL_PATTERN.test(email) || email.length > 160) return { error: "Enter a valid email address." };
   if (phoneDigits.length < 7 || phoneDigits.length > 15 || phone.length > 30) return { error: "Enter a valid phone number." };
   if (interest.length < 10 || interest.length > 2000) return { error: "Tell us what you would like to discuss." };
+  if (!privacyConsent) return { error: "Privacy consent is required." };
   if (Number.isNaN(new Date(startAt).getTime())) return { error: "Select a valid time." };
   return { value: { name, email, phone, interest, startAt, language } };
 }
 
 export function registerSchedulingRoutes(app) {
-  app.get("/api/scheduling/availability", async (request, response) => {
+  app.get("/api/scheduling/availability", limitAvailability, async (request, response) => {
     const date = String(request.query.date || "");
     if (!isValidDate(date)) return response.status(400).json({ message: "Select a valid date." });
     if (!isGoogleCalendarConfigured()) {
@@ -89,15 +95,23 @@ export function registerSchedulingRoutes(app) {
       const slots = await availableSlotsForDate(date);
       return response.json({ configured: true, date, timeZone: schedulingConfig().timeZone, slots });
     } catch (error) {
-      console.error("Availability lookup failed", error);
-      return response.status(502).json({ message: "Availability could not be loaded." });
+      logError("Availability lookup failed.", error, request.requestId);
+      return apiError(response, 502, "CALENDAR_UNAVAILABLE", "Availability could not be loaded.");
     }
   });
 
-  app.post("/api/scheduling/book", async (request, response) => {
+  app.post("/api/scheduling/book", limitBooking, async (request, response) => {
     const validation = validateBooking(request.body);
-    if (validation.error) return response.status(400).json({ message: validation.error });
-    if (!isGoogleCalendarConfigured()) return response.status(503).json({ message: "Online scheduling is being configured." });
+    if (validation.error) return apiError(response, 400, "INVALID_BOOKING", validation.error);
+    if (!isGoogleCalendarConfigured()) return apiError(response, 503, "CALENDAR_NOT_CONFIGURED", "Online scheduling is being configured.");
+    if (process.env.NODE_ENV === "production" && !isSupabaseConfigured()) {
+      return apiError(response, 503, "DATABASE_NOT_CONFIGURED", "Online scheduling is being configured.");
+    }
+
+    const requestId = String(request.get("idempotency-key") || "").trim();
+    if (!/^[a-zA-Z0-9-]{16,100}$/.test(requestId)) {
+      return apiError(response, 400, "INVALID_IDEMPOTENCY_KEY", "The booking request identifier is invalid.");
+    }
 
     const booking = validation.value;
     const date = booking.startAt.slice(0, 10);
@@ -125,44 +139,77 @@ export function registerSchedulingRoutes(app) {
           language: booking.language,
           metadata: { requested_start: selected.startAt },
         });
+        await reserveAppointment({
+          requestId,
+          leadId: lead?.id || null,
+          startAt: selected.startAt,
+          endAt: selected.endAt,
+          timeZone: schedulingConfig().timeZone,
+          metadata: { language: booking.language },
+        });
       }
 
-      const meeting = await createGoogleMeetEvent({
-        ...booking,
-        startAt: selected.startAt,
-        endAt: selected.endAt,
-        timeZone: schedulingConfig().timeZone,
-      });
+      let meeting;
+      try {
+        meeting = await createGoogleMeetEvent({
+          ...booking,
+          startAt: selected.startAt,
+          endAt: selected.endAt,
+          timeZone: schedulingConfig().timeZone,
+        });
+      } catch (error) {
+        if (isSupabaseConfigured()) await updateAppointment({ requestId, status: "cancelled" }).catch(() => undefined);
+        throw error;
+      }
 
       if (isSupabaseConfigured()) {
         try {
-          await saveAppointment({
-            leadId: lead?.id || null,
-            startAt: selected.startAt,
-            endAt: selected.endAt,
-            timeZone: schedulingConfig().timeZone,
+          await updateAppointment({
+            requestId,
             status: "confirmed",
             googleEventId: meeting.eventId,
             googleMeetUrl: meeting.meetUrl,
             googleEventUrl: meeting.eventUrl,
-            metadata: { language: booking.language },
           });
         } catch (databaseError) {
-          console.error("Appointment persistence failed after Calendar creation", databaseError);
+          logError("Appointment confirmation persistence failed.", databaseError, request.requestId);
+        }
+      }
+
+      let email = { notificationSent: false, confirmationSent: false };
+      if (isEmailConfigured()) {
+        try {
+          email = await sendAppointmentEmails({
+            ...booking,
+            ...meeting,
+            startAt: selected.startAt,
+            endAt: selected.endAt,
+            timeZone: schedulingConfig().timeZone,
+          });
+        } catch (emailError) {
+          logError("Appointment email failed.", emailError, request.requestId);
         }
       }
 
       bookingRequests.set(clientKey, Date.now());
       return response.status(201).json({
+        ok: true,
         message: "Consultation scheduled.",
         startAt: selected.startAt,
         timeZone: schedulingConfig().timeZone,
         meetUrl: meeting.meetUrl,
         eventUrl: meeting.eventUrl,
+        confirmationSent: email.confirmationSent,
       });
     } catch (error) {
-      console.error("Consultation booking failed", error);
-      return response.status(502).json({ message: "The consultation could not be scheduled. Please try again." });
+      logError("Consultation booking failed.", error, request.requestId);
+      const conflict = error instanceof Error && /409|duplicate|appointments_active_start/i.test(error.message);
+      return apiError(
+        response,
+        conflict ? 409 : 502,
+        conflict ? "TIME_NOT_AVAILABLE" : "BOOKING_FAILED",
+        conflict ? "This time is no longer available. Select another one." : "The consultation could not be scheduled. Please try again.",
+      );
     }
   });
 }

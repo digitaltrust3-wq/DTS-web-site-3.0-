@@ -4,7 +4,7 @@
     "version":  "0.0.1",
     "type":  "module",
     "scripts":  {
-                    "build":  "vite build",
+                    "build":  "vite build && node server/scripts/generate-seo.mjs",
                     "dev":  "concurrently --kill-others-on-fail \"npm:dev:web\" \"npm:dev:api\"",
                     "dev:web":  "vite --host 127.0.0.1 --port 5192 --strictPort",
                     "dev:api":  "node --watch server/index.mjs",
@@ -14,7 +14,7 @@
                     "google:calendar:connect":  "node server/scripts/connect-google-calendar.mjs"
                 },
     "engines":  {
-                    "node":  "\u003e=20 \u003c25"
+                    "node":  "22.x"
                 },
     "dependencies":  {
                          "@radix-ui/react-slot":  "1.1.2",

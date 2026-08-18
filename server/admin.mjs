@@ -1,10 +1,11 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { isSupabaseConfigured, loadSiteContent, saveSiteContent } from "./integrations/supabase.mjs";
+import { logError } from "./lib/security.mjs";
 
 const SESSION_COOKIE = "dts_admin_session";
 const SESSION_LIFETIME = 8 * 60 * 60 * 1000;
-const sessions = new Map();
 const loginAttempts = new Map();
 
 function parseCookies(header = "") {
@@ -23,6 +24,21 @@ function safeEqual(left, right) {
 function cookieOptions(maxAge = SESSION_LIFETIME) {
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   return `Path=/; HttpOnly; SameSite=Strict; Max-Age=${Math.floor(maxAge / 1000)}${secure}`;
+}
+
+function createSessionToken(secret) {
+  const expiresAt = Date.now() + SESSION_LIFETIME;
+  const nonce = crypto.randomBytes(18).toString("base64url");
+  const payload = `${expiresAt}.${nonce}`;
+  const signature = crypto.createHmac("sha256", secret).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+function validSessionToken(token, secret) {
+  const [expiresAt, nonce, signature] = String(token || "").split(".");
+  if (!expiresAt || !nonce || !signature || Number(expiresAt) <= Date.now()) return false;
+  const expected = crypto.createHmac("sha256", secret).update(`${expiresAt}.${nonce}`).digest("base64url");
+  return safeEqual(signature, expected);
 }
 
 function isHttpUrl(value, allowEmpty = false) {
@@ -60,14 +76,9 @@ export function registerAdminRoutes(app, projectRoot) {
   // Administrator credentials stay server-side and are never included in the client bundle.
   const dataDirectory = path.join(projectRoot, "server", "data");
   const contentPath = path.join(dataDirectory, "content.json");
-  const contentSubscribers = new Set();
-
-  const announceContentUpdate = (savedAt) => {
-    const event = `event: content-updated\ndata: ${JSON.stringify({ savedAt })}\n\n`;
-    contentSubscribers.forEach((subscriber) => subscriber.write(event));
-  };
 
   const readContent = async () => {
+    if (isSupabaseConfigured()) return loadSiteContent();
     try {
       return JSON.parse(await fs.readFile(contentPath, "utf8"));
     } catch (error) {
@@ -78,35 +89,22 @@ export function registerAdminRoutes(app, projectRoot) {
 
   const requireAdmin = (request, response, next) => {
     const token = parseCookies(request.headers.cookie)[SESSION_COOKIE];
-    const session = token && sessions.get(token);
-    if (!session || session.expiresAt <= Date.now()) {
-      if (token) sessions.delete(token);
+    if (!process.env.ADMIN_SESSION_SECRET || !validSessionToken(token, process.env.ADMIN_SESSION_SECRET)) {
       return response.status(401).json({ authenticated: false });
     }
-    session.expiresAt = Date.now() + SESSION_LIFETIME;
     return next();
   };
 
-  app.get("/api/content", async (_request, response) => {
+  app.get("/api/content", async (request, response) => {
     try {
       response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
       response.setHeader("Pragma", "no-cache");
       response.setHeader("Expires", "0");
       return response.json((await readContent()) || {});
     } catch (error) {
-      console.error("Content read failed", error);
+      logError("Content read failed.", error, request.requestId);
       return response.status(500).json({ message: "Content could not be loaded." });
     }
-  });
-
-  app.get("/api/content/events", (request, response) => {
-    response.setHeader("Content-Type", "text/event-stream");
-    response.setHeader("Cache-Control", "no-cache, no-transform");
-    response.setHeader("Connection", "keep-alive");
-    response.flushHeaders();
-    response.write("event: connected\ndata: {}\n\n");
-    contentSubscribers.add(response);
-    request.on("close", () => contentSubscribers.delete(response));
   });
 
   app.get("/api/admin/session", requireAdmin, (_request, response) => {
@@ -137,16 +135,12 @@ export function registerAdminRoutes(app, projectRoot) {
     }
 
     loginAttempts.delete(clientKey);
-    const entropy = crypto.randomBytes(32).toString("hex");
-    const token = crypto.createHmac("sha256", process.env.ADMIN_SESSION_SECRET).update(entropy).digest("hex");
-    sessions.set(token, { expiresAt: Date.now() + SESSION_LIFETIME });
+    const token = createSessionToken(process.env.ADMIN_SESSION_SECRET);
     response.setHeader("Set-Cookie", `${SESSION_COOKIE}=${encodeURIComponent(token)}; ${cookieOptions()}`);
     return response.json({ authenticated: true });
   });
 
   app.post("/api/admin/logout", requireAdmin, (request, response) => {
-    const token = parseCookies(request.headers.cookie)[SESSION_COOKIE];
-    if (token) sessions.delete(token);
     response.setHeader("Set-Cookie", `${SESSION_COOKIE}=; ${cookieOptions(0)}`);
     response.status(204).end();
   });
@@ -156,15 +150,21 @@ export function registerAdminRoutes(app, projectRoot) {
     if (validationError) return response.status(400).json({ message: validationError });
 
     try {
-      await fs.mkdir(dataDirectory, { recursive: true });
-      const temporaryPath = `${contentPath}.${process.pid}.tmp`;
-      await fs.writeFile(temporaryPath, `${JSON.stringify(request.body, null, 2)}\n`, "utf8");
-      await fs.rename(temporaryPath, contentPath);
+      if (isSupabaseConfigured()) {
+        await saveSiteContent(request.body);
+      } else {
+        if (process.env.NODE_ENV === "production") {
+          return response.status(503).json({ message: "Content storage is not configured." });
+        }
+        await fs.mkdir(dataDirectory, { recursive: true });
+        const temporaryPath = `${contentPath}.${process.pid}.tmp`;
+        await fs.writeFile(temporaryPath, `${JSON.stringify(request.body, null, 2)}\n`, "utf8");
+        await fs.rename(temporaryPath, contentPath);
+      }
       const savedAt = new Date().toISOString();
-      announceContentUpdate(savedAt);
       return response.json({ saved: true, savedAt });
     } catch (error) {
-      console.error("Content save failed", error);
+      logError("Content save failed.", error, request.requestId);
       return response.status(500).json({ message: "Content could not be saved." });
     }
   });

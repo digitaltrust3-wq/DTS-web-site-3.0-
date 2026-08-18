@@ -6,11 +6,11 @@ import {
 } from "react";
 import {
   ArrowRight,
-  Cloud,
+  Bot,
+  BrainCircuit,
+  ChartNoAxesCombined,
+  Cable,
   Code2,
-  Database,
-  ShieldCheck,
-  Smartphone,
   Workflow,
   type LucideIcon,
 } from "lucide-react";
@@ -18,12 +18,12 @@ import services from "../../data/services.json";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 const serviceIcons: Record<string, LucideIcon> = {
-  code: Code2,
-  mobile: Smartphone,
-  cloud: Cloud,
-  data: Database,
-  security: ShieldCheck,
-  integration: Workflow,
+  agents: Bot,
+  automation: Workflow,
+  knowledge: BrainCircuit,
+  intelligence: ChartNoAxesCombined,
+  integration: Cable,
+  software: Code2,
 };
 
 export function Services() {
