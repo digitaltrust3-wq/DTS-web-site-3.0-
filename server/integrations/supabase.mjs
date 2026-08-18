@@ -96,7 +96,7 @@ export function updateAppointment({ requestId, status, googleEventId = null, goo
 }
 
 export function loadSiteContent() {
-  return supabaseRequest("site_content", {
+  return supabaseRequest("managed_site_content", {
     method: "GET",
     query: "?select=content&key=eq.website&limit=1",
     prefer: "",
@@ -104,7 +104,7 @@ export function loadSiteContent() {
 }
 
 export function saveSiteContent(content) {
-  return supabaseRequest("site_content", {
+  return supabaseRequest("managed_site_content", {
     query: "?on_conflict=key",
     prefer: "resolution=merge-duplicates,return=representation",
     body: { key: "website", content },

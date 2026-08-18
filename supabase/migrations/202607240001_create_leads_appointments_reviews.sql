@@ -26,25 +26,51 @@ create table if not exists public.leads (
   updated_at timestamptz not null default now()
 );
 
+-- Older Digital Trust environments already contain a bigint-based leads table.
+-- Add only the fields required by this website and preserve all existing rows.
+alter table public.leads add column if not exists interest text;
+alter table public.leads add column if not exists language text not null default 'es';
+alter table public.leads add column if not exists session_id text not null default gen_random_uuid()::text;
+alter table public.leads alter column session_id set default gen_random_uuid()::text;
+
 create index if not exists leads_email_idx on public.leads (lower(email));
 create index if not exists leads_created_at_idx on public.leads (created_at desc);
 create index if not exists leads_status_idx on public.leads (status);
 
-create table if not exists public.appointments (
-  id uuid primary key default gen_random_uuid(),
-  lead_id uuid references public.leads(id) on delete set null,
-  start_at timestamptz not null,
-  end_at timestamptz not null,
-  time_zone text not null default 'America/Bogota',
-  status text not null default 'confirmed' check (status in ('pending', 'confirmed', 'cancelled', 'completed', 'no_show')),
-  google_event_id text unique,
-  google_meet_url text,
-  google_event_url text,
-  metadata jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  check (end_at > start_at)
-);
+do $$
+declare
+  lead_id_type text;
+begin
+  select format_type(attribute.atttypid, attribute.atttypmod)
+    into lead_id_type
+    from pg_attribute attribute
+    join pg_class relation on relation.oid = attribute.attrelid
+    join pg_namespace namespace on namespace.oid = relation.relnamespace
+   where namespace.nspname = 'public'
+     and relation.relname = 'leads'
+     and attribute.attname = 'id'
+     and attribute.attnum > 0
+     and not attribute.attisdropped;
+
+  execute format($sql$
+    create table if not exists public.appointments (
+      id uuid primary key default gen_random_uuid(),
+      lead_id %s references public.leads(id) on delete set null,
+      start_at timestamptz not null,
+      end_at timestamptz not null,
+      time_zone text not null default 'America/Bogota',
+      status text not null default 'confirmed' check (status in ('pending', 'confirmed', 'cancelled', 'completed', 'no_show')),
+      google_event_id text unique,
+      google_meet_url text,
+      google_event_url text,
+      metadata jsonb not null default '{}'::jsonb,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      check (end_at > start_at)
+    )
+  $sql$, lead_id_type);
+end;
+$$;
 
 create index if not exists appointments_start_at_idx on public.appointments (start_at);
 create index if not exists appointments_status_idx on public.appointments (status);
