@@ -35,15 +35,15 @@
                          "three":  "^0.185.1"
                      },
     "devDependencies":  {
-                            "@tailwindcss/vite":  "4.1.12",
-                            "@vitejs/plugin-react":  "4.7.0",
-                            "concurrently":  "^9.2.4",
-                            "tailwindcss":  "4.1.12",
-                            "vite":  "6.4.3"
+                            "@tailwindcss/vite":  "4.3.3",
+                            "@vitejs/plugin-react":  "6.0.5",
+                            "concurrently":  "^10.0.5",
+                            "tailwindcss":  "4.3.3",
+                            "vite":  "8.2.1"
                         },
     "pnpm":  {
                  "overrides":  {
-                                   "vite":  "6.4.3"
+                                   "vite":  "8.2.1"
                                }
              },
     "description":  "Official website for Digital Trust Solutions"
