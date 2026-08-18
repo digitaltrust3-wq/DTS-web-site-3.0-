@@ -8,3 +8,5 @@ dist/
 *.log
 server/data/content.json
 supabase/.temp/
+
+.vercel

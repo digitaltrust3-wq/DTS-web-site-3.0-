@@ -1,6 +1,6 @@
 # Despliegue seguro en Vercel
 
-La aplicación usa una sola API Express. `server/app.mjs` define la aplicación, `server/index.mjs` la ejecuta localmente y `api/[...path].mjs` expone la misma instancia como Vercel Function.
+La aplicación usa una sola API Express. `server/app.mjs` define la aplicación, `server/index.mjs` la ejecuta localmente y `api/index.mjs` expone la misma instancia como Vercel Function. Una regla de Vercel conserva y reconstruye las rutas `/api/*` anidadas antes de entregarlas a Express.
 
 ## Preparación
 
