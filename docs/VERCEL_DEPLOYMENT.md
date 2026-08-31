@@ -26,6 +26,14 @@ La clave `SUPABASE_SERVICE_ROLE_KEY` se usa únicamente en la función backend. 
 
 ## Verificación
 
+Antes de desplegar una nueva versión, ejecutar el control de salida completo:
+
+```text
+npm run release:check
+```
+
+El comando es de solo lectura respecto a producción: compila localmente, audita dependencias y comprueba la aplicación publicada sin crear contactos ni reservas. Las pruebas de escritura se realizan después siguiendo `docs/PRODUCTION_TEST_CHECKLIST.md`.
+
 Después del despliegue:
 
 ```text

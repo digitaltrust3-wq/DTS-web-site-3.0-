@@ -11,7 +11,9 @@
                     "start":  "node server/index.mjs",
                     "check:deployment":  "node server/scripts/check-deployment.mjs",
                     "verify:email":  "node server/scripts/verify-email.mjs",
-                    "google:calendar:connect":  "node server/scripts/connect-google-calendar.mjs"
+                    "google:calendar:connect":  "node server/scripts/connect-google-calendar.mjs",
+                    "smoke:production":  "node server/scripts/smoke-production.mjs",
+                    "release:check":  "npm run build && npm audit --omit=dev --audit-level=high && npm run smoke:production"
                 },
     "engines":  {
                     "node":  "22.x"
