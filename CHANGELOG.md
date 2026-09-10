@@ -199,6 +199,8 @@ rueda 3D + auto-scroll al pasar el mouse por los bordes).
 
 ## 2026-09-10 (8) — Rediseño de las páginas de vista previa (3 plantillas reales)
 
+Commit: `618eebd`
+
 Pedido explícito: la vista ampliada ("página de visualización") es donde se va a
 concentrar toda la atención, así que necesitaba diseños más innovadores. Se investigaron
 tres sitios reales que el usuario compartió como referencia de estilo (una cafetería,
