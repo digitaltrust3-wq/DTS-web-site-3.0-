@@ -137,3 +137,35 @@ Commit: `159a4a2`
 - Verificado visualmente en el navegador (build de producción con `vite preview` + servidor
   del panel de admin corriendo), en inglés y español, con capturas confirmando los títulos y
   las descripciones nuevas. `npm run typecheck` y `npm run build` pasan limpio.
+
+## 2026-09-10 (6) — Rediseño de la sección "Proyectos destacados" como demo visual
+
+Reemplazado el carrusel de proyectos reales (con fotos de stock y URLs falsas como
+`react.dev`/`vite.dev`) por dos bloques de demostración de capacidades, sin backend ni
+integraciones reales — tal como se pidió:
+
+- **Galería de 10 sitios web** ([websiteShowcase.ts](src/app/data/websiteShowcase.ts) +
+  [WebsiteMockupCard.tsx](src/app/components/shared/WebsiteMockupCard.tsx) +
+  [WebsiteGallery.tsx](src/app/components/sections/WebsiteGallery.tsx)): veterinaria,
+  restaurante, cafetería, consultorio médico, tienda de ropa, constructora, barbería,
+  servicios profesionales, paneles solares y comercio local. Cada una es una maqueta de
+  navegador (chrome falso + nav + hero + servicios) construida solo con CSS/gradientes e
+  íconos — sin fotos externas, así que nada puede romperse por un enlace de imagen caído.
+  Carrusel horizontal con scroll-snap, flechas, y modal de vista ampliada.
+- **Diagrama de arquitectura de agentes de IA**
+  ([AgentNetwork.tsx](src/app/components/sections/AgentNetwork.tsx)): orquestador central
+  + 10 agentes especializados (atención, ventas, soporte, datos, CRM, correo, WhatsApp,
+  conocimiento, automatización, monitoreo) + 8 chips de sistemas externos (CRM, base de
+  datos, APIs, email, WhatsApp, sistemas internos, base de conocimiento, automatizaciones),
+  todo posicionado por trigonometría (no coordenadas fijas a mano) sobre un SVG. Líneas de
+  conexión con animación de flujo sutil vía CSS (respeta `prefers-reduced-motion`), sin JS
+  en el loop de animación.
+- `Portfolio.tsx`, `portfolioSites.ts` y el editor de "Proyectos" del panel admin quedan
+  intactos pero sin usar en la página pública — si más adelante quieren mostrar
+  proyectos reales, ya está todo listo para reactivarlo.
+- Ambas secciones tienen su propio diccionario de textos ES/EN (no pasan por
+  `translations.ts` ni por el CMS de `content.json`), así que no hay riesgo de que el
+  panel de administración las sobreescriba ni de que quede contenido inconsistente.
+- Verificado visualmente en escritorio y móvil (viewport 375px): en móvil las etiquetas de
+  los nodos del diagrama se ocultan automáticamente para no saturar la pantalla. `npm run
+  typecheck` y `npm run build` pasan limpio.

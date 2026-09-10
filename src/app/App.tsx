@@ -1,9 +1,10 @@
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { About } from "./components/sections/About";
+import { AgentNetwork } from "./components/sections/AgentNetwork";
 import { CTA } from "./components/sections/CTA";
 import { Hero } from "./components/sections/Hero";
-import { Portfolio } from "./components/sections/Portfolio";
+import { WebsiteGallery } from "./components/sections/WebsiteGallery";
 import { Services } from "./components/sections/Services";
 import { TechStack } from "./components/sections/TechStack";
 import { FixedVideoBackground } from "./components/shared/FixedVideoBackground";
@@ -43,7 +44,8 @@ export default function App() {
           <div className="page-video-region__content">
             <Hero />
             <Services />
-            <Portfolio />
+            <WebsiteGallery />
+            <AgentNetwork />
             <About />
             <TechStack />
             <CTA />
