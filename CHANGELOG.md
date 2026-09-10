@@ -120,6 +120,8 @@ Commit: `a1de19d`
 
 ## 2026-09-10 (5) — Copy de las 6 tarjetas de Servicios
 
+Commit: `159a4a2`
+
 - Reescritas las 6 tarjetas de la sección Servicios (título, texto corto, texto largo) en
   [translations.ts](src/app/i18n/translations.ts) y [services.json](src/app/data/services.json), en
   inglés y español. Cada tarjeta ahora vende un resultado distinto para el cliente en vez de
