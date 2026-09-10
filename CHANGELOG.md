@@ -35,9 +35,7 @@ Origen: [`Claude outputs/AUDIT_REPORT_DTS_web_2026-09-10.md`](Claude%20outputs/A
   autorización explícita) existían solo en local y nunca se habían comiteado.
   Commit: `dd2983d`
 
-### Pendiente (del mismo informe)
-
-- Migración Node 22 → 24 — H-4, sin urgencia (soporte de Node 22 hasta abril 2027).
+Con esto se cerró todo el checklist del informe original.
 
 ## 2026-09-10 (2)
 
@@ -62,3 +60,17 @@ Commit: `f402ef3`
   - Fuera de alcance de este cambio (quedan igual que antes, son mapas de deduplicación,
     no de rate limiting): `bookingRequests` en `server/scheduling.mjs` y el caché de
     mensajes procesados de WhatsApp.
+
+## 2026-09-10 (3)
+
+Commit: `a1de19d`
+
+- **H-4 — Migración Node 22 → 24.** Verificado antes de migrar: Vercel soporta 24.x (y
+  ya es su default) y Hostinger también ofrece 24.x en hPanel — no había riesgo de
+  romper ninguno de los dos despliegues.
+  - `package.json`: `engines.node` → `24.x`, `@types/node` → `^24.13.4`.
+  - `.github/workflows/deploy-pages.yml`: `node-version: 24`.
+  - `docs/HOSTINGER_DEPLOYMENT.md` y `docs/VERCEL_DEPLOYMENT.md`: instrucciones actualizadas.
+  - `package-lock.json` regenerado con `npm install` (ya no hay warning `EBADENGINE`,
+    porque el entorno local ya corre Node 24.17.0). 0 vulnerabilidades.
+  - Verificado: `npm run typecheck` y `npm run build` pasan limpio.

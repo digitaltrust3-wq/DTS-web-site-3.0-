@@ -172,7 +172,7 @@
 </div>
 
 <script>
-  const LAST_UPDATED = "2026-09-10 (H-2)";
+  const LAST_UPDATED = "2026-09-10 (checklist completo)";
 
   const findings = [
     { status: "done", title: "H-1 — CSP bloqueaba el video del hero", desc: "Agregado media-src con el origen de CloudFront en vercel.json y server/lib/security.mjs.", commit: "40e9395" },
@@ -183,10 +183,11 @@
     { status: "done", title: "H-6 — AGENTS.md no versionado", desc: "Comiteado. docs/PRODUCTION_TEST_CHECKLIST.md ya estaba en git.", commit: "dd2983d" },
     { status: "done", title: "H-7 — manifest.json sin íconos", desc: "Agregados brand-mark.svg y social-preview-logo.png.", commit: "bc5c408" },
     { status: "done", title: "H-2 — Rate limiting en memoria por proceso", desc: "Store compartido (Upstash Redis, opt-in) en server/lib/rateStore.mjs + Turnstile opt-in en el login de admin (server/lib/turnstile.mjs). Fallback en memoria sin configurar nada.", commit: "f402ef3" },
-    { status: "pending", title: "H-4 — Node 22 en Maintenance LTS", desc: "Migrar a Node 24 (Active LTS). Sin urgencia: soporte de Node 22 hasta abril 2027.", commit: null },
+    { status: "done", title: "H-4 — Node 22 en Maintenance LTS", desc: "Migrado a Node 24 (Active LTS) en package.json, CI y docs de Vercel/Hostinger. Verificado soporte en ambos antes de migrar.", commit: "a1de19d" },
   ];
 
   const timeline = [
+    { when: "2026-09-10", what: "H-4: migración Node 22 → 24", why: "Node 22 pasó a Maintenance LTS. Verificado que Vercel (ya default) y Hostinger soportan 24.x antes de migrar package.json, CI y docs.", commit: "a1de19d" },
     { when: "2026-09-10", what: "H-2: rate limiting compartido + Turnstile opt-in", why: "El límite de intentos de login y otros rate limiters eran por instancia de Vercel; ahora usan un store compartido (Upstash) si está configurado, y el login de admin puede exigir Turnstile.", commit: "f402ef3" },
     { when: "2026-09-10", what: "AGENTS.md versionado", why: "Reglas de colaboración con IA existían solo en local.", commit: "dd2983d" },
     { when: "2026-09-10", what: "Íconos agregados al manifest PWA", why: "manifest.json tenía icons: [] — Lighthouse marcaba el sitio como no instalable.", commit: "bc5c408" },
