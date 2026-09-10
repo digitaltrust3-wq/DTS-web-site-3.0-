@@ -89,6 +89,59 @@ function TextFieldTree({
   return null;
 }
 
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+const TURNSTILE_SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: string | HTMLElement, options: { sitekey: string; callback: (token: string) => void; "expired-callback"?: () => void; "error-callback"?: () => void }) => string;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
+
+/** Renders the Cloudflare Turnstile widget. A no-op until VITE_TURNSTILE_SITE_KEY is set. */
+function TurnstileWidget({ onToken, resetSignal }: { onToken: (token: string) => void; resetSignal: number }) {
+  const containerId = "admin-login-turnstile";
+  const widgetId = useState<{ current: string | undefined }>(() => ({ current: undefined }))[0];
+
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+
+    const render = () => {
+      const container = document.getElementById(containerId);
+      if (!container || !window.turnstile) return;
+      widgetId.current = window.turnstile.render(container, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: onToken,
+        "expired-callback": () => onToken(""),
+        "error-callback": () => onToken(""),
+      });
+    };
+
+    if (window.turnstile) {
+      render();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = TURNSTILE_SCRIPT_SRC;
+    script.async = true;
+    script.defer = true;
+    script.onload = render;
+    document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    if (resetSignal > 0 && window.turnstile && widgetId.current) {
+      window.turnstile.reset(widgetId.current);
+    }
+  }, [resetSignal]);
+
+  if (!TURNSTILE_SITE_KEY) return null;
+  return <div id={containerId} className="admin-turnstile" />;
+}
+
 function emptyProject(index: number): PortfolioSite {
   return {
     id: `project-${Date.now()}-${index}`,
@@ -111,6 +164,8 @@ export function AdminPage() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginBusy, setLoginBusy] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const [view, setView] = useState<"texts" | "projects">("texts");
   const [language, setLanguage] = useState<Language>("es");
   const [draft, setDraft] = useState<ManagedContent>(() => structuredClone(managedContent));
@@ -142,7 +197,7 @@ export function AdminPage() {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, turnstileToken }),
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.message || "No fue posible iniciar sesión.");
@@ -151,6 +206,8 @@ export function AdminPage() {
       await refreshContent();
     } catch (error) {
       setLoginError(error instanceof Error ? error.message : "No fue posible iniciar sesión.");
+      setTurnstileToken("");
+      setTurnstileResetSignal((value) => value + 1);
     } finally {
       setLoginBusy(false);
     }
@@ -226,8 +283,9 @@ export function AdminPage() {
             <span>Contraseña</span>
             <input type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} />
           </label>
+          <TurnstileWidget onToken={setTurnstileToken} resetSignal={turnstileResetSignal} />
           {loginError && <p className="admin-message admin-message--error" role="alert">{loginError}</p>}
-          <button className="admin-primary-button" type="submit" disabled={loginBusy}>{loginBusy ? "Ingresando..." : "Ingresar"}</button>
+          <button className="admin-primary-button" type="submit" disabled={loginBusy || (Boolean(TURNSTILE_SITE_KEY) && !turnstileToken)}>{loginBusy ? "Ingresando..." : "Ingresar"}</button>
         </form>
       </main>
     );

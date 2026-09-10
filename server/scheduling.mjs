@@ -4,8 +4,8 @@ import { isEmailConfigured, sendAppointmentEmails } from "./integrations/email.m
 import { apiError, createRateLimiter, logError } from "./lib/security.mjs";
 
 const bookingRequests = new Map();
-const limitAvailability = createRateLimiter({ windowMs: 60_000, limit: 30 });
-const limitBooking = createRateLimiter({ windowMs: 10 * 60_000, limit: 6 });
+const limitAvailability = createRateLimiter({ windowMs: 60_000, limit: 30, name: "availability" });
+const limitBooking = createRateLimiter({ windowMs: 10 * 60_000, limit: 6, name: "booking" });
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

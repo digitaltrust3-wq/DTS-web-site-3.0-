@@ -3,10 +3,12 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { isSupabaseConfigured, loadSiteContent, saveSiteContent } from "./integrations/supabase.mjs";
 import { logError } from "./lib/security.mjs";
+import { incrementCounter, peekCounter, resetCounter } from "./lib/rateStore.mjs";
+import { isTurnstileConfigured, verifyTurnstileToken } from "./lib/turnstile.mjs";
 
 const SESSION_COOKIE = "dts_admin_session";
 const SESSION_LIFETIME = 8 * 60 * 60 * 1000;
-const loginAttempts = new Map();
+const LOGIN_ATTEMPT_WINDOW_MS = 15 * 60 * 1000;
 
 function parseCookies(header = "") {
   return Object.fromEntries(header.split(";").map((part) => {
@@ -111,30 +113,37 @@ export function registerAdminRoutes(app, projectRoot) {
     response.json({ authenticated: true });
   });
 
-  app.post("/api/admin/login", (request, response) => {
+  app.post("/api/admin/login", async (request, response) => {
     const configuredEmail = process.env.ADMIN_EMAIL;
     const configuredPassword = process.env.ADMIN_PASSWORD;
     if (!configuredEmail || !configuredPassword || !process.env.ADMIN_SESSION_SECRET) {
       return response.status(503).json({ message: "The administrator account is not configured." });
     }
 
-    const clientKey = request.ip || "unknown";
-    const attempt = loginAttempts.get(clientKey) || { count: 0, resetAt: Date.now() + 15 * 60 * 1000 };
-    if (attempt.resetAt <= Date.now()) {
-      attempt.count = 0;
-      attempt.resetAt = Date.now() + 15 * 60 * 1000;
-    }
+    // Shared across Vercel instances when UPSTASH_REDIS_REST_URL/TOKEN are
+    // configured; otherwise an in-process counter (see AUDIT_REPORT H-2).
+    const clientKey = `admin-login:${request.ip || "unknown"}`;
+    const attempt = await peekCounter(clientKey);
     if (attempt.count >= 5) return response.status(429).json({ message: "Too many attempts. Try again later." });
+
+    // Opt-in bot check: only enforced once TURNSTILE_SECRET_KEY is set.
+    if (isTurnstileConfigured) {
+      const turnstileToken = String(request.body?.turnstileToken || "");
+      const humanVerified = await verifyTurnstileToken(turnstileToken, request.ip);
+      if (!humanVerified) {
+        await incrementCounter(clientKey, LOGIN_ATTEMPT_WINDOW_MS);
+        return response.status(401).json({ message: "Security verification failed. Please try again." });
+      }
+    }
 
     const email = String(request.body?.email || "").trim().toLowerCase();
     const password = String(request.body?.password || "");
     if (!safeEqual(email, configuredEmail.trim().toLowerCase()) || !safeEqual(password, configuredPassword)) {
-      attempt.count += 1;
-      loginAttempts.set(clientKey, attempt);
+      await incrementCounter(clientKey, LOGIN_ATTEMPT_WINDOW_MS);
       return response.status(401).json({ message: "Invalid email or password." });
     }
 
-    loginAttempts.delete(clientKey);
+    await resetCounter(clientKey);
     const token = createSessionToken(process.env.ADMIN_SESSION_SECRET);
     response.setHeader("Set-Cookie", `${SESSION_COOKIE}=${encodeURIComponent(token)}; ${cookieOptions()}`);
     return response.json({ authenticated: true });

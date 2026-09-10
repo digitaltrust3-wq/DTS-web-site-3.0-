@@ -2657,6 +2657,10 @@ body {
   font-size: 0.78rem;
 }
 
+.admin-turnstile {
+  margin: 0.75rem 0;
+}
+
 .admin-message--error,
 .admin-save-status--error {
   color: #ffaaa7;

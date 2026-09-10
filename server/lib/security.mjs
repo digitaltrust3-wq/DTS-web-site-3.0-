@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { incrementCounter } from "./rateStore.mjs";
 
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
 
@@ -35,7 +36,7 @@ export function applySecurity(app) {
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; connect-src 'self'; upgrade-insecure-requests",
+      "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; frame-src https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; upgrade-insecure-requests",
     );
     if (process.env.NODE_ENV === "production") {
       response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
@@ -51,36 +52,15 @@ export function applySecurity(app) {
   });
 }
 
-export function createRateLimiter({ windowMs, limit }) {
-  // NOTE: this counter is per Node.js process. On Vercel each serverless
-  // instance keeps its own map, so the effective limit is per-instance, not
-  // global. That is an accepted tradeoff for this deployment size; move to a
-  // shared store (Upstash/Vercel KV) or add Cloudflare Turnstile before
-  // relying on this as the only defense for a high-value endpoint.
-  const requests = new Map();
-  let lastSweep = Date.now();
-
-  return (request, response, next) => {
-    const now = Date.now();
-
-    // Opportunistic cleanup so the map does not grow forever on a
-    // long-lived process (Hostinger). Runs at most once per window.
-    if (now - lastSweep > windowMs) {
-      lastSweep = now;
-      for (const [mapKey, entry] of requests) {
-        if (entry.resetAt <= now) requests.delete(mapKey);
-      }
-    }
-
-    const key = request.ip || "unknown";
-    const current = requests.get(key);
-    if (!current || current.resetAt <= now) {
-      requests.set(key, { count: 1, resetAt: now + windowMs });
-      return next();
-    }
-    current.count += 1;
+export function createRateLimiter({ windowMs, limit, name = "rl" }) {
+  // Backed by rateStore.mjs: uses a shared Upstash counter across every
+  // Vercel instance when configured, otherwise an in-process Map (see
+  // AUDIT_REPORT H-2 for the per-instance tradeoff of that fallback).
+  return async (request, response, next) => {
+    const key = `${name}:${request.ip || "unknown"}`;
+    const current = await incrementCounter(key, windowMs);
     if (current.count > limit) {
-      response.setHeader("Retry-After", String(Math.ceil((current.resetAt - now) / 1000)));
+      response.setHeader("Retry-After", String(Math.ceil((current.resetAt - Date.now()) / 1000)));
       return response.status(429).json({ ok: false, error: { code: "RATE_LIMITED", message: "Too many requests. Please try again shortly." } });
     }
     return next();

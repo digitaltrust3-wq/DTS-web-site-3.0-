@@ -3,7 +3,7 @@ import { isEmailConfigured, sendContactEmails } from "./integrations/email.mjs";
 import { apiError, createRateLimiter, logError } from "./lib/security.mjs";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const limitContact = createRateLimiter({ windowMs: 10 * 60_000, limit: 5 });
+const limitContact = createRateLimiter({ windowMs: 10 * 60_000, limit: 5, name: "contact" });
 
 function validateContact(body) {
   const name = String(body?.name ?? "").trim();
