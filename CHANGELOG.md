@@ -37,5 +37,28 @@ Origen: [`Claude outputs/AUDIT_REPORT_DTS_web_2026-09-10.md`](Claude%20outputs/A
 
 ### Pendiente (del mismo informe)
 
-- Rate limiting compartido entre instancias de Vercel (Turnstile/hCaptcha + Redis/Upstash/Vercel KV) — H-2.
 - Migración Node 22 → 24 — H-4, sin urgencia (soporte de Node 22 hasta abril 2027).
+
+## 2026-09-10 (2)
+
+Commit: `f402ef3`
+
+- **H-2 — Rate limiting compartido + Turnstile en login de admin.** Ambas piezas son
+  opt-in por variables de entorno; sin configurarlas, el comportamiento es idéntico
+  al de antes (fallback automático).
+  - [`server/lib/rateStore.mjs`](server/lib/rateStore.mjs) (nuevo): contador compartido vía
+    Upstash Redis REST API (`UPSTASH_REDIS_REST_URL`/`TOKEN`) cuando está configurado;
+    si no, cae al `Map` en memoria de antes. `createRateLimiter` (contacto, disponibilidad,
+    reservas) y el limitador de intentos de login de `server/admin.mjs` ahora usan este store.
+  - [`server/lib/turnstile.mjs`](server/lib/turnstile.mjs) (nuevo): verificación server-side
+    de Cloudflare Turnstile, activa solo si `TURNSTILE_SECRET_KEY` está seteada.
+  - [`src/app/admin/AdminPage.tsx`](src/app/admin/AdminPage.tsx): widget de Turnstile en el
+    formulario de login, renderizado solo si `VITE_TURNSTILE_SITE_KEY` está definida.
+  - CSP (`vercel.json` y `server/lib/security.mjs`): se agregó `challenges.cloudflare.com`
+    a `script-src`, `frame-src` y `connect-src` para permitir el widget.
+  - `.env.example` / `.env.vercel.example`: documentadas las 4 variables nuevas, todas opcionales.
+  - Verificado: `npm run typecheck`, `npm run build` y prueba unitaria aislada del store en
+    memoria (increment/peek/reset) pasan limpio.
+  - Fuera de alcance de este cambio (quedan igual que antes, son mapas de deduplicación,
+    no de rate limiting): `bookingRequests` en `server/scheduling.mjs` y el caché de
+    mensajes procesados de WhatsApp.
