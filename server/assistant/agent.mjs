@@ -1,5 +1,11 @@
 import { companyKnowledge, quickAnswers } from "./knowledge.mjs";
 
+// Shared by every channel that talks to the Digital Trust Solutions
+// assistant (WhatsApp: server/whatsapp/webhook.mjs, website chat:
+// server/chat.mjs). Session continuity (previous_response_id) is keyed by
+// customerId, so callers should namespace it per channel (e.g. a WhatsApp
+// phone number vs. "web:<uuid>") to avoid collisions between channels.
+
 const sessions = new Map();
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
 const handoffPattern = /\b(asesor|agente|persona|humano|representante|llamada|human|agent|representative|call me)\b/i;

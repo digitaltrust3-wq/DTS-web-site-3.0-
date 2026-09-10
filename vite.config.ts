@@ -18,6 +18,15 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    optimizeDeps: {
+      // Without this, Vite's dev-time dependency scanner also crawls
+      // animaciones/robot-dog-3d/index.html, an orphaned demo page that
+      // loads an unrelated external project via an absolute /@fs/ path
+      // (see docs/... audit notes). That project's imports (three, gsap,
+      // @react-three/*) aren't dependencies of this app and were removed
+      // from package.json; scanning them breaks dependency optimization.
+      entries: ["index.html", "src/**/*.{ts,tsx}"],
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src/app"),

@@ -15,6 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import services from "../../data/services.json";
+import { useChat } from "../../chat/ChatContext";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 const serviceIcons: Record<string, LucideIcon> = {
@@ -28,6 +29,7 @@ const serviceIcons: Record<string, LucideIcon> = {
 
 export function Services() {
   const { copy } = useLanguage();
+  const { openChat } = useChat();
   const serviceCopy = copy.services;
   const gridRef = useRef<HTMLDivElement | null>(null);
   const activeCardRef = useRef<HTMLElement | null>(null);
@@ -195,9 +197,12 @@ export function Services() {
                     </span>
                     <h3>{item.title}</h3>
                     <p>{item.long}</p>
-                    <a href="#contact">
+                    <button
+                      type="button"
+                      onClick={() => openChat(copy.chatWidget.serviceInterest.replace("{service}", item.title))}
+                    >
                       {serviceCopy.discuss} <ArrowRight aria-hidden="true" />
-                    </a>
+                    </button>
                   </div>
                 </div>
               </article>

@@ -5,6 +5,7 @@ import { receiveWebhook, verifyWebhook } from "./whatsapp/webhook.mjs";
 import { registerAdminRoutes } from "./admin.mjs";
 import { registerContactRoutes } from "./contact.mjs";
 import { registerSchedulingRoutes } from "./scheduling.mjs";
+import { registerChatRoutes } from "./chat.mjs";
 import { checkGoogleCalendarConnection, isGoogleCalendarConfigured } from "./integrations/google-calendar.mjs";
 import { checkSupabaseConnection, isSupabaseConfigured } from "./integrations/supabase.mjs";
 import { checkEmailConnection, isEmailConfigured } from "./integrations/email.mjs";
@@ -28,6 +29,7 @@ app.use(express.json({
 registerAdminRoutes(app, projectRoot);
 registerContactRoutes(app);
 registerSchedulingRoutes(app);
+registerChatRoutes(app);
 
 app.get("/api/health", (_request, response) => {
   response.setHeader("Cache-Control", "no-store");

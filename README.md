@@ -1,6 +1,6 @@
 # Digital Trust Solutions
 
-Sitio web bilingüe de Digital Trust Solutions, construido con React, Vite, Tailwind CSS y una API Express desplegable en Vercel. Incluye contacto, reservas con Google Meet, persistencia en Supabase y una base para WhatsApp Cloud.
+Sitio web bilingüe de Digital Trust Solutions, construido con React, Vite, Tailwind CSS y una API Express desplegable en Vercel. Incluye contacto, reservas con Google Meet, persistencia en Supabase, un asistente de IA conversacional (chat del sitio y WhatsApp Cloud, compartiendo el mismo agente en `server/assistant/`) y un panel de administración.
 
 ## Requisitos
 
@@ -59,16 +59,19 @@ public/
     services/    Imágenes de las tarjetas de servicios
 src/
   app/
+    chat/        Contexto global del chat del asistente de IA
     components/
       layout/    Navegación y pie de página
       sections/  Secciones principales del sitio
-      shared/    Componentes reutilizables
+      shared/    Componentes reutilizables (incluye el widget de chat)
     data/        Contenido estructurado
     i18n/        Traducciones y selector de idioma
     lib/         Utilidades compartidas
   styles/        Estilos globales y tema
 server/
-  whatsapp/      Webhook, conocimiento y lógica del bot
+  assistant/     Agente de IA compartido (conocimiento y lógica de respuesta)
+  chat.mjs       Endpoint del chat del sitio web (POST /api/chat)
+  whatsapp/      Webhook de WhatsApp, usa el mismo agente de server/assistant/
 docs/            Documentación y atribuciones
 ```
 

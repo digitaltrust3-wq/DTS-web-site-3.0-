@@ -1674,24 +1674,34 @@ body {
   transition: transform 440ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.service-card__details a {
+.service-card__details a,
+.service-card__details button {
   display: inline-flex;
   width: fit-content;
   align-items: center;
   gap: 0.55rem;
+  border: none;
+  background: none;
+  padding: 0;
   color: white;
+  font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
+  cursor: pointer;
 }
 
-.service-card__details a svg {
+.service-card__details a svg,
+.service-card__details button svg {
   width: 1rem;
   transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .service-card__details a:hover svg,
 .service-card__details a:focus-visible svg,
-.service-card.is-active .service-card__details a svg {
+.service-card__details button:hover svg,
+.service-card__details button:focus-visible svg,
+.service-card.is-active .service-card__details a svg,
+.service-card.is-active .service-card__details button svg {
   transform: translate3d(0.4rem, 0, 0);
 }
 
@@ -2472,7 +2482,8 @@ body {
   .service-card__summary,
   .service-card__details,
   .service-card__details p,
-  .service-card__details a svg {
+  .service-card__details a svg,
+  .service-card__details button svg {
     will-change: auto !important;
   }
 }

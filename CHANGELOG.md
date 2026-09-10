@@ -37,6 +37,47 @@ Origen: [`Claude outputs/AUDIT_REPORT_DTS_web_2026-09-10.md`](Claude%20outputs/A
 
 Con esto se cerró todo el checklist del informe original.
 
+## 2026-09-10 (4) — Asistente de IA conectado al sitio web
+
+Objetivo: que todos los botones de "contáctanos/cotizar/hablemos" del sitio abran una
+conversación con el agente de IA en vez del formulario de contacto estático. El formulario
+de agenda de reunión (Google Meet) se mantiene aparte, sin cambios.
+
+- **Agente compartido**: se movió la lógica del bot (`server/whatsapp/bot.mjs` +
+  `knowledge.mjs`) a `server/assistant/` para que WhatsApp y el chat del sitio web usen
+  exactamente el mismo conocimiento de la empresa y las mismas reglas (no inventar precios,
+  escalar a humano, límites de seguridad). `server/whatsapp/webhook.mjs` solo actualizó su import.
+- **Nuevo endpoint** [`POST /api/chat`](server/chat.mjs): valida sesión/mensaje, aplica rate
+  limiting (20 msj/5 min por IP, mismo store compartido de H-2) y llama al agente.
+- **Nuevo widget de chat** ([ChatWidget.tsx](src/app/components/shared/ChatWidget.tsx) +
+  [ChatContext.tsx](src/app/chat/ChatContext.tsx)): un modal de conversación montado una sola
+  vez en la app. Persiste la conversación en `localStorage` (por navegador, no por servidor).
+  Cuando un botón lo abre con un mensaje contextual, lo envía automáticamente si es una
+  conversación nueva, o solo lo precarga en el campo de texto si ya hay una charla en curso
+  (para no interrumpirla).
+- **Botones reconectados**: Hero ("Iniciar proyecto"), Navbar ("Contáctanos"), Footer
+  ("Contáctanos"), CTA ("Contáctanos") y cada tarjeta de Servicios ("Consultar este
+  servicio", con un mensaje contextual por servicio, ej. "quiero más información sobre
+  Agentes de IA empresariales"). El componente `ContactModal.tsx` y su endpoint
+  `/api/contact` (con Supabase + email) se dejaron intactos pero sin usar por ahora —
+  disponibles si se quiere un flujo híbrido más adelante.
+- **Sin `OPENAI_API_KEY` configurada** (el caso actual): el asistente responde con
+  respuestas predefinidas por palabra clave, igual que WhatsApp hoy. En cuanto se agregue
+  la clave a `.env`/Vercel/Hostinger, ambos canales pasan a generar respuestas reales con
+  el modelo configurado, sin tocar código.
+- **Bug de infraestructura descubierto y corregido de paso**: `vite.config.ts` no restringía
+  qué archivos escanea el optimizador de dependencias de Vite en modo `dev`, así que
+  también rastreaba `animaciones/robot-dog-3d/index.html` (un demo huérfano que carga un
+  proyecto 3D externo vía ruta absoluta, ya señalado como no usado en la auditoría). Al
+  haber quitado `three`/`gsap`/`@react-three/*` de `package.json` en la limpieza de
+  dependencias, esa ruta dejó de resolver y rompía el dev server con errores de React
+  duplicado. Se acotó `optimizeDeps.entries` a los archivos reales del proyecto.
+- Verificado manualmente en el navegador: auto-envío del mensaje contextual, envío manual,
+  detección de idioma (ES/EN), i18n completo del widget, persistencia de la conversación,
+  handoff a especialista, validaciones del backend (sesión inválida, mensaje vacío) y
+  rate limiting (bloqueó correctamente a partir de la solicitud 21). `npm run typecheck`
+  y `npm run build` pasan limpio.
+
 ## 2026-09-10 (2)
 
 Commit: `f402ef3`

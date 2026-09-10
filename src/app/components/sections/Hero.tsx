@@ -14,7 +14,7 @@ import {
   Rocket,
   type LucideIcon,
 } from "lucide-react";
-import { ContactModal } from "../shared/ContactModal";
+import { useChat } from "../../chat/ChatContext";
 import { Button } from "../shared/Button";
 import { useLanguage } from "../../i18n/LanguageContext";
 
@@ -197,8 +197,8 @@ function HeroMetricCard({
 }
 
 export function Hero() {
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const { copy } = useLanguage();
+  const { openChat } = useChat();
   const hero = copy.hero;
   const whatsappNumber = String(
     import.meta.env.VITE_WHATSAPP_NUMBER ?? "573184289661",
@@ -230,7 +230,7 @@ export function Hero() {
             <Button
               type="button"
               size="lg"
-              onClick={() => setIsContactOpen(true)}
+              onClick={() => openChat(copy.chatWidget.starterMessage)}
               className="group border border-slate-500/30 bg-gradient-to-r from-slate-700 to-slate-600 px-8 text-white shadow-lg shadow-slate-950/50 hover:from-slate-600 hover:to-slate-500"
             >
               {hero.startProject}
@@ -275,13 +275,12 @@ export function Hero() {
               rel={whatsappUrl ? "noreferrer" : undefined}
               onClick={whatsappUrl ? undefined : (event) => {
                 event.preventDefault();
-                setIsContactOpen(true);
+                openChat(copy.chatWidget.starterMessage);
               }}
             />
           </aside>
         </div>
       </div>
-      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </section>
   );
 }

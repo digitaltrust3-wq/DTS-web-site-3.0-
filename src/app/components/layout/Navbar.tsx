@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { Globe2, Menu, X } from "lucide-react";
 import { Button } from "../shared/Button";
 import { BrandLogo } from "../shared/BrandLogo";
-import { ContactModal } from "../shared/ContactModal";
+import { useChat } from "../../chat/ChatContext";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const { language, copy, toggleLanguage } = useLanguage();
+  const { openChat } = useChat();
   const navCopy = copy.common;
 
   useEffect(() => {
@@ -22,11 +22,10 @@ export function Navbar() {
 
   const openContactForm = () => {
     setIsMobileMenuOpen(false);
-    setIsContactOpen(true);
+    openChat(copy.chatWidget.starterMessage);
   };
 
   return (
-    <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
@@ -108,7 +107,5 @@ export function Navbar() {
         )}
         </div>
       </nav>
-      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
-    </>
   );
 }

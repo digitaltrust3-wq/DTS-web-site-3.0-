@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { createSupportReply } from "./bot.mjs";
+import { createSupportReply } from "../assistant/agent.mjs";
 
 const processedMessages = new Map();
 const MESSAGE_TTL_MS = 24 * 60 * 60 * 1000;

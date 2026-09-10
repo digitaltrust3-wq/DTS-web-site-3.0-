@@ -1,7 +1,7 @@
-import { useState, type ComponentType } from "react";
+import type { ComponentType } from "react";
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { BrandLogo } from "../shared/BrandLogo";
-import { ContactModal } from "../shared/ContactModal";
+import { useChat } from "../../chat/ChatContext";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 type SocialLink = {
@@ -13,8 +13,8 @@ type SocialLink = {
 
 export function Footer() {
   const { copy } = useLanguage();
+  const { openChat } = useChat();
   const footer = copy.footer;
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "digital.trust3@gmail.com";
   const socialLinks: SocialLink[] = [
     {
@@ -45,7 +45,6 @@ export function Footer() {
   const serviceLinkClass = "block rounded-sm py-0.5 transition-colors hover:text-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400";
 
   return (
-    <>
       <footer className="footer-section">
         <div className="wide-shell">
           <div className="footer-grid">
@@ -71,7 +70,7 @@ export function Footer() {
               <ul className="space-y-2 text-sm">
                 <li><a href="#about" className={serviceLinkClass}>{footer.about}</a></li>
                 <li>
-                  <button type="button" onClick={() => setIsContactOpen(true)} className={`${serviceLinkClass} w-full text-left`}>
+                  <button type="button" onClick={() => openChat(copy.chatWidget.starterMessage)} className={`${serviceLinkClass} w-full text-left`}>
                     {footer.contact}
                   </button>
                 </li>
@@ -114,7 +113,5 @@ export function Footer() {
           </div>
         </div>
       </footer>
-      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
-    </>
   );
 }
