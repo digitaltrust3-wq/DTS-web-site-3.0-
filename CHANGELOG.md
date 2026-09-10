@@ -117,3 +117,21 @@ Commit: `a1de19d`
   - `package-lock.json` regenerado con `npm install` (ya no hay warning `EBADENGINE`,
     porque el entorno local ya corre Node 24.17.0). 0 vulnerabilidades.
   - Verificado: `npm run typecheck` y `npm run build` pasan limpio.
+
+## 2026-09-10 (5) — Copy de las 6 tarjetas de Servicios
+
+- Reescritas las 6 tarjetas de la sección Servicios (título, texto corto, texto largo) en
+  [translations.ts](src/app/i18n/translations.ts) y [services.json](src/app/data/services.json), en
+  inglés y español. Cada tarjeta ahora vende un resultado distinto para el cliente en vez de
+  repetir "IA/inteligente" en casi todos los títulos (antes 5/6 títulos lo hacían, ahora 3/6).
+- **Hallazgo importante durante la verificación**: el sitio tiene un panel de administración
+  (`/admin`) que guarda una copia editable de TODO el contenido en `server/data/content.json`
+  (local, fuera de git) o en Supabase (producción). Esa copia **sobreescribe en tiempo real**
+  lo que está en `translations.ts` — por eso el cambio no se veía reflejado al probarlo en el
+  navegador hasta que también actualicé `content.json` con el mismo texto nuevo.
+  **Importante**: si ya se usó el panel de admin en producción (con Supabase configurado), ese
+  contenido vive aparte y este cambio de código no lo toca — habría que volver a guardarlo
+  desde `/admin` o migrar el texto a Supabase directamente.
+- Verificado visualmente en el navegador (build de producción con `vite preview` + servidor
+  del panel de admin corriendo), en inglés y español, con capturas confirmando los títulos y
+  las descripciones nuevas. `npm run typecheck` y `npm run build` pasan limpio.

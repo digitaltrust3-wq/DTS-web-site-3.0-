@@ -2,49 +2,49 @@
   {
     "id": "service_01",
     "icon": "agents",
-    "title": "Enterprise AI Agents",
-    "shortDescription": "Intelligent agents for sales, customer service and operations.",
-    "longDescription": "We build specialized digital workers that assist customers, qualify leads, update systems, execute actions and transfer complex cases to your team.",
+    "title": "AI Agents for Sales & Support",
+    "shortDescription": "They answer customers, qualify leads and resolve cases 24/7 — no waiting in line.",
+    "longDescription": "We build digital workers that assist customers, qualify prospects, update your systems and escalate complex cases to your team, every day of the year.",
     "image": "/assets/services/custom-software.jpg"
   },
   {
     "id": "service_02",
     "icon": "automation",
-    "title": "Intelligent Process Automation",
-    "shortDescription": "We turn manual processes into intelligent, automated workflows.",
-    "longDescription": "We analyze, redesign and automate repetitive work across email, forms, CRM, documents, approvals, notifications and business reporting.",
+    "title": "Operational Process Automation",
+    "shortDescription": "The repetitive work goes to the machine. What matters stays with your team.",
+    "longDescription": "We find the manual tasks eating up hours — emails, forms, approvals, reports — and turn them into automated workflows that run on their own.",
     "image": "/assets/services/mobile-apps.jpg"
   },
   {
     "id": "service_03",
     "icon": "knowledge",
-    "title": "Enterprise Knowledge Assistants",
-    "shortDescription": "AI that understands your organization's knowledge and processes.",
-    "longDescription": "We connect AI to manuals, contracts, policies, catalogs and internal data so customers and teams receive reliable, context-aware answers.",
+    "title": "Assistants With Your Company's Knowledge",
+    "shortDescription": "Your AI answers with YOUR information, not generic internet answers.",
+    "longDescription": "We connect AI to your manuals, contracts, catalogs and internal data, so every answer to customers and teams is accurate and verifiable.",
     "image": "/assets/services/cloud-solutions.jpg"
   },
   {
     "id": "service_04",
     "icon": "intelligence",
-    "title": "Process Intelligence and Optimization",
-    "shortDescription": "We uncover opportunities to reduce time, cost and unnecessary work.",
-    "longDescription": "We analyze response times, operational load, funnels and customer behavior to identify bottlenecks and prioritize measurable improvements.",
+    "title": "Process Diagnosis & Prioritization",
+    "shortDescription": "Before automating, we measure exactly where time and money are being lost.",
+    "longDescription": "We analyze response times, workload and customer behavior to pinpoint what to automate first and how much you stand to gain from it.",
     "image": "/assets/services/data-analytics.jpg"
   },
   {
     "id": "service_05",
     "icon": "integration",
-    "title": "AI Integration with Business Systems",
-    "shortDescription": "We connect AI with the tools your company already uses.",
-    "longDescription": "We integrate agents, data and automations with WhatsApp, CRM, email, ERP, calendars, APIs, databases and internal systems.",
+    "title": "Integration With Your Current Systems",
+    "shortDescription": "No replacing what already works: we plug AI into your WhatsApp, CRM and ERP.",
+    "longDescription": "We integrate agents, data and automations with the tools your company already runs — WhatsApp, CRM, email, ERP, calendars, APIs and databases.",
     "image": "/assets/services/cybersecurity.jpg"
   },
   {
     "id": "service_06",
     "icon": "software",
-    "title": "Custom Intelligent Software",
-    "shortDescription": "Software, automation and AI working as one business system.",
-    "longDescription": "We create secure platforms, portals and internal tools with AI, integrations, cloud infrastructure and data architecture built in from the start.",
+    "title": "Custom Software & Platforms",
+    "shortDescription": "When the solution doesn't exist yet, we build it from scratch.",
+    "longDescription": "We design secure platforms, portals and internal tools with AI, integrations and cloud architecture built to grow with your business.",
     "image": "/assets/services/api-integration.jpg"
   }
 ]
