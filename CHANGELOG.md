@@ -231,3 +231,16 @@ propios de cada maqueta de DTS.
 - Verificado visualmente en escritorio y móvil las tres plantillas (cafetería, veterinaria,
   constructora); ajuste de responsive en el nav para pantallas muy angostas.
   `npm run typecheck` y `npm run build` pasan limpio.
+
+## 2026-09-10 (9) — Pausada también "Arquitectura de agentes"
+
+- Se pausó la sección `AgentNetwork` (diagrama de agentes) igual que `WebsiteGallery`
+  antes: se deja de importar y renderizar en [App.tsx](src/app/App.tsx), pero el código
+  (`AgentNetwork.tsx`) queda intacto para reactivarla después con el diseño nuevo que se
+  está evaluando (ver los 3 bocetos estilo n8n compartidos aparte).
+- El ancla `#portfolio` (usada por el link "Portfolio" del nav y el botón "Ver casos de
+  éxito" del Hero) ya no tiene dónde apuntar al quitar ambas secciones — se agregó un
+  `<span id="portfolio" aria-hidden="true" />` justo antes de "Acerca de" para que esos
+  enlaces sigan funcionando sin tocar `About.tsx`.
+- Verificado visualmente: la página pasa de Servicios directo a "Acerca de Digital Trust
+  Solutions" sin huecos ni saltos. `npm run typecheck` y `npm run build` pasan limpio.

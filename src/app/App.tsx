@@ -1,7 +1,6 @@
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { About } from "./components/sections/About";
-import { AgentNetwork } from "./components/sections/AgentNetwork";
 import { CTA } from "./components/sections/CTA";
 import { Hero } from "./components/sections/Hero";
 import { Services } from "./components/sections/Services";
@@ -43,9 +42,9 @@ export default function App() {
           <div className="page-video-region__content">
             <Hero />
             <Services />
-            {/* WebsiteGallery paused: paused per owner request (2026-09-10), not removed.
-                Re-enable by importing and rendering <WebsiteGallery /> here again. */}
-            <AgentNetwork />
+            {/* WebsiteGallery and AgentNetwork paused per owner request (2026-09-10),
+                not removed. Re-enable by importing and rendering them here again. */}
+            <span id="portfolio" aria-hidden="true" />
             <About />
             <TechStack />
             <CTA />
