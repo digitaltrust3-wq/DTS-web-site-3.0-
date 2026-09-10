@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { websiteShowcase, type ShowcaseSite } from "../../data/websiteShowcase";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { WebsiteMockupCard } from "../shared/WebsiteMockupCard";
+import { WebsitePreviewPage } from "../shared/WebsitePreviewPage";
 
 const labels = {
   es: {
@@ -403,11 +404,13 @@ export function WebsiteGallery() {
 
       {memoizedActiveSite && createPortal(
         <div className="mockup-preview" role="dialog" aria-modal="true" onMouseDown={(event) => event.target === event.currentTarget && setActiveSite(null)}>
-          <div className="mockup-preview__panel">
-            <button type="button" className="mockup-preview__close" onClick={() => setActiveSite(null)} aria-label={copy.close} autoFocus>
+          <div className="mockup-preview__panel mockup-preview__panel--page">
+            <button type="button" className="mockup-preview__close mockup-preview__close--page" onClick={() => setActiveSite(null)} aria-label={copy.close} autoFocus>
               <X aria-hidden="true" />
             </button>
-            <WebsiteMockupCard site={memoizedActiveSite} language={language} />
+            <div className="preview-page-frame">
+              <WebsitePreviewPage site={memoizedActiveSite} language={language} />
+            </div>
             <p className="mockup-preview__notice">{copy.demoNotice}</p>
           </div>
         </div>,

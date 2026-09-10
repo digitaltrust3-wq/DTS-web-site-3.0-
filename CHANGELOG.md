@@ -196,3 +196,36 @@ rueda 3D + auto-scroll al pasar el mouse por los bordes).
   (igual que el original), el modal de vista ampliada muestra la maqueta completa con
   estadísticas/testimonio/footer, y todo compila limpio (`npm run typecheck`,
   `npm run build`).
+
+## 2026-09-10 (8) — Rediseño de las páginas de vista previa (3 plantillas reales)
+
+Pedido explícito: la vista ampliada ("página de visualización") es donde se va a
+concentrar toda la atención, así que necesitaba diseños más innovadores. Se investigaron
+tres sitios reales que el usuario compartió como referencia de estilo (una cafetería,
+una clínica veterinaria y una constructora) — **solo como inspiración de estructura y
+lenguaje visual, no para clonarlos**: colores, íconos, textos y marca siguen siendo
+propios de cada maqueta de DTS.
+
+- **Nuevo componente** [WebsitePreviewPage.tsx](src/app/components/shared/WebsitePreviewPage.tsx)
+  con 3 plantillas claramente distintas, cada una asignada a las 10 maquetas según el
+  tipo de negocio:
+  - **`retail`** (cafetería, tienda de ropa, paneles solares, comercio local): barra de
+    anuncio superior, nav centrado, hero a dos columnas con una tarjeta de producto
+    inclinada y una insignia flotante, grid de 3 tarjetas de servicio, testimonio con
+    estrellas — inspirado en el patrón de e-commerce cálido de una cafetería real.
+  - **`service`** (veterinaria, consultorio médico, barbería): breadcrumb, insignia de
+    urgencia/reserva, fila de íconos circulares por servicio, línea de dirección/horario,
+    y una barra de doble acción al final (llamar + agendar) — inspirado en el patrón de
+    una clínica veterinaria real con atención 24/7.
+  - **`editorial`** (restaurante, constructora, servicios profesionales): foto de fondo +
+    tarjeta blanca superpuesta con titular en negrita y una palabra resaltada en el color
+    de marca, lista de servicios numerada, insignia de confianza, estadísticas grandes —
+    inspirado en el patrón editorial de una constructora real.
+- [websiteShowcase.ts](src/app/data/websiteShowcase.ts): se agregó `layout` (qué plantilla
+  usa cada negocio) y `badge` (texto corto de urgencia/promoción, ES/EN) a las 10 maquetas.
+- La tarjeta pequeña del carrusel ([WebsiteMockupCard.tsx](src/app/components/shared/WebsiteMockupCard.tsx))
+  no cambió — sigue siendo el teaser oscuro; el rediseño aplica específicamente a la vista
+  ampliada, que es donde el usuario pidió concentrar el trabajo.
+- Verificado visualmente en escritorio y móvil las tres plantillas (cafetería, veterinaria,
+  constructora); ajuste de responsive en el nav para pantallas muy angostas.
+  `npm run typecheck` y `npm run build` pasan limpio.

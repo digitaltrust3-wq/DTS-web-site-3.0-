@@ -20,6 +20,7 @@ export type ShowcaseTestimonial = { quote: string; author: string };
 export type ShowcaseCopy = {
   business: string;
   category: string;
+  badge: string;
   headline: string;
   subheadline: string;
   cta: string;
@@ -32,6 +33,7 @@ export type ShowcaseCopy = {
 
 export type ShowcaseSite = {
   id: string;
+  layout: "retail" | "service" | "editorial";
   icon: LucideIcon;
   /** CSS gradient used for the mock hero "photo" — no external images, so nothing to break. */
   gradient: string;
@@ -49,6 +51,7 @@ export type ShowcaseSite = {
 export const websiteShowcase: ShowcaseSite[] = [
   {
     id: "veterinary",
+    layout: "service",
     icon: PawPrint,
     gradient: "linear-gradient(135deg, #0f766e 0%, #14b8a6 55%, #5eead4 100%)",
     accent: "#2dd4bf",
@@ -57,6 +60,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Veterinaria",
         category: "Salud animal",
+        badge: "Urgencias 24/7",
         headline: "Cuidamos a tu mascota como familia",
         subheadline: "Consultas, vacunación y cirugía con atención cercana.",
         cta: "Agendar cita",
@@ -76,6 +80,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Veterinary Clinic",
         category: "Animal health",
+        badge: "24/7 emergency care",
         headline: "We care for your pet like family",
         subheadline: "Consultations, vaccines and surgery with close attention.",
         cta: "Book a visit",
@@ -96,6 +101,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "restaurant",
+    layout: "editorial",
     icon: UtensilsCrossed,
     gradient: "linear-gradient(135deg, #7c2d12 0%, #c2410c 55%, #fb923c 100%)",
     accent: "#fb923c",
@@ -104,6 +110,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Restaurante",
         category: "Gastronomía",
+        badge: "Reservas abiertas",
         headline: "Sabores auténticos, todos los días",
         subheadline: "Reserva tu mesa y descubre el menú de temporada.",
         cta: "Ver menú",
@@ -123,6 +130,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Restaurant",
         category: "Dining",
+        badge: "Reservations open",
         headline: "Authentic flavors, every day",
         subheadline: "Reserve your table and discover the seasonal menu.",
         cta: "View menu",
@@ -143,6 +151,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "cafe",
+    layout: "retail",
     icon: Coffee,
     gradient: "linear-gradient(135deg, #451a03 0%, #92400e 55%, #d97706 100%)",
     accent: "#d97706",
@@ -151,6 +160,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Cafetería",
         category: "Café de especialidad",
+        badge: "Tueste de la semana",
         headline: "Tu pausa perfecta empieza aquí",
         subheadline: "Café de origen, repostería artesanal y buen ambiente.",
         cta: "Ver ubicaciones",
@@ -170,6 +180,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Coffee Shop",
         category: "Specialty coffee",
+        badge: "This week's roast",
         headline: "Your perfect break starts here",
         subheadline: "Single-origin coffee, fresh pastries and a great vibe.",
         cta: "Find a location",
@@ -190,6 +201,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "clinic",
+    layout: "service",
     icon: Stethoscope,
     gradient: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #60a5fa 100%)",
     accent: "#60a5fa",
@@ -198,6 +210,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Consultorio médico",
         category: "Salud",
+        badge: "Citas el mismo día",
         headline: "Atención médica cercana y confiable",
         subheadline: "Citas en línea con especialistas en menos de 24 horas.",
         cta: "Agendar cita",
@@ -217,6 +230,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Medical Clinic",
         category: "Healthcare",
+        badge: "Same-day appointments",
         headline: "Trusted, attentive medical care",
         subheadline: "Book with a specialist online in under 24 hours.",
         cta: "Book appointment",
@@ -237,6 +251,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "clothing",
+    layout: "retail",
     icon: Shirt,
     gradient: "linear-gradient(135deg, #831843 0%, #db2777 55%, #f472b6 100%)",
     accent: "#f472b6",
@@ -245,6 +260,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Tienda de ropa",
         category: "Moda",
+        badge: "Nueva temporada",
         headline: "Nueva colección ya disponible",
         subheadline: "Diseños únicos para cada estación del año.",
         cta: "Comprar ahora",
@@ -264,6 +280,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Clothing Store",
         category: "Fashion",
+        badge: "New season",
         headline: "New collection now available",
         subheadline: "Unique designs for every season.",
         cta: "Shop now",
@@ -284,6 +301,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "construction",
+    layout: "editorial",
     icon: HardHat,
     gradient: "linear-gradient(135deg, #713f12 0%, #ca8a04 55%, #facc15 100%)",
     accent: "#facc15",
@@ -292,6 +310,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Empresa de construcción",
         category: "Construcción",
+        badge: "Experiencia garantizada",
         headline: "Construimos proyectos que perduran",
         subheadline: "Obra civil, remodelaciones y proyectos a la medida.",
         cta: "Solicitar cotización",
@@ -311,6 +330,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Construction Company",
         category: "Construction",
+        badge: "Guaranteed experience",
         headline: "We build projects that last",
         subheadline: "Civil works, remodeling and custom builds.",
         cta: "Request a quote",
@@ -331,6 +351,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "barbershop",
+    layout: "service",
     icon: Scissors,
     gradient: "linear-gradient(135deg, #18181b 0%, #3f3f46 55%, #a1a1aa 100%)",
     accent: "#d4d4d8",
@@ -339,6 +360,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Barbería",
         category: "Estilo y cuidado",
+        badge: "Reserva en línea",
         headline: "Estilo clásico, corte perfecto",
         subheadline: "Reserva tu turno y evita la espera.",
         cta: "Reservar turno",
@@ -358,6 +380,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Barbershop",
         category: "Style & grooming",
+        badge: "Book online",
         headline: "Classic style, perfect cut",
         subheadline: "Book your slot and skip the wait.",
         cta: "Book a slot",
@@ -378,6 +401,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "professional-services",
+    layout: "editorial",
     icon: Briefcase,
     gradient: "linear-gradient(135deg, #1e1b4b 0%, #4338ca 55%, #818cf8 100%)",
     accent: "#818cf8",
@@ -386,6 +410,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Firma de servicios profesionales",
         category: "Consultoría",
+        badge: "Asesoría certificada",
         headline: "Asesoría experta para tu negocio",
         subheadline: "Contabilidad, legal y consultoría estratégica.",
         cta: "Agendar consulta",
@@ -405,6 +430,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Professional Services Firm",
         category: "Consulting",
+        badge: "Certified advisory",
         headline: "Expert guidance for your business",
         subheadline: "Accounting, legal and strategic consulting.",
         cta: "Book a consultation",
@@ -425,6 +451,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "solar",
+    layout: "retail",
     icon: Sun,
     gradient: "linear-gradient(135deg, #713f12 0%, #eab308 55%, #fde047 100%)",
     accent: "#fde047",
@@ -433,6 +460,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Paneles solares",
         category: "Energía renovable",
+        badge: "Ahorro certificado",
         headline: "Ahorra energía, cuida el planeta",
         subheadline: "Instalación de paneles solares con garantía de 20 años.",
         cta: "Calcular ahorro",
@@ -452,6 +480,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Solar Panels",
         category: "Renewable energy",
+        badge: "Certified savings",
         headline: "Save energy, protect the planet",
         subheadline: "Solar panel installation with a 20-year warranty.",
         cta: "Calculate savings",
@@ -472,6 +501,7 @@ export const websiteShowcase: ShowcaseSite[] = [
   },
   {
     id: "local-shop",
+    layout: "retail",
     icon: Store,
     gradient: "linear-gradient(135deg, #4c1d95 0%, #7c3aed 55%, #c4b5fd 100%)",
     accent: "#c4b5fd",
@@ -480,6 +510,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       es: {
         business: "Comercio local",
         category: "Retail de barrio",
+        badge: "Entrega el mismo día",
         headline: "Todo lo que necesitas, cerca de ti",
         subheadline: "Productos de calidad con atención personalizada.",
         cta: "Ver catálogo",
@@ -499,6 +530,7 @@ export const websiteShowcase: ShowcaseSite[] = [
       en: {
         business: "Local Shop",
         category: "Neighborhood retail",
+        badge: "Same-day delivery",
         headline: "Everything you need, close to home",
         subheadline: "Quality products with a personal touch.",
         cta: "View catalog",
