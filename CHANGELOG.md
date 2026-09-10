@@ -174,6 +174,8 @@ integraciones reales — tal como se pidió:
 
 ## 2026-09-10 (7) — Maquetas más elaboradas + carrusel con movimiento restaurado
 
+Commit: `41f1c44`
+
 Ajuste pedido tras ver el resultado anterior: las maquetas debían verse como páginas
 totalmente terminadas, y el carrusel debía moverse igual que el original (efecto de
 rueda 3D + auto-scroll al pasar el mouse por los bordes).
