@@ -35,7 +35,7 @@ export function applySecurity(app) {
     response.setHeader("X-Frame-Options", "DENY");
     response.setHeader(
       "Content-Security-Policy",
-      "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; upgrade-insecure-requests",
+      "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; connect-src 'self'; upgrade-insecure-requests",
     );
     if (process.env.NODE_ENV === "production") {
       response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
@@ -52,9 +52,26 @@ export function applySecurity(app) {
 }
 
 export function createRateLimiter({ windowMs, limit }) {
+  // NOTE: this counter is per Node.js process. On Vercel each serverless
+  // instance keeps its own map, so the effective limit is per-instance, not
+  // global. That is an accepted tradeoff for this deployment size; move to a
+  // shared store (Upstash/Vercel KV) or add Cloudflare Turnstile before
+  // relying on this as the only defense for a high-value endpoint.
   const requests = new Map();
+  let lastSweep = Date.now();
+
   return (request, response, next) => {
     const now = Date.now();
+
+    // Opportunistic cleanup so the map does not grow forever on a
+    // long-lived process (Hostinger). Runs at most once per window.
+    if (now - lastSweep > windowMs) {
+      lastSweep = now;
+      for (const [mapKey, entry] of requests) {
+        if (entry.resetAt <= now) requests.delete(mapKey);
+      }
+    }
+
     const key = request.ip || "unknown";
     const current = requests.get(key);
     if (!current || current.resetAt <= now) {
