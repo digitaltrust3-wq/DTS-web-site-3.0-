@@ -234,6 +234,8 @@ propios de cada maqueta de DTS.
 
 ## 2026-09-10 (9) — Pausada también "Arquitectura de agentes"
 
+Commit: `fbb5381`
+
 - Se pausó la sección `AgentNetwork` (diagrama de agentes) igual que `WebsiteGallery`
   antes: se deja de importar y renderizar en [App.tsx](src/app/App.tsx), pero el código
   (`AgentNetwork.tsx`) queda intacto para reactivarla después con el diseño nuevo que se
