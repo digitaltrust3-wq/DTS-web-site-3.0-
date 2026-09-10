@@ -140,6 +140,8 @@ Commit: `159a4a2`
 
 ## 2026-09-10 (6) — Rediseño de la sección "Proyectos destacados" como demo visual
 
+Commit: `06757f6`
+
 Reemplazado el carrusel de proyectos reales (con fotos de stock y URLs falsas como
 `react.dev`/`vite.dev`) por dos bloques de demostración de capacidades, sin backend ni
 integraciones reales — tal como se pidió:
