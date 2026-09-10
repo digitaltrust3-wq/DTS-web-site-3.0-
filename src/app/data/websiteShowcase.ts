@@ -13,6 +13,10 @@ import {
 } from "lucide-react";
 import type { Language } from "../i18n/translations";
 
+export type ShowcaseService = { title: string; description: string };
+export type ShowcaseStat = { value: string; label: string };
+export type ShowcaseTestimonial = { quote: string; author: string };
+
 export type ShowcaseCopy = {
   business: string;
   category: string;
@@ -20,7 +24,10 @@ export type ShowcaseCopy = {
   subheadline: string;
   cta: string;
   nav: [string, string, string];
-  services: [string, string, string];
+  services: [ShowcaseService, ShowcaseService, ShowcaseService];
+  stats: [ShowcaseStat, ShowcaseStat];
+  testimonial: ShowcaseTestimonial;
+  footerTagline: string;
 };
 
 export type ShowcaseSite = {
@@ -54,7 +61,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Consultas, vacunación y cirugía con atención cercana.",
         cta: "Agendar cita",
         nav: ["Servicios", "Equipo", "Contacto"],
-        services: ["Consultas", "Vacunación", "Cirugía"],
+        services: [
+          { title: "Consultas", description: "Chequeos generales y diagnóstico a tiempo." },
+          { title: "Vacunación", description: "Esquemas completos para cada etapa de vida." },
+          { title: "Cirugía", description: "Quirófano propio con monitoreo especializado." },
+        ],
+        stats: [
+          { value: "5,000+", label: "Mascotas atendidas" },
+          { value: "15", label: "Años de experiencia" },
+        ],
+        testimonial: { quote: "Atendieron a mi perro un domingo de emergencia. Nunca lo voy a olvidar.", author: "Camila R., cliente" },
+        footerTagline: "Salud y bienestar animal, todos los días del año.",
       },
       en: {
         business: "Veterinary Clinic",
@@ -63,7 +80,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Consultations, vaccines and surgery with close attention.",
         cta: "Book a visit",
         nav: ["Services", "Team", "Contact"],
-        services: ["Consultations", "Vaccines", "Surgery"],
+        services: [
+          { title: "Consultations", description: "General checkups and timely diagnosis." },
+          { title: "Vaccines", description: "Full schedules for every stage of life." },
+          { title: "Surgery", description: "In-house operating room with specialized monitoring." },
+        ],
+        stats: [
+          { value: "5,000+", label: "Pets treated" },
+          { value: "15", label: "Years of experience" },
+        ],
+        testimonial: { quote: "They treated my dog on an emergency Sunday. I'll never forget it.", author: "Camila R., client" },
+        footerTagline: "Animal health and wellness, every day of the year.",
       },
     },
   },
@@ -81,7 +108,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Reserva tu mesa y descubre el menú de temporada.",
         cta: "Ver menú",
         nav: ["Menú", "Reservas", "Ubicación"],
-        services: ["Almuerzo", "Cenas", "Eventos"],
+        services: [
+          { title: "Almuerzo", description: "Menú ejecutivo servido en 20 minutos." },
+          { title: "Cenas", description: "Ambiente íntimo con carta de temporada." },
+          { title: "Eventos", description: "Espacios privados para hasta 40 personas." },
+        ],
+        stats: [
+          { value: "20", label: "Años de tradición" },
+          { value: "4.9★", label: "Calificación promedio" },
+        ],
+        testimonial: { quote: "El mejor lugar para celebrar en familia. Siempre volvemos.", author: "Andrés M., comensal" },
+        footerTagline: "Cocina de casa, hecha con ingredientes locales.",
       },
       en: {
         business: "Restaurant",
@@ -90,7 +127,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Reserve your table and discover the seasonal menu.",
         cta: "View menu",
         nav: ["Menu", "Reservations", "Location"],
-        services: ["Lunch", "Dinner", "Events"],
+        services: [
+          { title: "Lunch", description: "Executive menu served in 20 minutes." },
+          { title: "Dinner", description: "Intimate setting with a seasonal menu." },
+          { title: "Events", description: "Private spaces for up to 40 guests." },
+        ],
+        stats: [
+          { value: "20", label: "Years of tradition" },
+          { value: "4.9★", label: "Average rating" },
+        ],
+        testimonial: { quote: "The best place to celebrate with family. We always come back.", author: "Andrés M., guest" },
+        footerTagline: "Home cooking, made with local ingredients.",
       },
     },
   },
@@ -108,7 +155,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Café de origen, repostería artesanal y buen ambiente.",
         cta: "Ver ubicaciones",
         nav: ["Menú", "Nosotros", "Locales"],
-        services: ["Café", "Repostería", "Para llevar"],
+        services: [
+          { title: "Café", description: "Granos de origen tostados cada semana." },
+          { title: "Repostería", description: "Horneado fresco todas las mañanas." },
+          { title: "Para llevar", description: "Pide en la app y recógelo sin filas." },
+        ],
+        stats: [
+          { value: "8", label: "Locales en la ciudad" },
+          { value: "12,000+", label: "Tazas al mes" },
+        ],
+        testimonial: { quote: "El latte con leche de avena es mi ritual de cada mañana.", author: "Sofía T., clienta habitual" },
+        footerTagline: "Café de especialidad, tostado con propósito.",
       },
       en: {
         business: "Coffee Shop",
@@ -117,7 +174,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Single-origin coffee, fresh pastries and a great vibe.",
         cta: "Find a location",
         nav: ["Menu", "About", "Locations"],
-        services: ["Coffee", "Pastries", "To go"],
+        services: [
+          { title: "Coffee", description: "Single-origin beans roasted weekly." },
+          { title: "Pastries", description: "Baked fresh every morning." },
+          { title: "To go", description: "Order in the app and skip the line." },
+        ],
+        stats: [
+          { value: "8", label: "Locations citywide" },
+          { value: "12,000+", label: "Cups a month" },
+        ],
+        testimonial: { quote: "The oat milk latte is my morning ritual.", author: "Sofía T., regular" },
+        footerTagline: "Specialty coffee, roasted with purpose.",
       },
     },
   },
@@ -135,7 +202,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Citas en línea con especialistas en menos de 24 horas.",
         cta: "Agendar cita",
         nav: ["Especialidades", "Doctores", "Contacto"],
-        services: ["Medicina general", "Laboratorio", "Telemedicina"],
+        services: [
+          { title: "Medicina general", description: "Consulta con médicos certificados." },
+          { title: "Laboratorio", description: "Resultados en línea el mismo día." },
+          { title: "Telemedicina", description: "Consulta por video desde donde estés." },
+        ],
+        stats: [
+          { value: "30+", label: "Especialistas" },
+          { value: "98%", label: "Pacientes satisfechos" },
+        ],
+        testimonial: { quote: "Conseguí una cita el mismo día y el doctor fue muy claro.", author: "Laura G., paciente" },
+        footerTagline: "Cuidado médico integral para toda la familia.",
       },
       en: {
         business: "Medical Clinic",
@@ -144,7 +221,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Book with a specialist online in under 24 hours.",
         cta: "Book appointment",
         nav: ["Specialties", "Doctors", "Contact"],
-        services: ["General care", "Lab tests", "Telehealth"],
+        services: [
+          { title: "General care", description: "Consultations with certified physicians." },
+          { title: "Lab tests", description: "Results online the same day." },
+          { title: "Telehealth", description: "Video consultations from anywhere." },
+        ],
+        stats: [
+          { value: "30+", label: "Specialists" },
+          { value: "98%", label: "Satisfied patients" },
+        ],
+        testimonial: { quote: "I got a same-day appointment and the doctor was very clear.", author: "Laura G., patient" },
+        footerTagline: "Complete medical care for the whole family.",
       },
     },
   },
@@ -162,7 +249,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Diseños únicos para cada estación del año.",
         cta: "Comprar ahora",
         nav: ["Mujer", "Hombre", "Ofertas"],
-        services: ["Envíos", "Cambios", "Tienda física"],
+        services: [
+          { title: "Envíos", description: "A todo el país en 2 a 4 días hábiles." },
+          { title: "Cambios", description: "30 días para cambios sin costo." },
+          { title: "Tienda física", description: "Recoge tu compra el mismo día." },
+        ],
+        stats: [
+          { value: "200+", label: "Diseños activos" },
+          { value: "25,000+", label: "Clientes felices" },
+        ],
+        testimonial: { quote: "La calidad de la tela superó lo que esperaba por el precio.", author: "Valentina P., clienta" },
+        footerTagline: "Moda con identidad, para cada temporada.",
       },
       en: {
         business: "Clothing Store",
@@ -171,7 +268,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Unique designs for every season.",
         cta: "Shop now",
         nav: ["Women", "Men", "Sale"],
-        services: ["Shipping", "Exchanges", "In-store pickup"],
+        services: [
+          { title: "Shipping", description: "Nationwide delivery in 2-4 business days." },
+          { title: "Exchanges", description: "30 days for free exchanges." },
+          { title: "In-store pickup", description: "Pick up your order the same day." },
+        ],
+        stats: [
+          { value: "200+", label: "Active designs" },
+          { value: "25,000+", label: "Happy customers" },
+        ],
+        testimonial: { quote: "The fabric quality exceeded what I expected for the price.", author: "Valentina P., customer" },
+        footerTagline: "Fashion with identity, for every season.",
       },
     },
   },
@@ -189,7 +296,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Obra civil, remodelaciones y proyectos a la medida.",
         cta: "Solicitar cotización",
         nav: ["Proyectos", "Servicios", "Cotizar"],
-        services: ["Obra nueva", "Remodelación", "Consultoría"],
+        services: [
+          { title: "Obra nueva", description: "Diseño y construcción llave en mano." },
+          { title: "Remodelación", description: "Ampliaciones y renovaciones integrales." },
+          { title: "Consultoría", description: "Estudios técnicos y presupuestos detallados." },
+        ],
+        stats: [
+          { value: "120+", label: "Proyectos entregados" },
+          { value: "18", label: "Años en el mercado" },
+        ],
+        testimonial: { quote: "Cumplieron el cronograma al pie de la letra. Muy profesionales.", author: "Jorge L., cliente" },
+        footerTagline: "Ingeniería y construcción con garantía real.",
       },
       en: {
         business: "Construction Company",
@@ -198,7 +315,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Civil works, remodeling and custom builds.",
         cta: "Request a quote",
         nav: ["Projects", "Services", "Get a quote"],
-        services: ["New builds", "Remodeling", "Consulting"],
+        services: [
+          { title: "New builds", description: "Turnkey design and construction." },
+          { title: "Remodeling", description: "Full renovations and expansions." },
+          { title: "Consulting", description: "Technical studies and detailed budgets." },
+        ],
+        stats: [
+          { value: "120+", label: "Projects delivered" },
+          { value: "18", label: "Years in business" },
+        ],
+        testimonial: { quote: "They kept the schedule to the letter. Very professional.", author: "Jorge L., client" },
+        footerTagline: "Engineering and construction with a real warranty.",
       },
     },
   },
@@ -216,7 +343,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Reserva tu turno y evita la espera.",
         cta: "Reservar turno",
         nav: ["Servicios", "Barberos", "Reservar"],
-        services: ["Corte", "Barba", "Afeitado clásico"],
+        services: [
+          { title: "Corte", description: "Estilos clásicos y modernos a la medida." },
+          { title: "Barba", description: "Perfilado, hidratación y acabado." },
+          { title: "Afeitado clásico", description: "Toalla caliente y navaja tradicional." },
+        ],
+        stats: [
+          { value: "10", label: "Barberos expertos" },
+          { value: "4.8★", label: "Calificación de clientes" },
+        ],
+        testimonial: { quote: "Salgo siempre con el mismo estilo que pido. Nunca falla.", author: "Daniel S., cliente" },
+        footerTagline: "Tradición y estilo en cada corte.",
       },
       en: {
         business: "Barbershop",
@@ -225,7 +362,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Book your slot and skip the wait.",
         cta: "Book a slot",
         nav: ["Services", "Barbers", "Book now"],
-        services: ["Haircut", "Beard", "Classic shave"],
+        services: [
+          { title: "Haircut", description: "Classic and modern styles, tailored to you." },
+          { title: "Beard", description: "Shaping, conditioning and finishing." },
+          { title: "Classic shave", description: "Hot towel and traditional straight razor." },
+        ],
+        stats: [
+          { value: "10", label: "Expert barbers" },
+          { value: "4.8★", label: "Customer rating" },
+        ],
+        testimonial: { quote: "I always leave with exactly the style I asked for.", author: "Daniel S., client" },
+        footerTagline: "Tradition and style in every cut.",
       },
     },
   },
@@ -243,7 +390,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Contabilidad, legal y consultoría estratégica.",
         cta: "Agendar consulta",
         nav: ["Servicios", "Equipo", "Contacto"],
-        services: ["Contabilidad", "Legal", "Estrategia"],
+        services: [
+          { title: "Contabilidad", description: "Estados financieros y declaraciones al día." },
+          { title: "Legal", description: "Contratos, cumplimiento y protección societaria." },
+          { title: "Estrategia", description: "Planes de crecimiento basados en datos." },
+        ],
+        stats: [
+          { value: "300+", label: "Empresas asesoradas" },
+          { value: "22", label: "Años de trayectoria" },
+        ],
+        testimonial: { quote: "Nos ayudaron a ordenar la empresa en tiempo récord.", author: "Marcela V., gerente general" },
+        footerTagline: "Decisiones informadas, resultados medibles.",
       },
       en: {
         business: "Professional Services Firm",
@@ -252,7 +409,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Accounting, legal and strategic consulting.",
         cta: "Book a consultation",
         nav: ["Services", "Team", "Contact"],
-        services: ["Accounting", "Legal", "Strategy"],
+        services: [
+          { title: "Accounting", description: "Up-to-date financial statements and filings." },
+          { title: "Legal", description: "Contracts, compliance and corporate protection." },
+          { title: "Strategy", description: "Data-driven growth plans." },
+        ],
+        stats: [
+          { value: "300+", label: "Companies advised" },
+          { value: "22", label: "Years in practice" },
+        ],
+        testimonial: { quote: "They helped us get the business organized in record time.", author: "Marcela V., general manager" },
+        footerTagline: "Informed decisions, measurable results.",
       },
     },
   },
@@ -270,7 +437,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Instalación de paneles solares con garantía de 20 años.",
         cta: "Calcular ahorro",
         nav: ["Instalación", "Financiamiento", "Contacto"],
-        services: ["Diagnóstico", "Instalación", "Mantenimiento"],
+        services: [
+          { title: "Diagnóstico", description: "Estudio gratuito de consumo energético." },
+          { title: "Instalación", description: "Equipos certificados por técnicos propios." },
+          { title: "Mantenimiento", description: "Revisiones periódicas incluidas." },
+        ],
+        stats: [
+          { value: "1,500+", label: "Instalaciones activas" },
+          { value: "40%", label: "Ahorro promedio" },
+        ],
+        testimonial: { quote: "Recuperé la inversión antes de lo que me prometieron.", author: "Ricardo A., cliente" },
+        footerTagline: "Energía limpia, ahorro real desde el primer mes.",
       },
       en: {
         business: "Solar Panels",
@@ -279,7 +456,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Solar panel installation with a 20-year warranty.",
         cta: "Calculate savings",
         nav: ["Installation", "Financing", "Contact"],
-        services: ["Assessment", "Installation", "Maintenance"],
+        services: [
+          { title: "Assessment", description: "Free energy consumption study." },
+          { title: "Installation", description: "Certified equipment, in-house technicians." },
+          { title: "Maintenance", description: "Periodic checkups included." },
+        ],
+        stats: [
+          { value: "1,500+", label: "Active installations" },
+          { value: "40%", label: "Average savings" },
+        ],
+        testimonial: { quote: "I recovered the investment sooner than they promised.", author: "Ricardo A., client" },
+        footerTagline: "Clean energy, real savings from month one.",
       },
     },
   },
@@ -297,7 +484,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Productos de calidad con atención personalizada.",
         cta: "Ver catálogo",
         nav: ["Catálogo", "Ofertas", "Ubicación"],
-        services: ["Domicilios", "Apartado", "Pago en línea"],
+        services: [
+          { title: "Domicilios", description: "Entrega en menos de 40 minutos." },
+          { title: "Apartado", description: "Reserva productos y paga después." },
+          { title: "Pago en línea", description: "Tarjeta, transferencia o efectivo." },
+        ],
+        stats: [
+          { value: "3", label: "Sucursales" },
+          { value: "10,000+", label: "Pedidos entregados" },
+        ],
+        testimonial: { quote: "Siempre tienen lo que busco y me conocen por mi nombre.", author: "Patricia N., clienta" },
+        footerTagline: "Tu tienda de confianza, en tu barrio.",
       },
       en: {
         business: "Local Shop",
@@ -306,7 +503,17 @@ export const websiteShowcase: ShowcaseSite[] = [
         subheadline: "Quality products with a personal touch.",
         cta: "View catalog",
         nav: ["Catalog", "Deals", "Location"],
-        services: ["Delivery", "Layaway", "Online payment"],
+        services: [
+          { title: "Delivery", description: "Delivered in under 40 minutes." },
+          { title: "Layaway", description: "Reserve products and pay later." },
+          { title: "Online payment", description: "Card, transfer or cash." },
+        ],
+        stats: [
+          { value: "3", label: "Locations" },
+          { value: "10,000+", label: "Orders delivered" },
+        ],
+        testimonial: { quote: "They always have what I need and know me by name.", author: "Patricia N., customer" },
+        footerTagline: "Your trusted shop, right in your neighborhood.",
       },
     },
   },

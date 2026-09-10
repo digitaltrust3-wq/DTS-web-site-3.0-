@@ -3252,23 +3252,81 @@ body {
   transform: translateY(-1px);
 }
 
+.mockup-stage {
+  position: relative;
+}
+
 .mockup-track {
-  display: flex;
-  gap: 1.5rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(19.5rem, 82vw);
+  gap: 1.75rem;
+  padding: 1.75rem 0.15rem 2.25rem;
   overflow-x: auto;
-  scroll-snap-type: x proximity;
-  padding: 0.5rem 0.25rem 1rem;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scroll-snap-type: inline mandatory;
   scrollbar-width: none;
+  perspective: 1400px;
 }
 
 .mockup-track::-webkit-scrollbar {
   display: none;
 }
 
+.mockup-track.is-auto-scrolling,
+.mockup-track.is-touching {
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+}
+
+.mockup-motion-zone {
+  display: none;
+}
+
+.mockup-mobile-pagination {
+  display: none;
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
+  .mockup-track {
+    cursor: default;
+  }
+
+  .mockup-motion-zone {
+    position: absolute;
+    z-index: 5;
+    top: 1.75rem;
+    bottom: 2.25rem;
+    display: block;
+    width: clamp(4rem, 8vw, 7rem);
+    border: 0;
+    background: transparent;
+  }
+
+  .mockup-motion-zone--left {
+    left: 0;
+  }
+
+  .mockup-motion-zone--right {
+    right: 0;
+  }
+}
+
 .mockup-slide {
-  flex: none;
-  width: min(19rem, 82vw);
+  --wheel-opacity: 1;
+  --wheel-rotate: 0deg;
+  --wheel-scale: 1;
+  --wheel-y: 0px;
+  min-width: 0;
   scroll-snap-align: start;
+  opacity: var(--wheel-opacity);
+  transform: perspective(1200px) translateY(var(--wheel-y)) rotateY(var(--wheel-rotate)) scale(var(--wheel-scale));
+  transform-origin: center center;
+  transition: opacity 140ms linear, transform 140ms linear;
+  will-change: transform, opacity;
 }
 
 .mockup-slide__trigger {
@@ -3288,14 +3346,46 @@ body {
   background: rgba(10, 19, 29, 0.82);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(16px);
-  transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+  transition: border-color 220ms ease, box-shadow 220ms ease;
 }
 
 .mockup-slide__trigger:hover .mockup-card,
 .mockup-slide__trigger:focus-visible .mockup-card {
   border-color: var(--mockup-accent, rgba(174, 199, 224, 0.5));
-  transform: translateY(-0.3rem);
   box-shadow: 0 2rem 4.5rem rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 900px) {
+  .mockup-track {
+    grid-auto-columns: 84vw;
+  }
+}
+
+@media (max-width: 900px), (any-hover: none) {
+  .mockup-mobile-pagination {
+    display: flex;
+    min-height: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    margin-top: 0.35rem;
+  }
+
+  .mockup-mobile-pagination span {
+    width: 0.38rem;
+    height: 0.38rem;
+    border: 1px solid rgba(226, 237, 247, 0.38);
+    border-radius: 50%;
+    background: rgba(191, 208, 224, 0.28);
+    transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+
+  .mockup-mobile-pagination span.is-active {
+    border-color: rgba(255, 255, 255, 0.92);
+    background: #ffffff;
+    box-shadow: 0 0 0.75rem rgba(191, 220, 246, 0.42);
+    transform: scale(1.35);
+  }
 }
 
 .mockup-chrome {
@@ -3431,18 +3521,148 @@ body {
 
 .mockup-services {
   display: flex;
-  gap: 0.45rem;
-  padding: 0.75rem 0.85rem 0.9rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.1rem 0.95rem;
   background: #0b141d;
-  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(174, 199, 224, 0.1);
 }
 
-.mockup-services__pill {
-  padding: 0.25rem 0.6rem;
+.mockup-services__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.mockup-services__dot {
+  flex: none;
+  margin-top: 0.3rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--mockup-accent, #7dd3c8);
+}
+
+.mockup-services__title {
+  margin: 0 0 0.1rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #f7fafc;
+}
+
+.mockup-services__description {
+  margin: 0;
+  font-size: 0.62rem;
+  line-height: 1.4;
+  color: #8ea0b5;
+}
+
+.mockup-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.9rem 0.95rem;
+  background: #0f1a24;
+  border-bottom: 1px solid rgba(174, 199, 224, 0.1);
+}
+
+.mockup-stats__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.6rem 0.3rem;
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mockup-stats__value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--mockup-accent, #7dd3c8);
+}
+
+.mockup-stats__label {
+  font-size: 0.55rem;
+  text-align: center;
+  color: #8ea0b5;
+}
+
+.mockup-testimonial {
+  position: relative;
+  padding: 1.1rem 0.95rem;
+  background: #0b141d;
+  border-bottom: 1px solid rgba(174, 199, 224, 0.1);
+}
+
+.mockup-testimonial__icon {
+  width: 1rem;
+  height: 1rem;
+  margin-bottom: 0.4rem;
+  color: var(--mockup-accent, #7dd3c8);
+  opacity: 0.7;
+}
+
+.mockup-testimonial__quote {
+  margin: 0 0 0.4rem;
+  font-size: 0.65rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #dbe4ee;
+}
+
+.mockup-testimonial__author {
+  margin: 0;
+  font-size: 0.58rem;
+  font-weight: 600;
+  color: #8ea0b5;
+}
+
+.mockup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.95rem;
+  background: #08111a;
+}
+
+.mockup-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.2rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #f7fafc;
+}
+
+.mockup-footer__brand svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: var(--mockup-accent, #7dd3c8);
+}
+
+.mockup-footer__tagline {
+  margin: 0;
+  font-size: 0.55rem;
+  color: #6b7c8d;
+}
+
+.mockup-footer__socials {
+  display: flex;
+  flex: none;
+  gap: 0.4rem;
+}
+
+.mockup-footer__socials svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  padding: 0.3rem;
+  box-sizing: content-box;
   border-radius: 999px;
   border: 1px solid rgba(174, 199, 224, 0.2);
-  color: #b9c6d4;
-  font-size: 0.6rem;
+  color: #8ea0b5;
 }
 
 .mockup-preview {

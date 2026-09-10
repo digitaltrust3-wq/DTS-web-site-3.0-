@@ -171,3 +171,26 @@ integraciones reales — tal como se pidió:
 - Verificado visualmente en escritorio y móvil (viewport 375px): en móvil las etiquetas de
   los nodos del diagrama se ocultan automáticamente para no saturar la pantalla. `npm run
   typecheck` y `npm run build` pasan limpio.
+
+## 2026-09-10 (7) — Maquetas más elaboradas + carrusel con movimiento restaurado
+
+Ajuste pedido tras ver el resultado anterior: las maquetas debían verse como páginas
+totalmente terminadas, y el carrusel debía moverse igual que el original (efecto de
+rueda 3D + auto-scroll al pasar el mouse por los bordes).
+
+- **Maquetas más completas** ([websiteShowcase.ts](src/app/data/websiteShowcase.ts) +
+  [WebsiteMockupCard.tsx](src/app/components/shared/WebsiteMockupCard.tsx)): cada una de
+  las 10 ahora incluye, además de nav/hero/servicios: descripciones por servicio (no solo
+  una palabra), una fila de 2 estadísticas (ej. "5,000+ Mascotas atendidas"), un testimonio
+  de cliente con cita y autor, y un pie de página con marca, tagline y redes sociales.
+  Sigue sin usar imágenes externas — todo es CSS/gradientes/íconos.
+- **Movimiento del carrusel restaurado** ([WebsiteGallery.tsx](src/app/components/sections/WebsiteGallery.tsx)):
+  se portó el motor completo del carrusel original de `Portfolio.tsx` — loop infinito
+  (tripla el arreglo), zonas de movimiento en los bordes, aceleración según posición del
+  mouse, autoplay en móvil que pausa al tocar y retoma a los 2.4s, y el efecto de rueda 3D
+  (`perspective` + `rotateY` + `translateY` + `scale` vía variables CSS) aplicado ahora a
+  `.mockup-slide`. Respeta `prefers-reduced-motion` igual que antes.
+- Verificado en el navegador: el carrusel se mueve solo al pasar el mouse por los bordes
+  (igual que el original), el modal de vista ampliada muestra la maqueta completa con
+  estadísticas/testimonio/footer, y todo compila limpio (`npm run typecheck`,
+  `npm run build`).

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { Facebook, Instagram, Quote, Twitter } from "lucide-react";
 import type { ShowcaseSite } from "../../data/websiteShowcase";
 import type { Language } from "../../i18n/translations";
 
@@ -9,9 +10,9 @@ type WebsiteMockupCardProps = {
 
 /**
  * A self-contained, stylized preview of a small-business homepage — browser
- * chrome, nav, hero and a services strip. Deliberately built from CSS
- * (gradients + an icon) instead of photos, so nothing here depends on an
- * external image host or can render as a broken link.
+ * chrome, nav, hero, services, stats, a testimonial and a footer. Built
+ * entirely from CSS (gradients + icons) instead of photos, so nothing here
+ * depends on an external image host or can render as a broken link.
  */
 export function WebsiteMockupCard({ site, language }: WebsiteMockupCardProps) {
   const copy = site.copy[language];
@@ -46,9 +47,45 @@ export function WebsiteMockupCard({ site, language }: WebsiteMockupCardProps) {
       </div>
 
       <div className="mockup-services">
-        {copy.services.map((label) => (
-          <span key={label} className="mockup-services__pill">{label}</span>
+        {copy.services.map((service) => (
+          <div key={service.title} className="mockup-services__item">
+            <span className="mockup-services__dot" />
+            <div>
+              <p className="mockup-services__title">{service.title}</p>
+              <p className="mockup-services__description">{service.description}</p>
+            </div>
+          </div>
         ))}
+      </div>
+
+      <div className="mockup-stats">
+        {copy.stats.map((stat) => (
+          <div key={stat.label} className="mockup-stats__item">
+            <span className="mockup-stats__value">{stat.value}</span>
+            <span className="mockup-stats__label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mockup-testimonial">
+        <Quote className="mockup-testimonial__icon" aria-hidden="true" />
+        <p className="mockup-testimonial__quote">&ldquo;{copy.testimonial.quote}&rdquo;</p>
+        <p className="mockup-testimonial__author">{copy.testimonial.author}</p>
+      </div>
+
+      <div className="mockup-footer">
+        <div>
+          <p className="mockup-footer__brand">
+            <Icon aria-hidden="true" />
+            {copy.business}
+          </p>
+          <p className="mockup-footer__tagline">{copy.footerTagline}</p>
+        </div>
+        <div className="mockup-footer__socials">
+          <Facebook aria-hidden="true" />
+          <Instagram aria-hidden="true" />
+          <Twitter aria-hidden="true" />
+        </div>
       </div>
     </article>
   );
