@@ -39,6 +39,8 @@ Con esto se cerró todo el checklist del informe original.
 
 ## 2026-09-10 (4) — Asistente de IA conectado al sitio web
 
+Commit: `a0cf77f`
+
 Objetivo: que todos los botones de "contáctanos/cotizar/hablemos" del sitio abran una
 conversación con el agente de IA en vez del formulario de contacto estático. El formulario
 de agenda de reunión (Google Meet) se mantiene aparte, sin cambios.
