@@ -15,7 +15,7 @@ La aplicación usa una sola API Express. `server/app.mjs` define la aplicación,
 - Framework preset: Vite.
 - Build command: `npm run build`.
 - Output directory: `dist`.
-- Node.js: 22.
+- Node.js: 24.
 - Root directory: raíz del repositorio.
 
 Configurar `VITE_BASE_PATH=/`, `PUBLIC_BASE_PATH=/` y las URL públicas HTTPS del dominio definitivo.

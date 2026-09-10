@@ -31,7 +31,7 @@ En hPanel:
 3. Selecciona **Import Git Repository**.
 4. Autoriza GitHub y elige `digitaltrust3-wq/DTS-web-site-3.0-`.
 5. Usa la rama `main`.
-6. Selecciona Node.js 22.
+6. Selecciona Node.js 24.
 
 Configuración de compilación:
 
