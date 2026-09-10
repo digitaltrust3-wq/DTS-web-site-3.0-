@@ -4,7 +4,6 @@ import { About } from "./components/sections/About";
 import { AgentNetwork } from "./components/sections/AgentNetwork";
 import { CTA } from "./components/sections/CTA";
 import { Hero } from "./components/sections/Hero";
-import { WebsiteGallery } from "./components/sections/WebsiteGallery";
 import { Services } from "./components/sections/Services";
 import { TechStack } from "./components/sections/TechStack";
 import { FixedVideoBackground } from "./components/shared/FixedVideoBackground";
@@ -44,7 +43,8 @@ export default function App() {
           <div className="page-video-region__content">
             <Hero />
             <Services />
-            <WebsiteGallery />
+            {/* WebsiteGallery paused: paused per owner request (2026-09-10), not removed.
+                Re-enable by importing and rendering <WebsiteGallery /> here again. */}
             <AgentNetwork />
             <About />
             <TechStack />

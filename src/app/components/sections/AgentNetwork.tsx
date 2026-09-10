@@ -93,7 +93,7 @@ export function AgentNetwork() {
   const agentPointById = new Map(agentPoints.map(({ agent, point }) => [agent.id, point]));
 
   return (
-    <section className="agent-network-section" aria-label={copy.title}>
+    <section id="portfolio" className="agent-network-section" aria-label={copy.title}>
       <div className="agent-network-shell">
         <div className="agent-network-heading">
           <span className="agent-network-eyebrow">{copy.eyebrow}</span>
