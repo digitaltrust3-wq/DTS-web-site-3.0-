@@ -40,7 +40,7 @@ jobs:
           VITE_SITE_URL: https://digitaltrust3-wq.github.io/DTS-web-site-3.0-/
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
